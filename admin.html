@@ -1,0 +1,2492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a192f">
+<title>Guided Path · Admin</title>
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   GUIDED PATH — ADMIN  (Global Style tokens)
+   ═══════════════════════════════════════════════════════════════ */
+:root{
+  --gpn-navy:#0a192f; --gpn-navy-2:#0d1f3a; --gpn-navy-3:#102844;
+  --gpn-cyan:#00b8d4; --gpn-cyan-hi:#00e5ff;
+  --gpn-gold:#ffd54f; --gpn-gold-dim:#b58900;
+  --gpn-text:#e0e0e0; --gpn-muted:#c0c0c0; --gpn-dim:#b0c4de;
+  --gpn-border:rgba(0,184,212,0.25);
+  --gpn-border-hi:rgba(0,184,212,0.55);
+  --gpn-divider:rgba(0,184,212,0.18);
+  --gpn-danger:#ef5350; --gpn-danger-soft:#ff9e9e;
+  --gpn-ok:#4caf50; --gpn-warn:#ffb300;
+  --gpn-radius:10px; --gpn-radius-sm:6px;
+  --gpn-serif:Georgia,'Times New Roman',serif;
+  --gpn-sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;}
+html,body{margin:0;padding:0;height:100%;}
+body{
+  font-family:var(--gpn-sans);
+  background:
+    radial-gradient(900px 500px at 0% -10%, rgba(0,184,212,0.06), transparent 55%),
+    radial-gradient(700px 400px at 100% 0%, rgba(255,213,79,0.04), transparent 50%),
+    var(--gpn-navy);
+  color:var(--gpn-text);
+  font-size:14px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;display:flex;flex-direction:column;
+}
+a{color:var(--gpn-gold);text-decoration:none;}
+code{font-family:'Courier New',monospace;color:var(--gpn-cyan-hi);font-size:.85em;}
+
+/* TOPBAR */
+.gpn-topbar{
+  position:sticky;top:0;z-index:30;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:10px;padding:10px 16px;
+  background:rgba(10,25,47,0.96);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--gpn-divider);
+}
+.gpn-top-left{display:flex;align-items:center;gap:10px;min-width:0;}
+.gpn-brand{
+  width:34px;height:34px;border-radius:8px;display:grid;place-items:center;flex-shrink:0;
+  background:linear-gradient(135deg,var(--gpn-cyan),#007b8f);
+  color:#04121e;font-family:var(--gpn-serif);font-weight:800;font-size:13px;
+  border:1px solid rgba(0,229,255,0.35);box-shadow:0 0 10px rgba(0,184,212,0.25);
+}
+.gpn-titles{display:flex;flex-direction:column;line-height:1.15;min-width:0;}
+.gpn-title{font-family:var(--gpn-serif);font-weight:700;font-size:14px;color:var(--gpn-cyan-hi);letter-spacing:.4px;}
+.gpn-sub{font-size:11px;color:var(--gpn-dim);}
+.gpn-top-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.gpn-icon-btn{
+  width:34px;height:34px;border-radius:8px;background:transparent;
+  border:1px solid var(--gpn-border);color:var(--gpn-cyan-hi);
+  font-size:15px;cursor:pointer;display:grid;place-items:center;
+  transition:border-color .2s, background .2s;
+}
+.gpn-icon-btn:hover{border-color:var(--gpn-border-hi);background:rgba(0,184,212,0.06);}
+.gpn-user-chip{
+  display:none;font-size:.72rem;color:var(--gpn-dim);
+  padding:4px 10px;border:1px solid var(--gpn-divider);border-radius:20px;
+}
+@media(min-width:640px){.gpn-user-chip{display:inline-block;}}
+
+/* LAYOUT */
+.gpn-layout{display:flex;flex:1;min-height:calc(100vh - 55px);}
+.gpn-side{
+  width:216px;flex-shrink:0;border-right:1px solid var(--gpn-divider);
+  background:rgba(10,25,47,0.6);padding:12px 8px;overflow-y:auto;
+}
+.gpn-side-nav{display:flex;flex-direction:column;gap:2px;}
+.gpn-side-btn{
+  text-align:left;padding:9px 12px;background:transparent;border:0;
+  color:var(--gpn-dim);border-radius:var(--gpn-radius-sm);
+  font-family:var(--gpn-serif);font-size:.8rem;font-weight:700;
+  letter-spacing:.04em;cursor:pointer;
+  display:flex;align-items:center;gap:9px;
+  border-left:2px solid transparent;
+  transition:background .2s, color .2s, border-color .2s;
+  white-space:nowrap;
+}
+.gpn-side-btn .ic{font-size:.95rem;line-height:1;opacity:.85;}
+.gpn-side-btn:hover{background:rgba(0,184,212,0.06);color:#fff;}
+.gpn-side-btn.is-active{
+  background:linear-gradient(90deg, rgba(0,229,255,0.12), rgba(0,229,255,0.02));
+  color:var(--gpn-cyan-hi);border-left-color:var(--gpn-cyan-hi);
+}
+.gpn-side-sep{height:1px;background:var(--gpn-divider);margin:8px 6px;}
+
+.gpn-main{flex:1;padding:18px;max-width:1200px;width:100%;overflow-x:hidden;}
+
+/* CARDS */
+.gpn-card{
+  background:var(--gpn-navy);border:1px solid var(--gpn-border);
+  border-radius:var(--gpn-radius);padding:16px 18px;margin-bottom:14px;
+  transition:border-color .25s, box-shadow .25s;
+}
+.gpn-card:hover{border-color:var(--gpn-border-hi);box-shadow:0 0 16px rgba(0,184,212,0.10);}
+.gpn-card-title{
+  font-family:var(--gpn-serif);font-size:.72rem;font-weight:700;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--gpn-cyan);
+  margin:0 0 12px;display:flex;align-items:center;gap:8px;
+}
+.gpn-card-title::after{content:'';flex:1;height:1px;background:var(--gpn-divider);}
+.gpn-card-head{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  margin-bottom:12px;flex-wrap:wrap;
+}
+.gpn-h1{font-family:var(--gpn-serif);font-size:1.35rem;font-weight:700;color:#fff;margin:0 0 4px;line-height:1.2;}
+.gpn-h2{font-family:var(--gpn-serif);font-size:1.05rem;font-weight:700;color:var(--gpn-cyan-hi);margin:0 0 6px;}
+.gpn-muted{color:var(--gpn-muted);font-size:.82rem;line-height:1.55;}
+.gpn-dim{color:var(--gpn-dim);font-size:.78rem;}
+
+.gpn-kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;}
+.gpn-kv > div{
+  background:rgba(0,184,212,0.03);border:1px solid var(--gpn-divider);
+  border-radius:var(--gpn-radius-sm);padding:11px 13px;
+}
+.gpn-kv .k{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gpn-cyan);font-weight:600;margin-bottom:3px;}
+.gpn-kv .v{font-family:var(--gpn-serif);font-size:1.1rem;font-weight:700;color:#fff;line-height:1.2;}
+.gpn-kv .v small{font-size:.72rem;color:var(--gpn-dim);font-weight:400;}
+
+/* BUTTONS */
+.gpn-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  padding:9px 15px;background:rgba(0,184,212,0.05);
+  border:1px solid rgba(0,184,212,0.45);border-radius:var(--gpn-radius-sm);
+  color:var(--gpn-cyan-hi);font-family:var(--gpn-serif);font-size:.8rem;font-weight:700;
+  letter-spacing:.02em;cursor:pointer;white-space:nowrap;
+  transition:background .2s, border-color .2s, color .2s, box-shadow .2s;
+  line-height:1.2;text-decoration:none;
+}
+.gpn-btn:hover{background:rgba(0,184,212,0.14);border-color:var(--gpn-cyan-hi);color:#fff;box-shadow:0 0 12px rgba(0,229,255,0.18);}
+.gpn-btn:active{transform:translateY(1px);}
+.gpn-btn[disabled]{opacity:.5;cursor:not-allowed;box-shadow:none;}
+.gpn-btn.gold{background:linear-gradient(135deg,var(--gpn-gold),var(--gpn-gold-dim));border-color:transparent;color:#1a1405;box-shadow:0 0 14px rgba(255,213,79,0.20);}
+.gpn-btn.gold:hover{background:linear-gradient(135deg,#ffe082,var(--gpn-gold));color:#1a1405;box-shadow:0 0 20px rgba(255,213,79,0.35);}
+.gpn-btn.ghost{background:transparent;border-color:var(--gpn-border);color:var(--gpn-dim);}
+.gpn-btn.ghost:hover{color:#fff;border-color:var(--gpn-border-hi);background:rgba(0,184,212,0.06);}
+.gpn-btn.danger{background:rgba(239,83,80,0.06);border-color:rgba(239,83,80,0.4);color:var(--gpn-danger-soft);}
+.gpn-btn.danger:hover{background:rgba(239,83,80,0.14);border-color:var(--gpn-danger);color:#fff;}
+.gpn-btn.sm{padding:6px 11px;font-size:.72rem;}
+
+/* FORMS */
+.gpn-form-row{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:10px;}
+.gpn-form-row.two{grid-template-columns:1fr 1fr;}
+.gpn-form-row.three{grid-template-columns:1fr 1fr 1fr;}
+.gpn-field label{
+  display:block;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--gpn-cyan);font-weight:600;margin-bottom:5px;
+}
+.gpn-field input,.gpn-field select,.gpn-field textarea{
+  width:100%;padding:9px 11px;background:var(--gpn-navy-2);
+  border:1px solid var(--gpn-border);border-radius:var(--gpn-radius-sm);
+  color:var(--gpn-text);font-family:inherit;font-size:.85rem;outline:none;
+  transition:border-color .2s, box-shadow .2s;
+}
+.gpn-field input:focus,.gpn-field select:focus,.gpn-field textarea:focus{
+  border-color:var(--gpn-cyan-hi);box-shadow:0 0 0 3px rgba(0,229,255,0.10);
+}
+.gpn-field textarea{min-height:70px;resize:vertical;font-family:var(--gpn-sans);}
+.gpn-checkbox{
+  display:flex;align-items:center;gap:8px;
+  padding:7px 10px;background:rgba(0,184,212,0.03);
+  border:1px solid var(--gpn-divider);border-radius:var(--gpn-radius-sm);
+  margin-bottom:5px;font-size:.82rem;cursor:pointer;
+}
+.gpn-checkbox input{accent-color:var(--gpn-cyan);}
+.gpn-checkbox:hover{border-color:var(--gpn-border);}
+.gpn-filters{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:12px;}
+@media(min-width:640px){.gpn-filters{grid-template-columns:2fr 1fr 1fr;}}
+
+/* TABLES */
+.gpn-table-wrap{
+  overflow-x:auto;border:1px solid var(--gpn-divider);
+  border-radius:var(--gpn-radius);background:rgba(0,0,0,0.06);
+}
+.gpn-table{width:100%;border-collapse:collapse;font-size:.82rem;}
+.gpn-table th,.gpn-table td{
+  padding:10px 12px;text-align:left;border-bottom:1px solid var(--gpn-divider);
+  vertical-align:middle;
+}
+.gpn-table th{
+  background:var(--gpn-navy-3);color:var(--gpn-cyan);
+  font-family:var(--gpn-serif);font-size:.68rem;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;
+  position:sticky;top:0;z-index:1;
+}
+.gpn-table tr:last-child td{border-bottom:none;}
+.gpn-table tbody tr:hover{background:rgba(0,184,212,0.03);}
+.gpn-table td.nowrap{white-space:nowrap;}
+.gpn-row-actions{display:flex;gap:6px;flex-wrap:wrap;}
+
+/* TAGS */
+.gpn-tag{
+  display:inline-block;padding:3px 9px;border-radius:20px;
+  font-size:.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  border:1px solid var(--gpn-border);color:var(--gpn-dim);white-space:nowrap;
+}
+.gpn-tag.ok{color:#7fe3a4;border-color:rgba(76,175,80,0.5);background:rgba(76,175,80,0.06);}
+.gpn-tag.warn{color:var(--gpn-gold);border-color:rgba(255,213,79,0.5);background:rgba(255,213,79,0.06);}
+.gpn-tag.danger{color:var(--gpn-danger-soft);border-color:rgba(239,83,80,0.5);background:rgba(239,83,80,0.06);}
+.gpn-tag.info{color:var(--gpn-cyan-hi);border-color:rgba(0,229,255,0.45);background:rgba(0,229,255,0.06);}
+
+/* MODAL */
+.gpn-modal-back{
+  position:fixed;inset:0;background:rgba(0,0,0,0.72);z-index:100;
+  display:flex;align-items:center;justify-content:center;padding:16px;
+  animation:gpnFade .18s ease;
+}
+@keyframes gpnFade{from{opacity:0;}to{opacity:1;}}
+.gpn-modal{
+  background:var(--gpn-navy);border:1px solid var(--gpn-border-hi);
+  border-radius:var(--gpn-radius);max-width:640px;width:100%;
+  max-height:90vh;overflow-y:auto;padding:20px 22px 18px;
+  box-shadow:0 0 32px rgba(0,184,212,0.25);
+}
+.gpn-modal.wide{max-width:880px;}
+.gpn-modal h3{
+  font-family:var(--gpn-serif);font-size:1.1rem;color:var(--gpn-cyan-hi);
+  margin:0 0 12px;padding-bottom:10px;border-bottom:1px solid var(--gpn-divider);
+}
+.gpn-modal-actions{
+  display:flex;justify-content:flex-end;gap:8px;margin-top:14px;
+  padding-top:12px;border-top:1px solid var(--gpn-divider);flex-wrap:wrap;
+}
+
+/* LOADING / EMPTY / TOAST */
+.gpn-loading{padding:40px 16px;text-align:center;color:var(--gpn-dim);font-size:.88rem;}
+.gpn-empty{
+  padding:20px 16px;text-align:center;color:var(--gpn-dim);font-size:.85rem;
+  border:1px dashed var(--gpn-divider);border-radius:var(--gpn-radius-sm);
+  background:rgba(0,184,212,0.02);
+}
+.gpn-err{
+  padding:11px 14px;border-radius:var(--gpn-radius-sm);
+  background:rgba(239,83,80,0.08);border:1px solid rgba(239,83,80,0.35);
+  border-left:3px solid var(--gpn-danger);color:var(--gpn-danger-soft);
+  font-size:.83rem;margin-bottom:12px;
+}
+.gpn-toast{
+  position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);
+  background:var(--gpn-navy-3);border:1px solid var(--gpn-cyan-hi);
+  color:#fff;padding:10px 18px;border-radius:24px;
+  font-size:.82rem;font-weight:600;box-shadow:0 0 16px rgba(0,184,212,0.3);
+  z-index:200;opacity:0;pointer-events:none;
+  transition:opacity .2s, transform .2s;max-width:90vw;
+}
+.gpn-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.gpn-toast.err{border-color:var(--gpn-danger);color:var(--gpn-danger-soft);}
+
+/* ACTION REQUIRED */
+.gpn-att{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
+.gpn-att-item{
+  padding:12px 15px;border-radius:var(--gpn-radius);
+  font-size:.88rem;font-weight:600;line-height:1.4;
+  border:1px solid var(--gpn-border);border-left:3px solid var(--gpn-cyan);
+  display:flex;align-items:center;gap:10px;
+}
+.gpn-att-item.red{border-left-color:var(--gpn-danger);background:rgba(239,83,80,0.06);color:var(--gpn-danger-soft);}
+.gpn-att-item.orange{border-left-color:var(--gpn-warn);background:rgba(255,179,0,0.06);color:#ffc46b;}
+.gpn-att-item.yellow{border-left-color:var(--gpn-gold);background:rgba(255,213,79,0.05);color:var(--gpn-gold);}
+.gpn-att-item.ok{border-left-color:var(--gpn-ok);background:rgba(76,175,80,0.05);color:#7fe3a4;}
+
+/* EVALUATION ANSWER BLOCKS */
+.gpn-answer{
+  border:1px solid var(--gpn-divider);border-radius:8px;
+  padding:12px;margin-bottom:12px;background:rgba(0,184,212,0.02);
+}
+.gpn-answer-label{
+  font-family:var(--gpn-serif);font-weight:700;color:var(--gpn-cyan-hi);
+  margin-bottom:6px;font-size:.9rem;
+}
+.gpn-answer-box{
+  background:var(--gpn-navy-2);border:1px solid var(--gpn-divider);
+  border-radius:6px;padding:9px 11px;margin-bottom:8px;
+  font-size:.85rem;line-height:1.55;white-space:pre-wrap;
+}
+.gpn-answer-model{
+  background:rgba(255,213,79,0.04);border-left:3px solid var(--gpn-gold);
+  border-radius:0 6px 6px 0;padding:9px 11px;margin-bottom:8px;
+  font-size:.85rem;line-height:1.55;white-space:pre-wrap;
+}
+
+/* LOCK NOTICE */
+.gpn-lock-notice{
+  padding:11px 14px;border-radius:var(--gpn-radius-sm);
+  background:rgba(255,213,79,0.05);border:1px solid rgba(255,213,79,0.35);
+  border-left:3px solid var(--gpn-gold);color:var(--gpn-gold);
+  font-size:.82rem;line-height:1.5;margin-bottom:12px;
+}
+
+/* RESPONSIVE */
+@media (max-width:820px){
+  .gpn-layout{flex-direction:column;min-height:0;}
+  .gpn-side{
+    width:100%;border-right:0;border-bottom:1px solid var(--gpn-divider);
+    padding:8px;overflow-x:auto;overflow-y:hidden;
+  }
+  .gpn-side-nav{flex-direction:row;gap:4px;padding-bottom:2px;}
+  .gpn-side-btn{
+    white-space:nowrap;padding:7px 11px;border-left:0;
+    border-bottom:2px solid transparent;font-size:.72rem;
+  }
+  .gpn-side-btn.is-active{border-left:0;border-bottom-color:var(--gpn-cyan-hi);}
+  .gpn-side-sep{display:none;}
+  .gpn-main{padding:14px 12px;}
+  .gpn-form-row.two,.gpn-form-row.three{grid-template-columns:1fr;}
+  .gpn-modal{padding:18px 16px;}
+}
+</style>
+</head>
+<body>
+
+<header class="gpn-topbar">
+  <div class="gpn-top-left">
+    <div class="gpn-brand">GP</div>
+    <div class="gpn-titles">
+      <span class="gpn-title">GUIDED PATH</span>
+      <span class="gpn-sub">Admin Control Centre</span>
+    </div>
+  </div>
+  <div class="gpn-top-right">
+    <span class="gpn-user-chip" id="userChip">—</span>
+    <button class="gpn-icon-btn" id="logoutBtn" aria-label="Logout" title="Logout">⎋</button>
+  </div>
+</header>
+
+<div class="gpn-layout">
+  <aside class="gpn-side">
+    <nav class="gpn-side-nav" id="sideNav">
+      <button class="gpn-side-btn is-active" data-view="dashboard"><span class="ic">◉</span>Dashboard</button>
+      <button class="gpn-side-btn" data-view="students"><span class="ic">◍</span>Students</button>
+      <button class="gpn-side-btn" data-view="programmes"><span class="ic">◈</span>Programmes</button>
+      <button class="gpn-side-btn" data-view="subjects"><span class="ic">◇</span>Subjects</button>
+      <button class="gpn-side-btn" data-view="chapters"><span class="ic">◊</span>Chapters</button>
+      <button class="gpn-side-btn" data-view="enrolments"><span class="ic">▣</span>Enrolments</button>
+      <button class="gpn-side-btn" data-view="materials"><span class="ic">▤</span>Materials</button>
+      <button class="gpn-side-btn" data-view="schedule"><span class="ic">◷</span>Schedule</button>
+      <button class="gpn-side-btn" data-view="questions"><span class="ic">?</span>Question Bank</button>
+      <button class="gpn-side-btn" data-view="tests"><span class="ic">✎</span>Tests</button>
+      <button class="gpn-side-btn" data-view="evaluation"><span class="ic">✓</span>Evaluation</button>
+      <button class="gpn-side-btn" data-view="results"><span class="ic">★</span>Results</button>
+      <button class="gpn-side-btn" data-view="analytics"><span class="ic">↗</span>Analytics</button>
+      <button class="gpn-side-btn" data-view="payments"><span class="ic">₹</span>Payments</button>
+      <button class="gpn-side-btn" data-view="activity"><span class="ic">⌗</span>Activity</button>
+      <div class="gpn-side-sep"></div>
+      <button class="gpn-side-btn" data-view="settings"><span class="ic">⚙</span>Settings</button>
+    </nav>
+  </aside>
+
+  <main class="gpn-main" id="view">
+    <div class="gpn-loading">Loading…</div>
+  </main>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   GUIDED PATH — ADMIN SCRIPT
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── 1  CONFIG ─────────────────────────────────────────────── */
+var CONFIG = {
+  API_URL: 'https://script.google.com/macros/s/AKfycbx0dOo1ovROMdFYedx4Gm3a1tmpZjjXEwqcxLjCzWXC3Tgxupo9Mc3obk5zDS3uat_7/exec',
+  TOKEN_KEY: 'gp_token',
+  ROLE_KEY:  'gp_role',
+  USER_KEY:  'gp_user'
+};
+
+/* ── 2  API ────────────────────────────────────────────────── */
+var API = (function(){
+  var busy = {};
+
+  function call(action, payload, opts){
+    opts = opts || {};
+    var key = action + '|' + JSON.stringify(payload || {});
+    if (busy[key] && !opts.allowDuplicate) {
+      return Promise.resolve({ ok:false, error:'Duplicate request suppressed.', code:'DUPLICATE' });
+    }
+    busy[key] = true;
+
+    var token = localStorage.getItem(CONFIG.TOKEN_KEY) || '';
+    var body = { action: action, token: token, payload: payload || {} };
+
+    return fetch(CONFIG.API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(body),
+      redirect: 'follow'
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      delete busy[key];
+      if (!data || typeof data.ok === 'undefined') {
+        return { ok:false, error:'Malformed server response.', code:'BAD_RESPONSE' };
+      }
+      if (!data.ok) {
+        var c = data.code || '';
+        if (c === 'SESSION_EXPIRED' || c === 'SESSION_REVOKED' || c === 'ACCOUNT_INACTIVE') {
+          handleSessionFailure(data.error || 'Session expired.');
+        } else if (c === 'FORBIDDEN') {
+          handleSessionFailure('This session is not authorized for admin operations.');
+        }
+      }
+      return data;
+    })
+    .catch(function(){
+      delete busy[key];
+      return { ok:false, error:'Network error. Please check your connection.', code:'NETWORK' };
+    });
+  }
+
+  return { call: call };
+})();
+
+/* ── 3  UI HELPERS ─────────────────────────────────────────── */
+function el(id){ return document.getElementById(id); }
+function esc(s){
+  return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function fmtDate(iso){
+  if (!iso) return '—';
+  var s = String(iso);
+  return s.length >= 10 ? s.substring(0,10) : s;
+}
+function fmtDT(iso){
+  if (!iso) return '—';
+  return String(iso).replace('T',' ').substring(0,16);
+}
+function todayStr(){
+  var d = new Date();
+  return d.getFullYear() + '-' +
+         String(d.getMonth()+1).padStart(2,'0') + '-' +
+         String(d.getDate()).padStart(2,'0');
+}
+function toast(msg, isErr){
+  var t = document.querySelector('.gpn-toast');
+  if (!t){ t = document.createElement('div'); t.className='gpn-toast'; document.body.appendChild(t); }
+  t.textContent = msg;
+  t.className = 'gpn-toast show' + (isErr ? ' err' : '');
+  clearTimeout(t._t);
+  t._t = setTimeout(function(){ t.className='gpn-toast'; }, 2600);
+}
+function modal(html, wide){
+  closeModal();
+  var back = document.createElement('div');
+  back.className = 'gpn-modal-back';
+  back.innerHTML = '<div class="gpn-modal' + (wide ? ' wide' : '') + '">' + html + '</div>';
+  back.addEventListener('click', function(e){ if (e.target === back) closeModal(); });
+  document.body.appendChild(back);
+  return back;
+}
+function closeModal(){
+  var m = document.querySelector('.gpn-modal-back');
+  if (m) m.remove();
+}
+function badge(status){
+  var s = String(status || '').toUpperCase();
+  if (!s) return '<span class="gpn-tag">—</span>';
+  if (['ACTIVE','PUBLISHED','PAID','AUTO_EVALUATED','MANUALLY_EVALUATED','COMPLETED'].indexOf(s) >= 0)
+    return '<span class="gpn-tag ok">' + esc(s) + '</span>';
+  if (['PENDING','PENDING_MANUAL','SCHEDULED','ISSUED','SUBMITTED','EXPIRING','DRAFT','AVAILABLE','INACTIVE'].indexOf(s) >= 0)
+    return '<span class="gpn-tag warn">' + esc(s) + '</span>';
+  if (['EXPIRED','CANCELLED','SUSPENDED','MISSED'].indexOf(s) >= 0)
+    return '<span class="gpn-tag danger">' + esc(s) + '</span>';
+  return '<span class="gpn-tag info">' + esc(s) + '</span>';
+}
+function confirmDialog(msg){
+  return new Promise(function(resolve){
+    var m = modal(
+      '<h3>Confirm</h3>' +
+      '<p class="gpn-muted">' + esc(msg) + '</p>' +
+      '<div class="gpn-modal-actions">' +
+        '<button class="gpn-btn ghost" id="cfNo">Cancel</button>' +
+        '<button class="gpn-btn danger" id="cfYes">Confirm</button>' +
+      '</div>'
+    );
+    m.querySelector('#cfNo').addEventListener('click', function(){ closeModal(); resolve(false); });
+    m.querySelector('#cfYes').addEventListener('click', function(){ closeModal(); resolve(true); });
+  });
+}
+function val(sel){ var n = document.querySelector(sel); return n ? n.value : ''; }
+function valTrim(sel){ return String(val(sel)).trim(); }
+function setHTML(node, html){ if (typeof node === 'string') node = el(node); if (node) node.innerHTML = html; }
+
+/* ── 4  SESSION GUARD ──────────────────────────────────────── */
+function getSession(){
+  return {
+    token: localStorage.getItem(CONFIG.TOKEN_KEY),
+    role:  localStorage.getItem(CONFIG.ROLE_KEY),
+    user:  (function(){ try { return JSON.parse(localStorage.getItem(CONFIG.USER_KEY) || 'null'); } catch(e){ return null; } })()
+  };
+}
+function clearSession(){
+  localStorage.removeItem(CONFIG.TOKEN_KEY);
+  localStorage.removeItem(CONFIG.ROLE_KEY);
+  localStorage.removeItem(CONFIG.USER_KEY);
+}
+function handleSessionFailure(msg){
+  clearSession();
+  toast(msg || 'Session ended.', true);
+  setTimeout(function(){ window.location.href = 'login.html'; }, 800);
+}
+function doLogout(){
+  var t = localStorage.getItem(CONFIG.TOKEN_KEY) || '';
+  var body = { action:'logout', token:t, payload:{} };
+  fetch(CONFIG.API_URL, {
+    method:'POST',
+    headers:{ 'Content-Type':'text/plain;charset=utf-8' },
+    body: JSON.stringify(body),
+    redirect:'follow'
+  }).catch(function(){}).then(function(){
+    clearSession();
+    window.location.href = 'login.html';
+  });
+}
+
+/* ── 5  ROUTER ─────────────────────────────────────────────── */
+var state = {
+  view: 'dashboard',
+  cache: {
+    students: [], programmes: [], subjects: [], chapters: [],
+    enrolments: [], materials: [], schedule: [], questions: [],
+    tests: [], payments: [], results: []
+  }
+};
+
+function setActiveNav(v){
+  document.querySelectorAll('.gpn-side-btn').forEach(function(b){
+    b.classList.toggle('is-active', b.getAttribute('data-view') === v);
+  });
+}
+
+function render(){
+  el('view').innerHTML = '<div class="gpn-loading">Loading…</div>';
+  switch (state.view) {
+    case 'dashboard':  return viewDashboard();
+    case 'students':   return viewStudents();
+    case 'programmes': return viewProgrammes();
+    case 'subjects':   return viewSubjects();
+    case 'chapters':   return viewChapters();
+    case 'enrolments': return viewEnrolments();
+    case 'materials':  return viewMaterials();
+    case 'schedule':   return viewSchedule();
+    case 'questions':  return viewQuestions();
+    case 'tests':      return viewTests();
+    case 'evaluation': return viewEvaluation();
+    case 'results':    return viewResults();
+    case 'analytics':  return viewAnalytics();
+    case 'payments':   return viewPayments();
+    case 'activity':   return viewActivity();
+    case 'settings':   return viewSettings();
+    default:           return viewDashboard();
+  }
+}
+
+function navigate(view){
+  state.view = view;
+  setActiveNav(view);
+  render();
+}
+
+document.querySelectorAll('.gpn-side-btn').forEach(function(b){
+  b.addEventListener('click', function(){ navigate(b.getAttribute('data-view')); });
+});
+
+/* ── 6  DASHBOARD ──────────────────────────────────────────── */
+function viewDashboard(){
+  return API.call('adminOverview').then(function(r){
+    var v = el('view');
+    if (!r.ok){ v.innerHTML = '<div class="gpn-err">' + esc(r.error) + '</div>'; return; }
+    var d = r.data || {};
+
+    var att = [];
+    if (d.pendingEvaluations) att.push({ level:'red', text:'🔴 ' + d.pendingEvaluations + ' evaluation' + (d.pendingEvaluations===1?'':'s') + ' pending' });
+    if (d.testsToday) att.push({ level:'orange', text:'🟠 ' + d.testsToday + ' test' + (d.testsToday===1?'':'s') + ' scheduled today' });
+    if (d.missedTests) att.push({ level:'yellow', text:'🟡 ' + d.missedTests + ' missed test' + (d.missedTests===1?'':'s') });
+    if (d.expiring && d.expiring.length) att.push({ level:'yellow', text:'🟡 ' + d.expiring.length + ' student' + (d.expiring.length===1?'':'s') + ' approaching expiry' });
+
+    var attHtml = att.length
+      ? '<div class="gpn-att">' + att.map(function(a){ return '<div class="gpn-att-item '+a.level+'">'+esc(a.text)+'</div>'; }).join('') + '</div>'
+      : '<div class="gpn-att"><div class="gpn-att-item ok">✓ Nothing urgent. You are on top of things.</div></div>';
+
+    var kpi =
+      '<div class="gpn-kv">' +
+        '<div><div class="k">Students</div><div class="v">' + (d.totalStudents||0) + '<small> / ' + (d.activeStudents||0) + ' active</small></div></div>' +
+        '<div><div class="k">Active Programmes</div><div class="v">' + (d.activeProgrammes||0) + '</div></div>' +
+        '<div><div class="k">Tests Today</div><div class="v">' + (d.testsToday||0) + '</div></div>' +
+        '<div><div class="k">Tests This Week</div><div class="v">' + (d.testsThisWeek||0) + '</div></div>' +
+        '<div><div class="k">Pending Evaluations</div><div class="v">' + (d.pendingEvaluations||0) + '</div></div>' +
+        '<div><div class="k">Missed Tests</div><div class="v">' + (d.missedTests||0) + '</div></div>' +
+      '</div>';
+
+    var recentSub = (d.recentSubmissions && d.recentSubmissions.length)
+      ? '<div class="gpn-table-wrap"><table class="gpn-table"><thead><tr><th>Time</th><th>Student</th><th>Test</th><th>Status</th></tr></thead><tbody>' +
+        d.recentSubmissions.map(function(x){
+          return '<tr><td class="nowrap">' + esc(fmtDT(x.SubmittedAt)) + '</td><td>' + esc(x.StudentName||x.StudentID) + '</td><td>' + esc(x.TestTitle||x.TestID) + '</td><td>' + badge(x.Status) + '</td></tr>';
+        }).join('') + '</tbody></table></div>'
+      : '<div class="gpn-empty">No recent submissions.</div>';
+
+    var recentPub = (d.recentlyPublished && d.recentlyPublished.length)
+      ? '<div class="gpn-table-wrap"><table class="gpn-table"><thead><tr><th>Published</th><th>Student</th><th>Test</th><th>Score</th></tr></thead><tbody>' +
+        d.recentlyPublished.map(function(x){
+          return '<tr><td class="nowrap">' + esc(fmtDate(x.PublishedDate)) + '</td><td>' + esc(x.StudentID) + '</td><td>' + esc(x.TestID) + '</td><td>' + esc(x.MarksObtained + '/' + x.MaxMarks) + ' · ' + esc(x.Percentage) + '%</td></tr>';
+        }).join('') + '</tbody></table></div>'
+      : '<div class="gpn-empty">No recent results.</div>';
+
+    var expiringHtml = (d.expiring && d.expiring.length)
+      ? '<div class="gpn-table-wrap"><table class="gpn-table"><thead><tr><th>Student</th><th>ID</th><th>Ends</th><th>Days</th></tr></thead><tbody>' +
+        d.expiring.map(function(x){
+          return '<tr><td>' + esc(x.Name) + '</td><td class="nowrap">' + esc(x.StudentID) + '</td><td>' + esc(fmtDate(x.EndDate)) + '</td><td>' + x.DaysLeft + '</td></tr>';
+        }).join('') + '</tbody></table></div>'
+      : '<div class="gpn-empty">No upcoming expiries.</div>';
+
+    v.innerHTML =
+      '<h1 class="gpn-h1">Dashboard</h1>' +
+      '<p class="gpn-muted" style="margin:4px 0 16px;">Overview and outstanding actions.</p>' +
+      '<h2 class="gpn-card-title" style="margin:0 0 10px;">Action Required</h2>' + attHtml +
+      '<section class="gpn-card"><h2 class="gpn-card-title">Overview</h2>' + kpi + '</section>' +
+      '<section class="gpn-card"><h2 class="gpn-card-title">Recently Published</h2>' + recentPub + '</section>' +
+      '<section class="gpn-card"><h2 class="gpn-card-title">Recent Submissions</h2>' + recentSub + '</section>' +
+      '<section class="gpn-card"><h2 class="gpn-card-title">Expiring Soon</h2>' + expiringHtml + '</section>';
+  });
+}
+
+/* ── 7  STUDENTS ───────────────────────────────────────────── */
+function viewStudents(){
+  return API.call('adminListStudents').then(function(r){
+    var v = el('view');
+    if (!r.ok){ v.innerHTML = '<div class="gpn-err">' + esc(r.error) + '</div>'; return; }
+    var students = r.data.students || [];
+    state.cache.students = students;
+
+    v.innerHTML =
+      '<div class="gpn-card">' +
+        '<div class="gpn-card-head">' +
+          '<h1 class="gpn-h1">Students</h1>' +
+          '<button class="gpn-btn gold" id="btnNewStudent">+ New Student</button>' +
+        '</div>' +
+        '<div class="gpn-filters">' +
+          '<div class="gpn-field"><label>Search</label><input id="sSearch" placeholder="Name / ID / Phone"></div>' +
+          '<div class="gpn-field"><label>Status</label><select id="sStatus"><option value="">All</option><option>ACTIVE</option><option>SUSPENDED</option></select></div>' +
+          '<div class="gpn-field"><label>Access</label><select id="sAccess"><option value="">All</option><option>ACTIVE</option><option>EXPIRING</option><option>EXPIRED</option><option>NONE</option></select></div>' +
+        '</div>' +
+        '<div id="studentsTable"></div>' +
+      '</div>';
+
+    function paint(){
+      var q  = valTrim('#sSearch').toLowerCase();
+      var st = val('#sStatus');
+      var ac = val('#sAccess');
+      var rows = students.filter(function(s){
+        if (st && String(s.Status).toUpperCase() !== st) return false;
+        if (ac && String(s.Access||'').toUpperCase() !== ac) return false;
+        if (q && (String(s.Name)+' '+String(s.StudentID)+' '+String(s.Phone||'')).toLowerCase().indexOf(q) < 0) return false;
+        return true;
+      });
+      var table = rows.length
+        ? '<div class="gpn-table-wrap"><table class="gpn-table"><thead><tr><th>ID</th><th>Name</th><th>Class</th><th>Phone</th><th>Access</th><th>Status</th><th>Actions</th></tr></thead><tbody>' +
+          rows.map(function(s){
+            return '<tr>' +
+              '<td class="nowrap">' + esc(s.StudentID) + '</td>' +
+              '<td>' + esc(s.Name) + '</td>' +
+              '<td>' + esc(s.Class) + '</td>' +
+              '<td class="nowrap">' + esc(s.Phone || '—') + '</td>' +
+              '<td>' + badge(s.Access) + '</td>' +
+              '<td>' + badge(s.Status) + '</td>' +
+              '<td><div class="gpn-row-actions">' +
+                '<button class="gpn-btn sm ghost" data-detail="' + esc(s.StudentID) + '">View</button>' +
+                '<button class="gpn-btn sm ghost" data-edit="' + esc(s.StudentID) + '">Edit</button>' +
+                '<button class="gpn-btn sm ghost" data-reset="' + esc(s.StudentID) + '">Reset PW</button>' +
+                '<button class="gpn-btn sm gold" data-enrol="' + esc(s.StudentID) + '">Enrol</button>' +
+                '<button class="gpn-btn sm ghost" data-remark="' + esc(s.StudentID) + '">Remark</button>' +
+              '</div></td>' +
+            '</tr>';
+          }).join('') + '</tbody></table></div>'
+        : '<div class="gpn-empty">No students match the filters.</div>';
+      setHTML('studentsTable', table);
+
+      document.querySelectorAll('#studentsTable [data-detail]').forEach(function(b){
+        b.addEventListener('click', function(){ studentDetail(b.getAttribute('data-detail')); });
+      });
+      document.querySelectorAll('#studentsTable [data-edit]').forEach(function(b){
+        b.addEventListener('click', function(){
+          var s = students.find(function(x){ return x.StudentID === b.getAttribute('data-edit'); });
+          studentEdit(s);
+        });
+      });
+      document.querySelectorAll('#studentsTable [data-reset]').forEach(function(b){
+        b.addEventListener('click', function(){ studentResetPassword(b.getAttribute('data-reset')); });
+      });
+      document.querySelectorAll('#studentsTable [data-enrol]').forEach(function(b){
+        b.addEventListener('click', function(){ studentEnrolModal(b.getAttribute('data-enrol')); });
+      });
+      document.querySelectorAll('#studentsTable [data-remark]').forEach(function(b){
+        b.addEventListener('click', function(){ addRemark(b.getAttribute('data-remark')); });
+      });
+    }
+
+    el('sSearch').addEventListener('input', paint);
+    el('sStatus').addEventListener('change', paint);
+    el('sAccess').addEventListener('change', paint);
+    el('btnNewStudent').addEventListener('click', studentCreateModal);
+    paint();
+  });
+}
+
+function studentCreateModal(){
+  var m = modal(
+    '<h3>New Student</h3>' +
+    '<div class="gpn-form-row"><div class="gpn-field"><label>Full Name *</label><input id="nsName"></div></div>' +
+    '<div class="gpn-form-row two">' +
+      '<div class="gpn-field"><label>Class</label><input id="nsClass" value="10"></div>' +
+      '<div class="gpn-field"><label>Board</label><input id="nsBoard" value="CBSE"></div>' +
+    '</div>' +
+    '<div class="gpn-form-row"><div class="gpn-field"><label>School</label><input id="nsSchool"></div></div>' +
+    '<div class="gpn-form-row two">' +
+      '<div class="gpn-field"><label>Parent Name</label><input id="nsParent"></div>' +
+      '<div class="gpn-field"><label>Phone</label><input id="nsPhone"></div>' +
+    '</div>' +
+    '<div class="gpn-form-row"><div class="gpn-field"><label>Initial Password *</label><input id="nsPassword" value="Student@123"></div></div>' +
+    '<div class="gpn-modal-actions">' +
+      '<button class="gpn-btn ghost" id="nsCancel">Cancel</button>' +
+      '<button class="gpn-btn gold" id="nsSave">Create</button>' +
+    '</div>'
+  );
+  m.querySelector('#nsCancel').addEventListener('click', closeModal);
+  m.querySelector('#nsSave').addEventListener('click', function(){
+    var data = {
+      Name: valTrim('#nsName'), Class: valTrim('#nsClass'), Board: valTrim('#nsBoard'),
+      School: valTrim('#nsSchool'), ParentName: valTrim('#nsParent'), Phone: valTrim('#nsPhone'),
+      Password: val('#nsPassword')
+    };
+    if (!data.Name){ toast('Name is required', true); return; }
+    if (!data.Password || data.Password.length < 6){ toast('Password must be ≥ 6 chars', true); return; }
+    API.call('adminCreateStudent', data).then(function(r){
+      if (!r.ok){ toast(r.error, true); return; }
+      toast('Created ' + r.data.StudentID);
+      closeModal();
+      render();
+    });
+  });
+}
+
+function studentEdit(s){
+  var m = modal(
+    '<h3>Edit ' + esc(s.StudentID) + '</h3>' +
+    '<div class="gpn-form-row"><div class="gpn-field"><label>Name</label><input id="esName" value="' + esc(s.Name) + '"></div></div>' +
+    '<div class="gpn-form-row two">' +
+      '<div class="gpn-field"><label>Class</label><input id="esClass" value="' + esc(s.Class) + '"></div>' +
+      '<div class="gpn-field"><label>Board</label><input id="esBoard" value="' + esc(s.Board) + '"></div>' +
+    '</div>' +
+    '<div class="gpn-form-row"><div class="gpn-field"><label>School</label><input id="esSchool" value="' + esc(s.School || '') + '"></div></div>' +
+    '<div class="gpn-form-row two">' +
+      '<div class="gpn-field"><label>Parent</label><input id="esParent" value="' + esc(s.ParentName || '') + '"></div>' +
+      '<div class="gpn-field"><label>Phone</label><input id="esPhone" value="' + esc(s.Phone || '') + '"></div>' +
+    '</div>' +
+    '<div class="gpn-form-row"><div class="gpn-field"><label>Status</label><select id="esStatus">' +
+      ['ACTIVE','SUSPENDED'].map(function(x){ return '<option' + (x === String(s.Status).toUpperCase() ? ' selected' : '') + '>' + x + '</option>'; }).join('') +
+    '</select></div></div>' +
+    '<div class="gpn-modal-actions">' +
+      '<button class="gpn-btn ghost" id="esCancel">Cancel</button>' +
+      '<button class="gpn-btn gold" id="esSave">Save</button>' +
+    '</div>'
+  );
+  m.querySelector('#esCancel').addEventListener('click', closeModal);
+  m.querySelector('#esSave').addEventListener('click', function(){
+    var patch = {
+      Name: valTrim('#esName'), Class: valTrim('#esClass'), Board: valTrim('#esBoard'),
+      School: valTrim('#esSchool'), ParentName: valTrim('#esParent'), Phone: valTrim('#esPhone'),
+      Status: val('#esStatus')
+    };
+    API.call('adminUpdateStudent', { id: s.StudentID, patch: patch }).then(function(r){
+      if (!r.ok){ toast(r.error, true); return; }
+      toast('Saved');
+      closeModal();
+      render();
+    });
+  });
+}
+
+function studentResetPassword(studentId){
+  var m = modal(
+    '<h3>Reset Password — ' + esc(studentId) + '</h3>' +
+    '<div class="gpn-form-row"><div class="gpn-field"><label>New Password</label><input id="rpPw" value="Student@123"></div></div>' +
+    '<div class="gpn-modal-actions">' +
+      '<button class="gpn-btn ghost" id="rpCancel">Cancel</button>' +
+      '<button class="gpn-btn gold" id="rpSave">Reset</button>' +
+    '</div>'
+  );
+  m.querySelector('#rpCancel').addEventListener('click', closeModal);
+  m.querySelector('#rpSave').addEventListener('click', function(){
+    var pw = val('#rpPw');
+    if (!pw || pw.length < 6){ toast('Password must be ≥ 6 chars', true); return; }
+    API.call('adminResetPassword', { id: studentId, password: pw }).then(function(r){
+      if (!r.ok){ toast(r.error, true); return; }
+      toast('Password updated');
+      closeModal();
+    });
+  });
+}
+
+function studentDetail(studentId){
+  API.call('adminGetStudent', { id: studentId }).then(function(r){
+    if (!r.ok){ toast(r.error, true); return; }
+    var s = r.data.student || {};
+    var enrol = r.data.enrolments || [];
+    var pays = r.data.payments || [];
+    var res  = r.data.results || [];
+    var act  = r.data.activity || [];
+
+    var enrolHtml = enrol.length
+      ? '<div class="gpn-table-wrap"><table class="gpn-table"><thead><tr><th>Enrolment</th><th>Programme</th><th>Start</th><th>End</th><th>Status</th></tr></thead><tbody>' +
+        enrol.map(function(e){
+          return '<tr><td class="nowrap">' + esc(e.EnrolmentID) + '</td><td>' + esc(e.ProgrammeID) + '</td><td>' + esc(fmtDate(e.StartDate)) + '</td><td>' + esc(fmtDate(e.EndDate)) + '</td><td>' + badge(e.Status) + '</td></tr>';
+        }).join('') + '</tbody></table></div>'
+      : '<div class="gpn-empty">No enrolments.</div>';
+
+    var resHtml = res.length
+      ? '<div class="gpn-table-wrap"><table class="gpn-table"><thead><tr><th>Test</th><th>Score</th><th>%</th><th>Published</th></tr></thead><tbody>' +
+        res.map(function(x){
+          return '<tr><td>' + esc(x.TestTitle || x.TestID) + '</td><td>' + x.MarksObtained + '/' + x.MaxMarks + '</td><td>' + x.Percentage + '%</td><td>' + esc(fmtDate(x.PublishedDate)) + '</td></tr>';
+        }).join('') + '</tbody></table></div>'
+      : '<div class="gpn-empty">No published results.</div>';
+
+    var payHtml = pays.length
+      ? '<div class="gpn-table-wrap"><table class="gpn-table"><thead><tr><th>Payment</th><th>Amount</th><th>Date</th><th>Status</th></tr></thead><tbody>' +
+        pays.map(function(p){
+          return '<tr><td class="nowrap">' + esc(p.PaymentID) + '</td><td>' + esc(p.Amount) + '</td><td>' + esc(fmtDate(p.PaymentDate)) + '</td><td>' + badge(p.Status) + '</td></tr>';
+        }).join('') + '</tbody></table></div>'
+      : '<div class="gpn-empty">No payments.</div>';
+
+    var actHtml = act.length
+      ? '<div class="gpn-table-wrap"><table class="gpn-table"><thead><tr><th>Time</th><th>Action</th><th>Entity</th></tr></thead><tbody>' +
+        act.slice(0,20).map(function(a){
+          return '<tr><td class="nowrap">' + esc(fmtDT(a.Timestamp)) + '</td><td>' + esc(a.Action) + '</td><td>' + esc(a.EntityType + (a.EntityID ? ' · ' + a.EntityID : '')) + '</td></tr>';
+        }).join('') + '</tbody></table></div>'
+      : '<div class="gpn-empty">No activity.</div>';
+
+    var m = modal(
+      '<h3>' + esc(s.Name) + ' · ' + esc(s.StudentID) + '</h3>' +
+      '<div class="gpn-kv" style="margin-bottom:14px;">' +
+        '<div><div class="k">Class</div><div class="v" style="font-size:.9rem;">' + esc(s.Class||'—') + '</div></div>' +
+        '<div><div class="k">Board</div><div class="v" style="font-size:.9rem;">' + esc(s.Board||'—') + '</div></div>' +
+        '<div><div class="k">Phone</div><div class="v" style="font-size:.9rem;">' + esc(s.Phone||'—') + '</div></div>' +
+        '<div><div class="k">Status</div><div class="v" style="font-size:.9rem;">' + esc(s.Status) + '</div></div>' +
+      '</div>' +
+      '<h2 class="gpn-card-title">Enrolments</h2>' + enrolHtml +
+      '<h2 class="gpn-card-title" style="margin-top:14px;">Results</h2>' + resHtml +
+      '<h2 class="gpn-card-title" style="margin-top:14px;">Payments</h2>' + payHtml +
+      '<h2 class="gpn-card-title" style="margin-top:14px;">Recent Activity</h2>' + actHtml +
+      '<div class="gpn-modal-actions"><button class="gpn-btn ghost" id="sdClose">Close</button></div>',
+      true
+    );
+    m.querySelector('#sdClose').addEventListener('click', closeModal);
+  });
+}
+
+function studentEnrolModal(studentId){
+  API.call('adminListProgrammes').then(function(pr){
+    if (!pr.ok){ toast(pr.error, true); return; }
+    var programmes = pr.data.programmes || [];
+    if (!programmes.length){ toast('Create a programme first.', true); return; }
+    var progOpts = programmes.map(function(p){
+      return '<option value="' + esc(p.ProgrammeID) + '">' + esc(p.Name) + '</option>';
+    }).join('');
+
+    var m = modal(
+      '<h3>Enrol Student — ' + esc(studentId) + '</h3>' +
+      '<div class="gpn-form-row"><div class="gpn-field"><label>Programme</label><select id="enProg">' + progOpts + '</select></div></div>' +
+      '<div class="gpn-form-row two">' +
+        '<div class="gpn-field"><label>Start Date</label><input type="date" id="enStart" value="' + todayStr() + '"></div>' +
+        '<div class="gpn-field"><label>End Date</label><input type="date" id="enEnd"></div>' +
+      '</div>' +
+      '<div class="gpn-form-row"><div class="gpn-field"><label>Subjects</label><div id="enSubs">Loading…</div></div></div>' +
+      '<div class="gpn-modal-actions">' +
+        '<button class="gpn-btn ghost" id="enCancel">Cancel</button>' +
+        '<button class="gpn-btn gold" id="enSave">Enrol</button>' +
+      '</div>'
+    );
+
+    function paintSubjects(){
+      var pid = val('#enProg');
+      var p = programmes.find(function(x){ return x.ProgrammeID === pid; });
+      var list = (p && p.Subjects) || [];
+      var box = m.querySelector('#enSubs');
+      if (!list.length){ box.innerHTML = '<div class="gpn-empty">No subjects in this programme.</div>'; return; }
+      box.innerHTML = list.map(function(s){
+        return '<label class="gpn-checkbox"><input type="checkbox" value="' + esc(s.SubjectID) + '" checked> ' + esc(s.Name) + '</label>';
+      }).join('');
+    }
+    m.querySelector('#enProg').addEventListener('change', paintSubjects);
+    paintSubjects();
+
+    m.querySelector('#enCancel').addEventListener('click', closeModal);
+    m.querySelector('#enSave').addEventListener('click', function(){
+      var subjectIds = Array.prototype.slice.call(m.querySelectorAll('#enSubs input:checked')).map(function(c){ return c.value; });
+      var data = {
+        StudentID: studentId,
+        ProgrammeID: val('#enProg'),
+        StartDate: val('#enStart'),
+        EndDate: val('#enEnd'),
+        SubjectIDs: subjectIds,
+        Status: 'ACTIVE'
+      };
+      API.call('adminCreateEnrolment', data).then(function(r){
+        if (!r.ok){ toast(r.error, true); return; }
+        toast('Enrolled');
+        closeModal();
+        render();
+      });
+    });
+  });
+}
+
+function addRemark(studentId){
+  var m = modal(
+    '<h3>Add Remark — ' + esc(studentId) + '</h3>' +
+    '<div class="gpn-form-row"><div class="gpn-field"><label>Remark</label><textarea id="rmText" placeholder="Feedback for the student"></textarea></div></div>' +
+    '<div class="gpn-modal-actions">' +
+      '<button class="gpn-btn ghost" id="rmCancel">Cancel</button>' +
+      '<button class="gpn-btn gold" id="rmSave">Save</button>' +
+    '</div>'
+  );
+  m.querySelector('#rmCancel').addEventListener('click', closeModal);
+  m.querySelector('#rmSave').addEventListener('click', function(){
+    var text = valTrim('#rmText');
+    if (!text){ toast('Remark is required', true); return; }
+    API.call('adminAddRemark', { StudentID: studentId, Text: text }).then(function(r){
+      if (!r.ok){ toast(r.error, true); return; }
+      toast('Remark saved');
+      closeModal();
+    });
+  });
+}
+
+/* ── 8  PROGRAMMES ─────────────────────────────────────────── */
+function viewProgrammes(){
+  return API.call('adminListProgrammes').then(function(r){
+    var v = el('view');
+    if (!r.ok){ v.innerHTML = '<div class="gpn-err">' + esc(r.error) + '</div>'; return; }
+    var progs = r.data.programmes || [];
+    state.cache.programmes = progs;
+
+    v.innerHTML =
+      '<div class="gpn-card">' +
+        '<div class="gpn-card-head">' +
+          '<h1 class="gpn-h1">Programmes</h1>' +
+          '<button class="gpn-btn gold" id="btnNewProg">+ New Programme</button>' +
+        '</div>' +
+        '<div class="gpn-table-wrap"><table class="gpn-table">' +
+          '<thead><tr><th>ID</th><th>Name</th><th>Class</th><th>Subjects</th><th>Duration</th><th>Price</th><th>Status</th><th>Actions</th></tr></thead>' +
+          '<tbody>' +
+            (progs.length ? progs.map(function(p){
+              return '<tr>' +
+                '<td class="nowrap">' + esc(p.ProgrammeID) + '</td>' +
+                '<td>' + esc(p.Name) + '</td>' +
+                '<td>' + esc(p.Class) + '</td>' +
+                '<td>' + ((p.Subjects || []).length) + '</td>' +
+                '<td>' + esc(p.Duration || '—') + '</td>' +
+                '<td>' + esc(p.Price || '—') + '</td>' +
+                '<td>' + badge(p.Status) + '</td>' +
+                '<td><div class="gpn-row-actions">' +
+                  '<button class="gpn-btn sm ghost" data-psub="' + esc(p.ProgrammeID) + '">Subjects</button>' +
+                  '<button class="gpn-btn sm ghost" data-edit="' + esc(p.ProgrammeID) + '">Edit</button>' +
+                '</div></td>' +
+              '</tr>';
+            }).join('') : '<tr><td colspan="8" class="gpn-empty">No programmes yet.</td></tr>') +
+          '</tbody>' +
+        '</table></div>' +
+      '</div>';
+
+    el('btnNewProg').addEventListener('click', programmeCreate);
+    v.querySelectorAll('[data-psub]').forEach(function(b){
+      b.addEventListener('click', function(){
+        var p = progs.find(function(x){ return x.ProgrammeID === b.getAttribute('data-psub'); });
+        programmeSubjectsModal(p);
+      });
+    });
+    v.querySelectorAll('[data-edit]').forEach(function(b){
+      b.addEventListener('click', function(){
+        var p = progs.find(function(x){ return x.ProgrammeID === b.getAttribute('data-edit'); });
+        programmeEdit(p);
+      });
+    });
+  });
+}
+
+function programmeCreate(){
+  var m = modal(
+    '<h3>New Programme</h3>' +
+    '<div class="gpn-form-row"><div class="gpn-field"><label>Name *</label><input id="npName" placeholder="Class 10 — Maths + Science + SST"></div></div>' +
+    '<div class="gpn-form-row two">' +
+      '<div class="gpn-field"><label>Class</label><input id="npClass" value="10"></div>' +
+      '<div class="gpn-field"><label>Board</label><input id="npBoard" value="CBSE"></div>' +
+    '</div>' +
+    '<div class="gpn-form-row"><div class="gpn-field"><label>Description</label><textarea id="npDesc"></textarea></div></div>' +
+    '<div class="gpn-form-row two">' +
+      '<div class="gpn-field"><label>Duration</label><input id="npDur" value="12 months"></div>' +
+      '<div class="gpn-field"><label>Price</label><input id="npPrice" value="30000"></div>' +
+    '</div>' +
+    '<div class="gpn-modal-actions">' +
+      '<button class="gpn-btn ghost" id="npCancel">Cancel</button>' +
+      '<button class="gpn-btn gold" id="npSave">Create</button>' +
+    '</div>'
+  );
+  m.querySelector('#npCancel').addEventListener('click', closeModal);
+  m.querySelector('#npSave').addEventListener('click', function(){
+    var data = {
+      Name: valTrim('#npName'), Class: valTrim('#npClass'), Board: valTrim('#npBoard'),
+      Description: valTrim('#npDesc'), Duration: valTrim('#npDur'), Price: valTrim('#npPrice'),
+      Status: 'ACTIVE'
+    };
+    if (!data.Name){ toast('Name required', true); return; }
+    API.call('adminCreateProgramme', data).then(function(r){
+      if (!r.ok){ toast(r.error, true); return; }
+      toast('Created ' + r.data.ProgrammeID);
+      closeModal();
+      render();
+    });
+  });
+}
+
+function programmeEdit(p){
+  var m = modal(
+    '<h3>Edit ' + esc(p.ProgrammeID) + '</h3>' +
+    '<div class="gpn-form-row"><div class="gpn-field"><label>Name</label><input id="epName" value="' + esc(p.Name) + '"></div></div>' +
+    '<div class="gpn-form-row two">' +
+      '<div class="gpn-field"><label>Class</label><input id="epClass" value="' + esc(p.Class) + '"></div>' +
+      '<div class="gpn-field"><label>Board</label><input id="epBoard" value="' + esc(p.Board) + '"></div>' +
+    '</div>' +
+    '<div class="gpn-form-row"><div class="gpn-field"><label>Description</label><textarea id="epDesc">' + esc(p.Description || '') + '</textarea></div></div>' +
+    '<div class="gpn-form-row two">' +
+      '<div class="gpn-field"><label>Duration</label><input id="epDur" value="' + esc(p.Duration || '') + '"></div>' +
+      '<div class="gpn-field"><label>Price</label><input id="epPrice" value="' + esc(p.Price || '') + '"></div>' +
+    '</div>' +
+    '<div class="gpn-form-row"><div class="gpn-field"><label>Status</label><select id="epStatus">' +
+      ['ACTIVE','INACTIVE'].map(function(x){ return '<option' + (x === String(p.Status).toUpperCase() ? ' selected' : '') + '>' + x + '</option>'; }).join('') +
+    '</select></div></div>' +
+    '<div class="gpn-modal-actions">' +
+      '<button class="gpn-btn ghost" id="epCancel">Cancel</button>' +
+      '<button class="gpn-btn gold" id="epSave">Save</button>' +
+    '</div>'
+  );
+  m.querySelector('#epCancel').addEventListener('click', closeModal);
+  m.querySelector('#epSave').addEventListener('click', function(){
+    var patch = {
+      Name: valTrim('#epName'), Class: valTrim('#epClass'), Board: valTrim('#epBoard'),
+      Description: valTrim('#epDesc'), Duration: valTrim('#epDur'), Price: valTrim('#epPrice'),
+      Status: val('#epStatus')
+    };
+    API.call('adminUpdateProgramme', { id: p.ProgrammeID, patch: patch }).then(function(r){
+      if (!r.ok){ toast(r.error, true); return; }
+      toast('Saved');
+      closeModal();
+      render();
+    });
+  });
+}
+
+/* FIX 1: programme-subject add/remove now checks every response.
+   Only shows "Subjects updated" if every add and remove succeeded. */
+function programmeSubjectsModal(p){
+  API.call('adminListSubjects').then(function(r){
+    if (!r.ok){ toast(r.error, true); return; }
+    var all = r.data.subjects || [];
+    var current = (p.Subjects || []).map(function(s){ return s.SubjectID; });
+    var m = modal(
+      '<h3>Subjects in ' + esc(p.Name) + '</h3>' +
+      (all.length
+        ? all.map(function(s){
+            return '<label class="gpn-checkbox"><input type="checkbox" value="' + esc(s.SubjectID) + '"' + (current.indexOf(s.SubjectID) >= 0 ? ' checked' : '') + '> ' +
+              esc(s.Name) + ' <span class="gpn-dim">· ' + esc(s.Class || '') + '</span></label>';
+          }).join('')
+        : '<div class="gpn-empty">No subjects yet.</div>') +
+      '<div class="gpn-modal-actions">' +
+        '<button class="gpn-btn ghost" id="mpsCancel">Cancel</button>' +
+        '<button class="gpn-btn gold" id="mpsSave">Save</button>' +
+      '</div>'
+    );
+    m.querySelector('#mpsCancel').addEventListener('click', closeModal);
+    m.querySelector('#mpsSave').addEventListener('click', function(){
+      var checked = Array.prototype.slice.call(m.querySelectorAll('input[type=checkbox]:checked')).map(function(c){ return c.value; });
+      var toAdd = checked.filter(function(x){ return current.indexOf(x) < 0; });
+      var toRemove = current.filter(function(x){ return checked.indexOf(x) < 0; });
+
+      var saveBtn = m.querySelector('#mpsSave');
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'Saving…';
+
+      // Chain add operations, aborting on the first failure.
+      var addChain = Promise.resolve(true);
+      toAdd.forEach(function(sid){
+        addChain = addChain.then(function(prev){
+          if (!prev) return false;
+          return API.call('adminAddProgrammeSubject', { programmeId: p.ProgrammeID, subjectId: sid })
+            .then(function(res){
+              if (!res || !res.ok) {
+                toast((res && res.error) || ('Failed to add subject ' + sid), true);
+                return false;
+              }
+              return true;
+            });
+        });
+      });
+
+      // Chain remove operations, but only if all adds succeeded.
+      addChain.then(function(addOk){
+        if (!addOk) return false;
+        var removeChain = Promise.resolve(true);
+        toRemove.forEach(function(sid){
+          removeChain = removeChain.then(function(prev){
+            if (!prev) return false;
+            return API.call('adminRemoveProgrammeSubject', { programmeId: p.ProgrammeID, subjectId: sid })
+              .then(function(res){
+                if (!res || !res.ok) {
+                  toast((res && res.error) || ('Failed to remove subject ' + sid), true);
+                  return false;
+                }
+                return true;
+              });
+          });
+        });
+        return removeChain;
+      }).then(function(allOk){
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'Save';
+        if (allOk) {
+          toast('Subjects updated');
+        }
+        // Always refresh from backend to reflect the true state, even after partial failure.
+        closeModal();
+        render();
+      });
+    });
+  });
+}
+
+/* ── 9  SUBJECTS ───────────────────────────────────────────── */
+function viewSubjects(){
+  return API.call('adminListSubjects').then(function(r){
+    var v = el('view');
+    if (!r.ok){ v.innerHTML = '<div class="gpn-err">' + esc(r.error) + '</div>'; return; }
+    var subs = r.data.subjects || [];
+    state.cache.subjects = subs;
+
+    v.innerHTML =
+      '<div class="gpn-card">' +
+        '<div class="gpn-card-head">' +
+          '<h1 class="gpn-h1">Subjects</h1>' +
+          '<button class="gpn-btn gold" id="btnNewSub">+ New Subject</button>' +
+        '</div>' +
+        '<div class="gpn-table-wrap"><table class="gpn-table">' +
+          '<thead><tr><th>ID</th><th>Name</th><th>Class</th><th>Board</th><th>Status</th><th>Actions</th></tr></thead>' +
+          '<tbody>' +
+            (subs.length ? subs.map(function(s){
+              return '<tr>' +
+                '<td class="nowrap">' + esc(s.SubjectID) + '</td>' +
+                '<td>' + esc(s.Name) + '</td>' +
+                '<td>' + esc(s.Class) + '</td>' +
+                '<td>' + esc(s.Board) + '</td>' +
+                '<td>' + badge(s.Status) + '</td>' +
+                '<td><button class="gpn-btn sm ghost" data-edit="' + esc(s.SubjectID) + '">Edit</button></td>' +
+              '</tr>';
+            }).join('') : '<tr><td colspan="6" class="gpn-empty">No subjects.</td></tr>') +
+          '</tbody>' +
+        '</table></div>' +
+      '</div>';
+
+    el('btnNewSub').addEventListener('click', subjectCreate);
+    v.querySelectorAll('[data-edit]').forEach(function(b){
+      b.addEventListener('click', function(){
+        var s = subs.find(function(x){ return x.SubjectID === b.getAttribute('data-edit'); });
+        subjectEdit(s);
+      });
+    });
+  });
+}
+
+function subjectCreate(){
+  var m = modal(
+    '<h3>New Subject</h3>' +
+    '<div class="gpn-form-row"><div class="gpn-field"><label>Name *</label><input id="nsuName" placeholder="Mathematics"></div></div>' +
+    '<div class="gpn-form-row two">' +
+      '<div class="gpn-field"><label>Class</label><input id="nsuClass" value="10"></div>' +
+      '<div class="gpn-field"><label>Board</label><input id="nsuBoard" value="CBSE"></div>' +
+    '</div>' +
+    '<div class="gpn-modal-actions">' +
+      '<button class="gpn-btn ghost" id="nsuCancel">Cancel</button>' +
+      '<button class="gpn-btn gold" id="nsuSave">Create</button>' +
+    '</div>'
+  );
+  m.querySelector('#nsuCancel').addEventListener('click', closeModal);
+  m.querySelector('#nsuSave').addEventListener('click', function(){
+    var data = { Name: valTrim('#nsuName'), Class: valTrim('#nsuClass'), Board: valTrim('#nsuBoard') };
+    if (!data.Name){ toast('Name required', true); return; }
+    API.call('adminCreateSubject', data).then(function(r){
+      if (!r.ok){ toast(r.error, true); return; }
+      toast('Created ' + r.data.SubjectID);
+      closeModal();
+      render();
+    });
+  });
+}
+
+function subjectEdit(s){
+  var m = modal(
+    '<h3>Edit ' + esc(s.SubjectID) + '</h3>' +
+    '<div class="gpn-form-row"><div class="gpn-field"><label>Name</label><input id="esuName" value="' + esc(s.Name) + '"></div></div>' +
+    '<div class="gpn-form-row two">' +
+      '<div class="gpn-field"><label>Class</label><input id="esuClass" value="' + esc(s.Class) + '"></div>' +
+      '<div class="gpn-field"><label>Board</label><input id="esuBoard" value="' + esc(s.Board) + '"></div>' +
+    '</div>' +
+    '<div class="gpn-form-row"><div class="gpn-field"><label>Status</label><select id="esuStatus">' +
+      ['ACTIVE','INACTIVE'].map(function(x){ return '<option' + (x === String(s.Status).toUpperCase() ? ' selected' : '') + '>' + x + '</option>'; }).join('') +
+    '</select></div></div>' +
+    '<div class="gpn-modal-actions">' +
+      '<button class="gpn-btn ghost" id="esuCancel">Cancel</button>' +
+      '<button class="gpn-btn gold" id="esuSave">Save</button>' +
+    '</div>'
+  );
+  m.querySelector('#esuCancel').addEventListener('click', closeModal);
+  m.querySelector('#esuSave').addEventListener('click', function(){
+    var patch = { Name: valTrim('#esuName'), Class: valTrim('#esuClass'), Board: valTrim('#esuBoard'), Status: val('#esuStatus') };
+    API.call('adminUpdateSubject', { id: s.SubjectID, patch: patch }).then(function(r){
+      if (!r.ok){ toast(r.error, true); return; }
+      toast('Saved');
+      closeModal();
+      render();
+    });
+  });
+}
+
+/* ── 10  CHAPTERS ──────────────────────────────────────────── */
+function viewChapters(){
+  return Promise.all([API.call('adminListChapters'), API.call('adminListSubjects')]).then(function(arr){
+    var cr = arr[0], sr = arr[1];
+    var v = el('view');
+    if (!cr.ok){ v.innerHTML = '<div class="gpn-err">' + esc(cr.error) + '</div>'; return; }
+    var chapters = cr.data.chapters || [];
+    var subjects = (sr.ok && sr.data.subjects) || [];
+    var sMap = {};
+    subjects.forEach(function(s){ sMap[s.SubjectID] = s.Name; });
+    state.cache.chapters = chapters;
+    state.cache.subjects = subjects;
+
+    v.innerHTML =
+      '<div class="gpn-card">' +
+        '<div class="gpn-card-head">' +
+          '<h1 class="gpn-h1">Chapters</h1>' +
+          '<button class="gpn-btn gold" id="btnNewChp">+ New Chapter</button>' +
+        '</div>' +
+        '<div class="gpn-table-wrap"><table class="gpn-table">' +
+          '<thead><tr><th>ID</th><th>Subject</th><th>Name</th><th>Number</th><th>Status</th><th>Actions</th></tr></thead>' +
+          '<tbody>' +
+            (chapters.length ? chapters.map(function(c){
+              return '<tr>' +
+                '<td class="nowrap">' + esc(c.ChapterID) + '</td>' +
+                '<td>' + esc(sMap[c.SubjectID] || c.SubjectID) + '</td>' +
+                '<td>' + esc(c.Name) + '</td>' +
+                '<td>' + esc(c.Number || '—') + '</td>' +
+                '<td>' + badge(c.Status) + '</td>' +
+                '<td><button class="gpn-btn sm ghost" data-edit="' + esc(c.ChapterID) + '">Edit</button></td>' +
+              '</tr>';
+            }).join('') : '<tr><td colspan="6" class="gpn-empty">No chapters.</td></tr>') +
+          '</tbody>' +
+        '</table></div>' +
+      '</div>';
+
+    el('btnNewChp').addEventListener('click', function(){ chapterCreate(subjects); });
+    v.querySelectorAll('[data-edit]').forEach(function(b){
+      b.addEventListener('click', function(){
+        var c = chapters.find(function(x){ return x.ChapterID === b.getAttribute('data-edit'); });
+        chapterEdit(c, subjects);
+      });
+    });
+  });
+}
+
+function chapterCreate(subjects){
+  if (!subjects.length){ toast('Create a subject first.', true); return; }
+  var opts = subjects.map(function(s){ return '<option value="' + esc(s.SubjectID) + '">' + esc(s.Name) + '</option>'; }).join('');
+  var m = modal(
+    '<h3>New Chapter</h3>' +
+    '<div class="gpn-form-row"><div class="gpn-field"><label>Subject</label><select id="nchSub">' + opts + '</select></div></div>' +
+    '<div class="gpn-form-row two">' +
+      '<div class="gpn-field"><label>Name *</label><input id="nchName"></div>' +
+      '<div class="gpn-field"><label>Number</label><input id="nchNum"></div>' +
+    '</div>' +
+    '<div class="gpn-form-row"><div class="gpn-field"><label>Description</label><textarea id="nchDesc"></textarea></div></div>' +
+    '<div class="gpn-modal-actions">' +
+      '<button class="gpn-btn ghost" id="nchCancel">Cancel</button>' +
+      '<button class="gpn-btn gold" id="nchSave">Create</button>' +
+    '</div>'
+  );
+  m.querySelector('#nchCancel').addEventListener('click', closeModal);
+  m.querySelector('#nchSave').addEventListener('click', function(){
+    var data = {
+      SubjectID: val('#nchSub'), Name: valTrim('#nchName'),
+      Number: valTrim('#nchNum'), Description: valTrim('#nchDesc')
+    };
+    if (!data.Name){ toast('Name required', true); return; }
+    API.call('adminCreateChapter', data).then(function(r){
+      if (!r.ok){ toast(r.error, true); return; }
+      toast('Created ' + r.data.ChapterID);
+      closeModal();
+      render();
+    });
+  });
+}
+
+function chapterEdit(c, subjects){
+  var opts = subjects.map(function(s){
+    return '<option value="' + esc(s.SubjectID) + '"' + (s.SubjectID === c.SubjectID ? ' selected' : '') + '>' + esc(s.Name) + '</option>';
+  }).join('');
+  var m = modal(
+    '<h3>Edit ' + esc(c.ChapterID) + '</h3>' +
+    '<div class="gpn-form-row"><div class="gpn-field"><label>Subject</label><select id="echSub">' + opts + '</select></div></div>' +
+    '<div class="gpn-form-row two">' +
+      '<div class="gpn-field"><label>Name</label><input id="echName" value="' + esc(c.Name) + '"></div>' +
+      '<div class="gpn-field"><label>Number</label><input id="echNum" value="' + esc(c.Number || '') + '"></div>' +
+    '</div>' +
+    '<div class="gpn-form-row"><div class="gpn-field"><label>Description</label><textarea id="echDesc">' + esc(c.Description || '') + '</textarea></div></div>' +
+    '<div class="gpn-modal-actions">' +
+      '<button class="gpn-btn ghost" id="echCancel">Cancel</button>' +
+      '<button class="gpn-btn gold" id="echSave">Save</button>' +
+    '</div>'
+  );
+  m.querySelector('#echCancel').addEventListener('click', closeModal);
+  m.querySelector('#echSave').addEventListener('click', function(){
+    var patch = {
+      SubjectID: val('#echSub'), Name: valTrim('#echName'),
+      Number: valTrim('#echNum'), Description: valTrim('#echDesc')
+    };
+    API.call('adminUpdateChapter', { id: c.ChapterID, patch: patch }).then(function(r){
+      if (!r.ok){ toast(r.error, true); return; }
+      toast('Saved');
+      closeModal();
+      render();
+    });
+  });
+}
+
+/* ── 11  ENROLMENTS ────────────────────────────────────────── */
+function viewEnrolments(){
+  return API.call('adminListEnrolments').then(function(r){
+    var v = el('view');
+    if (!r.ok){ v.innerHTML = '<div class="gpn-err">' + esc(r.error) + '</div>'; return; }
+    var enrol = r.data.enrolments || [];
+    state.cache.enrolments = enrol;
+
+    v.innerHTML =
+      '<div class="gpn-card">' +
+        '<div class="gpn-card-head"><h1 class="gpn-h1">Enrolments</h1></div>' +
+        '<p class="gpn-muted" style="margin:0 0 12px;">Manage access windows. Add new enrolments from the Students module.</p>' +
+        '<div class="gpn-table-wrap"><table class="gpn-table">' +
+          '<thead><tr><th>ID</th><th>Student</th><th>Programme</th><th>Subjects</th><th>Start</th><th>End</th><th>Status</th><th>Actions</th></tr></thead>' +
+          '<tbody>' +
+            (enrol.length ? enrol.map(function(e){
+              return '<tr>' +
+                '<td class="nowrap">' + esc(e.EnrolmentID) + '</td>' +
+                '<td class="nowrap">' + esc(e.StudentID) + '</td>' +
+                '<td class="nowrap">' + esc(e.ProgrammeID) + '</td>' +
+                '<td>' + esc(String(e.SubjectIDs || '').split(',').filter(Boolean).length) + '</td>' +
+                '<td>' + esc(fmtDate(e.StartDate)) + '</td>' +
+                '<td>' + esc(fmtDate(e.EndDate)) + '</td>' +
+                '<td>' + badge(e.Status) + '</td>' +
+                '<td><button class="gpn-btn sm ghost" data-edit="' + esc(e.EnrolmentID) + '">Edit</button></td>' +
+              '</tr>';
+            }).join('') : '<tr><td colspan="8" class="gpn-empty">No enrolments.</td></tr>') +
+          '</tbody>' +
+        '</table></div>' +
+      '</div>';
+
+    v.querySelectorAll('[data-edit]').forEach(function(b){
+      b.addEventListener('click', function(){
+        var e = enrol.find(function(x){ return x.EnrolmentID === b.getAttribute('data-edit'); });
+        enrolmentEdit(e);
+      });
+    });
+  });
+}
+
+function enrolmentEdit(e){
+  var m = modal(
+    '<h3>Edit Enrolment ' + esc(e.EnrolmentID) + '</h3>' +
+    '<div class="gpn-form-row two">' +
+      '<div class="gpn-field"><label>Start Date</label><input type="date" id="eeStart" value="' + esc(String(e.StartDate || '').substring(0,10)) + '"></div>' +
+      '<div class="gpn-field"><label>End Date</label><input type="date" id="eeEnd" value="' + esc(String(e.EndDate || '').substring(0,10)) + '"></div>' +
+    '</div>' +
+    '<div class="gpn-form-row"><div class="gpn-field"><label>Status</label><select id="eeStatus">' +
+      ['ACTIVE','SUSPENDED','EXPIRED','CANCELLED'].map(function(x){
+        return '<option' + (x === String(e.Status).toUpperCase() ? ' selected' : '') + '>' + x + '</option>';
+      }).join('') +
+    '</select></div></div>' +
+    '<div class="gpn-modal-actions">' +
+      '<button class="gpn-btn ghost" id="eeCancel">Cancel</button>' +
+      '<button class="gpn-btn gold" id="eeSave">Save</button>' +
+    '</div>'
+  );
+  m.querySelector('#eeCancel').addEventListener('click', closeModal);
+  m.querySelector('#eeSave').addEventListener('click', function(){
+    var patch = { StartDate: val('#eeStart'), EndDate: val('#eeEnd'), Status: val('#eeStatus') };
+    API.call('adminUpdateEnrolment', { id: e.EnrolmentID, patch: patch }).then(function(r){
+      if (!r.ok){ toast(r.error, true); return; }
+      toast('Saved');
+      closeModal();
+      render();
+    });
+  });
+}
+
+/* ── 12  MATERIALS ─────────────────────────────────────────── */
+function viewMaterials(){
+  return Promise.all([
+    API.call('adminListMaterials'),
+    API.call('adminListSubjects'),
+    API.call('adminListChapters'),
+    API.call('adminListProgrammes'),
+    API.call('adminMaterialUsage')
+  ]).then(function(arr){
+    var mr = arr[0], sr = arr[1], cr = arr[2], pr = arr[3], ur = arr[4];
+    var v = el('view');
+    if (!mr.ok){ v.innerHTML = '<div class="gpn-err">' + esc(mr.error) + '</div>'; return; }
+    var mats = mr.data.materials || [];
+    var subjects = (sr.ok && sr.data.subjects) || [];
+    var chapters = (cr.ok && cr.data.chapters) || [];
+    var programmes = (pr.ok && pr.data.programmes) || [];
+    var usage = (ur.ok && ur.data.usage) || {};
+    var sMap = {}; subjects.forEach(function(s){ sMap[s.SubjectID] = s.Name; });
+    var cMap = {}; chapters.forEach(function(c){ cMap[c.ChapterID] = c.Name; });
+    var pMap = {}; programmes.forEach(function(p){ pMap[p.ProgrammeID] = p.Name; });
+
+    state.cache.materials = mats;
+    state.cache.subjects = subjects;
+    state.cache.chapters = chapters;
+    state.cache.programmes = programmes;
+
+    v.innerHTML =
+      '<div class="gpn-card">' +
+        '<div class="gpn-card-head">' +
+          '<h1 class="gpn-h1">Materials</h1>' +
+          '<button class="gpn-btn gold" id="btnNewMat">+ New Material</button>' +
+        '</div>' +
+        '<p class="gpn-muted" style="margin:0 0 12px;">Use <code>r2://</code> prefix for private R2 objects or paste an external URL.</p>' +
+        '<div class="gpn-table-wrap"><table class="gpn-table">' +
+          '<thead><tr><th>ID</th><th>Title</th><th>Type</th><th>Subject</th><th>Chapter</th><th>Programme</th><th>Opened</th><th>Status</th><th>Actions</th></tr></thead>' +
+          '<tbody>' +
+            (mats.length ? mats.map(function(m){
+              var u = usage[m.MaterialID];
+              return '<tr>' +
+                '<td class="nowrap">' + esc(m.MaterialID) + '</td>' +
+                '<td>' + esc(m.Title) + '</td>' +
+                '<td>' + esc(m.Type) + '</td>' +
+                '<td>' + esc(sMap[m.SubjectID] || '—') + '</td>' +
+                '<td>' + esc(cMap[m.ChapterID] || '—') + '</td>' +
+                '<td>' + esc(pMap[m.ProgrammeID] || '—') + '</td>' +
+                '<td>' + (u ? u.opened : 0) + '</td>' +
+                '<td>' + badge(m.Status) + '</td>' +
+                '<td><button class="gpn-btn sm ghost" data-edit="' + esc(m.MaterialID) + '">Edit</button></td>' +
+              '</tr>';
+            }).join('') : '<tr><td colspan="9" class="gpn-empty">No materials.</td></tr>') +
+          '</tbody>' +
+        '</table></div>' +
+      '</div>';
+
+    el('btnNewMat').addEventListener('click', function(){ materialCreate(subjects, chapters, programmes); });
+    v.querySelectorAll('[data-edit]').forEach(function(b){
+      b.addEventListener('click', function(){
+        var m = mats.find(function(x){ return x.MaterialID === b.getAttribute('data-edit'); });
+        materialEdit(m, subjects, chapters, programmes);
+      });
+    });
+  });
+}
+
+function materialFormHtml(subjects, chapters, programmes, m){
+  var sOpts = '<option value="">— none —</option>' + subjects.map(function(s){
+    return '<option value="' + esc(s.SubjectID) + '"' + (m && s.SubjectID === m.SubjectID ? ' selected' : '') + '>' + esc(s.Name) + '</option>';
+  }).join('');
+  var cOpts = '<option value="">— none —</option>' + chapters.map(function(c){
+    return '<option value="' + esc(c.ChapterID) + '"' + (m && c.ChapterID === m.ChapterID ? ' selected' : '') + '>' + esc(c.Name) + '</option>';
+  }).join('');
+  var pOpts = '<option value="">— none —</option>' + programmes.map(function(p){
+    return '<option value="' + esc(p.ProgrammeID) + '"' + (m && p.ProgrammeID === m.ProgrammeID ? ' selected' : '') + '>' + esc(p.Name) + '</option>';
+  }).join('');
+  return '<div class="gpn-form-row"><div class="gpn-field"><label>Title *</label><input id="fmTitle" value="' + esc(m ? m.Title : '') + '"></div></div>' +
+    '<div class="gpn-form-row three">' +
+      '<div class="gpn-field"><label>Type</label><select id="fmType">' +
+        ['PDF','Notes','Worksheet','Video','Link'].map(function(t){ return '<option' + (m && t === m.Type ? ' selected' : '') + '>' + t + '</option>'; }).join('') +
+      '</select></div>' +
+      '<div class="gpn-field"><label>Class</label><input id="fmClass" value="' + esc(m ? m.Class : '10') + '"></div>' +
+      '<div class="gpn-field"><label>Status</label><select id="fmStatus"><option' + (m && m.Status === 'ACTIVE' ? ' selected' : '') + '>ACTIVE</option><option' + (m && m.Status === 'INACTIVE' ? ' selected' : '') + '>INACTIVE</option></select></div>' +
+    '</div>' +
+    '<div class="gpn-form-row"><div class="gpn-field"><label>URL (r2:// object key or https://…)</label><input id="fmURL" value="' + esc(m ? m.URL : '') + '" placeholder="r2://guides/maths/ch1.pdf"></div></div>' +
+    '<div class="gpn-form-row three">' +
+      '<div class="gpn-field"><label>Subject</label><select id="fmSub">' + sOpts + '</select></div>' +
+      '<div class="gpn-field"><label>Chapter</label><select id="fmChp">' + cOpts + '</select></div>' +
+      '<div class="gpn-field"><label>Programme</label><select id="fmProg">' + pOpts + '</select></div>' +
+    '</div>' +
+    '<div class="gpn-form-row"><div class="gpn-field"><label>Description</label><textarea id="fmDesc">' + esc(m ? m.Description : '') + '</textarea></div></div>';
+}
+
+function readMaterialForm(){
+  return {
+    Title: valTrim('#fmTitle'), Type: val('#fmType'), Class: valTrim('#fmClass'),
+    Status: val('#fmStatus'), URL: valTrim('#fmURL'),
+    SubjectID: val('#fmSub'), ChapterID: val('#fmChp'), ProgrammeID: val('#fmProg'),
+    Description: valTrim('#fmDesc')
+  };
+}
+
+function materialCreate(subjects, chapters, programmes){
+  var m = modal(
+    '<h3>New Material</h3>' +
+    materialFormHtml(subjects, chapters, programmes, null) +
+    '<div class="gpn-modal-actions">' +
+      '<button class="gpn-btn ghost" id="fmCancel">Cancel</button>' +
+      '<button class="gpn-btn gold" id="fmSave">Create</button>' +
+    '</div>'
+  );
+  m.querySelector('#fmCancel').addEventListener('click', closeModal);
+  m.querySelector('#fmSave').addEventListener('click', function(){
+    var data = readMaterialForm();
+    if (!data.Title){ toast('Title required', true); return; }
+    API.call('adminCreateMaterial', data).then(function(r){
+      if (!r.ok){ toast(r.error, true); return; }
+      toast('Created ' + r.data.MaterialID);
+      closeModal();
+      render();
+    });
+  });
+}
+
+function materialEdit(mat, subjects, chapters, programmes){
+  var m = modal(
+    '<h3>Edit ' + esc(mat.MaterialID) + '</h3>' +
+    materialFormHtml(subjects, chapters, programmes, mat) +
+    '<div class="gpn-modal-actions">' +
+      '<button class="gpn-btn ghost" id="fmCancel">Cancel</button>' +
+      '<button class="gpn-btn gold" id="fmSave">Save</button>' +
+    '</div>'
+  );
+  m.querySelector('#fmCancel').addEventListener('click', closeModal);
+  m.querySelector('#fmSave').addEventListener('click', function(){
+    var patch = readMaterialForm();
+    API.call('adminUpdateMaterial', { id: mat.MaterialID, patch: patch }).then(function(r){
+      if (!r.ok){ toast(r.error, true); return; }
+      toast('Saved');
+      closeModal();
+      render();
+    });
+  });
+}
+
+/* ── 13  SCHEDULE ──────────────────────────────────────────── */
+/* FIX 4C: Schedule now loads chapters and exposes ChapterID + EndTime. */
+function viewSchedule(){
+  return Promise.all([
+    API.call('adminListSchedule'),
+    API.call('adminListSubjects'),
+    API.call('adminListProgrammes'),
+    API.call('adminListChapters')
+  ]).then(function(arr){
+    var sr = arr[0], subr = arr[1], pr = arr[2], cr = arr[3];
+    var v = el('view');
+    if (!sr.ok){ v.innerHTML = '<div class="gpn-err">' + esc(sr.error) + '</div>'; return; }
+    var items = sr.data.schedule || [];
+    var subjects = (subr.ok && subr.data.subjects) || [];
+    var programmes = (pr.ok && pr.data.programmes) || [];
+    var chapters = (cr.ok && cr.data.chapters) || [];
+    var sMap = {}; subjects.forEach(function(s){ sMap[s.SubjectID] = s.Name; });
+    var pMap = {}; programmes.forEach(function(p){ pMap[p.ProgrammeID] = p.Name; });
+    var cMap = {}; chapters.forEach(function(c){ cMap[c.ChapterID] = c.Name; });
+
+    state.cache.schedule = items;
+    state.cache.subjects = subjects;
+    state.cache.programmes = programmes;
+    state.cache.chapters = chapters;
+
+    v.innerHTML =
+      '<div class="gpn-card">' +
+        '<div class="gpn-card-head">' +
+          '<h1 class="gpn-h1">Schedule</h1>' +
+          '<button class="gpn-btn gold" id="btnNewSch">+ New Item</button>' +
+        '</div>' +
+        '<p class="gpn-muted" style="margin:0 0 12px;">Leave Student ID blank for a programme-wide task.</p>' +
+        '<div class="gpn-table-wrap"><table class="gpn-table">' +
+          '<thead><tr><th>ID</th><th>Type</th><th>Date</th><th>Time</th><th>Student</th><th>Programme</th><th>Subject</th><th>Chapter</th><th>Status</th><th>Actions</th></tr></thead>' +
+          '<tbody>' +
+            (items.length ? items.map(function(s){
+              var timeStr = (s.StartTime || '—') + (s.EndTime ? ' – ' + s.EndTime : '');
+              return '<tr>' +
+                '<td class="nowrap">' + esc(s.ScheduleID) + '</td>' +
+                '<td>' + esc(s.Type) + '</td>' +
+                '<td>' + esc(fmtDate(s.Date)) + '</td>' +
+                '<td>' + esc(timeStr) + '</td>' +
+                '<td>' + esc(s.StudentID || '—') + '</td>' +
+                '<td>' + esc(pMap[s.ProgrammeID] || '—') + '</td>' +
+                '<td>' + esc(sMap[s.SubjectID] || '—') + '</td>' +
+                '<td>' + esc(cMap[s.ChapterID] || '—') + '</td>' +
+                '<td>' + badge(s.Status) + '</td>' +
+                '<td><button class="gpn-btn sm ghost" data-edit="' + esc(s.ScheduleID) + '">Edit</button></td>' +
+              '</tr>';
+            }).join('') : '<tr><td colspan="10" class="gpn-empty">No schedule items.</td></tr>') +
+          '</tbody>' +
+        '</table></div>' +
+      '</div>';
+
+    el('btnNewSch').addEventListener('click', function(){ scheduleCreate(subjects, programmes, chapters); });
+    v.querySelectorAll('[data-edit]').forEach(function(b){
+      b.addEventListener('click', function(){
+        var s = items.find(function(x){ return x.ScheduleID === b.getAttribute('data-edit'); });
+        scheduleEdit(s, subjects, programmes, chapters);
+      });
+    });
+  });
+}
+
+function scheduleFormHtml(subjects, programmes, chapters, s){
+  var sOpts = '<option value="">— none —</option>' + subjects.map(function(x){
+    return '<option value="' + esc(x.SubjectID) + '"' + (s && x.SubjectID === s.SubjectID ? ' selected' : '') + '>' + esc(x.Name) + '</option>';
+  }).join('');
+  var pOpts = '<option value="">— none —</option>' + programmes.map(function(x){
+    return '<option value="' + esc(x.ProgrammeID) + '"' + (s && x.ProgrammeID === s.ProgrammeID ? ' selected' : '') + '>' + esc(x.Name) + '</option>';
+  }).join('');
+  var cOpts = '<option value="">— none —</option>' + (chapters || []).map(function(x){
+    return '<option value="' + esc(x.ChapterID) + '"' + (s && x.ChapterID === s.ChapterID ? ' selected' : '') + '>' + esc(x.Name) + '</option>';
+  }).join('');
+  return '<div class="gpn-form-row two">' +
+      '<div class="gpn-field"><label>Type</label><select id="fsType">' +
+        ['Study','Practice','Test','Revision','Retest'].map(function(t){ return '<option' + (s && t === s.Type ? ' selected' : '') + '>' + t + '</option>'; }).join('') +
+      '</select></div>' +
+      '<div class="gpn-field"><label>Status</label><select id="fsStatus">' +
+        ['ACTIVE','CANCELLED'].map(function(x){ return '<option' + (s && x === String(s.Status).toUpperCase() ? ' selected' : '') + '>' + x + '</option>'; }).join('') +
+      '</select></div>' +
+    '</div>' +
+    '<div class="gpn-form-row three">' +
+      '<div class="gpn-field"><label>Date</label><input type="date" id="fsDate" value="' + esc(s ? String(s.Date).substring(0,10) : todayStr()) + '"></div>' +
+      '<div class="gpn-field"><label>Start Time</label><input type="time" id="fsTime" value="' + esc(s ? (s.StartTime || '') : '') + '"></div>' +
+      '<div class="gpn-field"><label>End Time</label><input type="time" id="fsEndTime" value="' + esc(s ? (s.EndTime || '') : '') + '"></div>' +
+    '</div>' +
+    '<div class="gpn-form-row"><div class="gpn-field"><label>Student ID (blank = programme-wide)</label><input id="fsStudent" value="' + esc(s ? s.StudentID : '') + '" placeholder="STU-0001"></div></div>' +
+    '<div class="gpn-form-row two">' +
+      '<div class="gpn-field"><label>Programme</label><select id="fsProg">' + pOpts + '</select></div>' +
+      '<div class="gpn-field"><label>Subject</label><select id="fsSub">' + sOpts + '</select></div>' +
+    '</div>' +
+    '<div class="gpn-form-row two">' +
+      '<div class="gpn-field"><label>Chapter</label><select id="fsChp">' + cOpts + '</select></div>' +
+      '<div class="gpn-field"><label>Reference (Test / Material ID)</label><input id="fsRef" value="' + esc(s ? s.RefID : '') + '" placeholder="TST-0001"></div>' +
+    '</div>';
+}
+
+function readScheduleForm(){
+  return {
+    Type: val('#fsType'), Status: val('#fsStatus'),
+    Date: val('#fsDate'), StartTime: val('#fsTime'), EndTime: val('#fsEndTime'),
+    StudentID: String(val('#fsStudent')).trim().toUpperCase(),
+    ProgrammeID: val('#fsProg'), SubjectID: val('#fsSub'), ChapterID: val('#fsChp'),
+    RefID: String(val('#fsRef')).trim().toUpperCase()
+  };
+}
+
+function scheduleCreate(subjects, programmes, chapters){
+  var m = modal(
+    '<h3>New Schedule Item</h3>' +
+    scheduleFormHtml(subjects, programmes, chapters, null) +
+    '<div class="gpn-modal-actions">' +
+      '<button class="gpn-btn ghost" id="fsCancel">Cancel</button>' +
+      '<button class="gpn-btn gold" id="fsSave">Create</button>' +
+    '</div>'
+  );
+  m.querySelector('#fsCancel').addEventListener('click', closeModal);
+  m.querySelector('#fsSave').addEventListener('click', function(){
+    var data = readScheduleForm();
+    if (!data.Date || !data.Type){ toast('Date and Type required', true); return; }
+    API.call('adminCreateSchedule', data).then(function(r){
+      if (!r.ok){ toast(r.error, true); return; }
+      toast('Created ' + r.data.ScheduleID);
+      closeModal();
+      render();
+    });
+  });
+}
+
+function scheduleEdit(s, subjects, programmes, chapters){
+  var m = modal(
+    '<h3>Edit ' + esc(s.ScheduleID) + '</h3>' +
+    scheduleFormHtml(subjects, programmes, chapters, s) +
+    '<div class="gpn-modal-actions">' +
+      '<button class="gpn-btn ghost" id="fsCancel">Cancel</button>' +
+      '<button class="gpn-btn gold" id="fsSave">Save</button>' +
+    '</div>'
+  );
+  m.querySelector('#fsCancel').addEventListener('click', closeModal);
+  m.querySelector('#fsSave').addEventListener('click', function(){
+    var patch = readScheduleForm();
+    API.call('adminUpdateSchedule', { id: s.ScheduleID, patch: patch }).then(function(r){
+      if (!r.ok){ toast(r.error, true); return; }
+      toast('Saved');
+      closeModal();
+      render();
+    });
+  });
+}
+
+/* ── 14  QUESTION BANK ─────────────────────────────────────── */
+/* FIX 4A: Question form now exposes Class, Topic and Status. */
+function viewQuestions(){
+  return Promise.all([API.call('adminListQuestions'), API.call('adminListSubjects'), API.call('adminListChapters')]).then(function(arr){
+    var qr = arr[0], sr = arr[1], cr = arr[2];
+    var v = el('view');
+    if (!qr.ok){ v.innerHTML = '<div class="gpn-err">' + esc(qr.error) + '</div>'; return; }
+    var qs = qr.data.questions || [];
+    var subjects = (sr.ok && sr.data.subjects) || [];
+    var chapters = (cr.ok && cr.data.chapters) || [];
+    var sMap = {}; subjects.forEach(function(s){ sMap[s.SubjectID] = s.Name; });
+
+    state.cache.questions = qs;
+    state.cache.subjects = subjects;
+    state.cache.chapters = chapters;
+
+    v.innerHTML =
+      '<div class="gpn-card">' +
+        '<div class="gpn-card-head">' +
+          '<h1 class="gpn-h1">Question Bank</h1>' +
+          '<button class="gpn-btn gold" id="btnNewQ">+ New Question</button>' +
+        '</div>' +
+        '<p class="gpn-muted" style="margin:0 0 12px;">Questions already deployed into a test cannot be edited.</p>' +
+        '<div class="gpn-table-wrap"><table class="gpn-table">' +
+          '<thead><tr><th>ID</th><th>Type</th><th>Question</th><th>Subject</th><th>Class</th><th>Topic</th><th>Marks</th><th>Difficulty</th><th>Status</th><th>Actions</th></tr></thead>' +
+          '<tbody>' +
+            (qs.length ? qs.map(function(q){
+              var short = String(q.Question || '').substring(0,60);
+              return '<tr>' +
+                '<td class="nowrap">' + esc(q.QuestionID) + '</td>' +
+                '<td>' + esc(q.Type) + '</td>' +
+                '<td>' + esc(short) + (String(q.Question || '').length > 60 ? '…' : '') + '</td>' +
+                '<td>' + esc(sMap[q.SubjectID] || '—') + '</td>' +
+                '<td>' + esc(q.Class || '—') + '</td>' +
+                '<td>' + esc(q.Topic || '—') + '</td>' +
+                '<td>' + esc(q.Marks) + '</td>' +
+                '<td>' + esc(q.Difficulty) + '</td>' +
+                '<td>' + badge(q.Status) + '</td>' +
+                '<td><button class="gpn-btn sm ghost" data-edit="' + esc(q.QuestionID) + '">Edit</button></td>' +
+              '</tr>';
+            }).join('') : '<tr><td colspan="10" class="gpn-empty">No questions.</td></tr>') +
+          '</tbody>' +
+        '</table></div>' +
+      '</div>';
+
+    el('btnNewQ').addEventListener('click', function(){ questionCreate(subjects, chapters); });
+    v.querySelectorAll('[data-edit]').forEach(function(b){
+      b.addEventListener('click', function(){
+        var q = qs.find(function(x){ return x.QuestionID === b.getAttribute('data-edit'); });
+        questionEdit(q, subjects, chapters);
+      });
+    });
+  });
+}
+
+function questionFormHtml(subjects, chapters, q){
+  var sOpts = '<option value="">— none —</option>' + subjects.map(function(x){
+    return '<option value="' + esc(x.SubjectID) + '"' + (q && x.SubjectID === q.SubjectID ? ' selected' : '') + '>' + esc(x.Name) + '</option>';
+  }).join('');
+  var cOpts = '<option value="">— none —</option>' + chapters.map(function(x){
+    return '<option value="' + esc(x.ChapterID) + '"' + (q && x.ChapterID === q.ChapterID ? ' selected' : '') + '>' + esc(x.Name) + '</option>';
+  }).join('');
+  var types = ['MCQ','Multiple Choice','Checkbox','Dropdown','Short Answer','Paragraph'];
+  return '<div class="gpn-form-row three">' +
+      '<div class="gpn-field"><label>Type</label><select id="fqType">' +
+        types.map(function(t){ return '<option' + (q && t === q.Type ? ' selected' : '') + '>' + t + '</option>'; }).join('') +
+      '</select></div>' +
+      '<div class="gpn-field"><label>Marks</label><input id="fqMarks" type="number" min="1" value="' + esc(q ? q.Marks : 2) + '"></div>' +
+      '<div class="gpn-field"><label>Difficulty</label><select id="fqDiff">' +
+        ['Easy','Medium','Hard'].map(function(d){ return '<option' + (q && d === q.Difficulty ? ' selected' : '') + '>' + d + '</option>'; }).join('') +
+      '</select></div>' +
+    '</div>' +
+    '<div class="gpn-form-row three">' +
+      '<div class="gpn-field"><label>Class</label><input id="fqClass" value="' + esc(q ? (q.Class || '10') : '10') + '" placeholder="10"></div>' +
+      '<div class="gpn-field"><label>Subject</label><select id="fqSub">' + sOpts + '</select></div>' +
+      '<div class="gpn-field"><label>Chapter</label><select id="fqChp">' + cOpts + '</select></div>' +
+    '</div>' +
+    '<div class="gpn-form-row two">' +
+      '<div class="gpn-field"><label>Topic</label><input id="fqTopic" value="' + esc(q ? (q.Topic || '') : '') + '" placeholder="e.g. Quadratic Equations"></div>' +
+      '<div class="gpn-field"><label>Status</label><select id="fqStatus">' +
+        ['ACTIVE','INACTIVE'].map(function(x){ return '<option' + (q && x === String(q.Status).toUpperCase() ? ' selected' : '') + '>' + x + '</option>'; }).join('') +
+      '</select></div>' +
+    '</div>' +
+    '<div class="gpn-form-row"><div class="gpn-field"><label>Question *</label><textarea id="fqQ">' + esc(q ? q.Question : '') + '</textarea></div></div>' +
+    '<div class="gpn-form-row"><div class="gpn-field"><label>Options (pipe-separated for objective types)</label><input id="fqOpts" placeholder="A|B|C|D" value="' + esc(q ? q.Options : '') + '"></div></div>' +
+    '<div class="gpn-form-row"><div class="gpn-field"><label>Correct Answer (for objective)</label><input id="fqCorrect" value="' + esc(q ? q.CorrectAnswer : '') + '"></div></div>' +
+    '<div class="gpn-form-row"><div class="gpn-field"><label>Model Answer (for descriptive)</label><textarea id="fqModel">' + esc(q ? q.ModelAnswer : '') + '</textarea></div></div>' +
+    '<div class="gpn-form-row"><div class="gpn-field"><label>Explanation (optional)</label><textarea id="fqExp">' + esc(q ? q.Explanation : '') + '</textarea></div></div>';
+}
+
+function readQuestionForm(){
+  return {
+    Type: val('#fqType'),
+    Marks: Number(val('#fqMarks') || 1),
+    Difficulty: val('#fqDiff'),
+    Class: valTrim('#fqClass'),
+    SubjectID: val('#fqSub'),
+    ChapterID: val('#fqChp'),
+    Topic: valTrim('#fqTopic'),
+    Status: val('#fqStatus'),
+    Question: valTrim('#fqQ'),
+    Options: valTrim('#fqOpts'),
+    CorrectAnswer: valTrim('#fqCorrect'),
+    ModelAnswer: valTrim('#fqModel'),
+    Explanation: valTrim('#fqExp')
+  };
+}
+
+function questionCreate(subjects, chapters){
+  var m = modal(
+    '<h3>New Question</h3>' +
+    questionFormHtml(subjects, chapters, null) +
+    '<div class="gpn-modal-actions">' +
+      '<button class="gpn-btn ghost" id="fqCancel">Cancel</button>' +
+      '<button class="gpn-btn gold" id="fqSave">Create</button>' +
+    '</div>', true
+  );
+  m.querySelector('#fqCancel').addEventListener('click', closeModal);
+  m.querySelector('#fqSave').addEventListener('click', function(){
+    var data = readQuestionForm();
+    if (!data.Question){ toast('Question text required', true); return; }
+    API.call('adminCreateQuestion', data).then(function(r){
+      if (!r.ok){ toast(r.error, true); return; }
+      toast('Created ' + r.data.QuestionID);
+      closeModal();
+      render();
+    });
+  });
+}
+
+function questionEdit(q, subjects, chapters){
+  var m = modal(
+    '<h3>Edit ' + esc(q.QuestionID) + '</h3>' +
+    questionFormHtml(subjects, chapters, q) +
+    '<div class="gpn-modal-actions">' +
+      '<button class="gpn-btn ghost" id="fqCancel">Cancel</button>' +
+      '<button class="gpn-btn gold" id="fqSave">Save</button>' +
+    '</div>', true
+  );
+  m.querySelector('#fqCancel').addEventListener('click', closeModal);
+  m.querySelector('#fqSave').addEventListener('click', function(){
+    var patch = readQuestionForm();
+    API.call('adminUpdateQuestion', { id: q.QuestionID, patch: patch }).then(function(r){
+      if (!r.ok){ toast(r.error, true); return; }
+      toast('Saved');
+      closeModal();
+      render();
+    });
+  });
+}
+
+/* ── 15  TESTS ─────────────────────────────────────────────── */
+/* FIX 2: AVAILABLE requires a FormID. */
+/* FIX 4B: Test form now exposes ChapterID. */
+function viewTests(){
+  return Promise.all([
+    API.call('adminListTests'),
+    API.call('adminListSubjects'),
+    API.call('adminListProgrammes'),
+    API.call('adminListChapters')
+  ]).then(function(arr){
+    var tr = arr[0], sr = arr[1], pr = arr[2], cr = arr[3];
+    var v = el('view');
+    if (!tr.ok){ v.innerHTML = '<div class="gpn-err">' + esc(tr.error) + '</div>'; return; }
+    var tests = tr.data.tests || [];
+    var subjects = (sr.ok && sr.data.subjects) || [];
+    var programmes = (pr.ok && pr.data.programmes) || [];
+    var chapters = (cr.ok && cr.data.chapters) || [];
+    var sMap = {}; subjects.forEach(function(s){ sMap[s.SubjectID] = s.Name; });
+    var pMap = {}; programmes.forEach(function(p){ pMap[p.ProgrammeID] = p.Name; });
+
+    state.cache.tests = tests;
+    state.cache.subjects = subjects;
+    state.cache.programmes = programmes;
+    state.cache.chapters = chapters;
+
+    v.innerHTML =
+      '<div class="gpn-card">' +
+        '<div class="gpn-card-head">' +
+          '<h1 class="gpn-h1">Tests</h1>' +
+          '<button class="gpn-btn gold" id="btnNewTest">+ New Test</button>' +
+        '</div>' +
+        '<div class="gpn-table-wrap"><table class="gpn-table">' +
+          '<thead><tr><th>ID</th><th>Title</th><th>Subject</th><th>Programme</th><th>Marks</th><th>Status</th><th>Submissions</th><th>Pending</th><th>Actions</th></tr></thead>' +
+          '<tbody>' +
+            (tests.length ? tests.map(function(t){
+              return '<tr>' +
+                '<td class="nowrap">' + esc(t.TestID) + '</td>' +
+                '<td>' + esc(t.Title) + '</td>' +
+                '<td>' + esc(sMap[t.SubjectID] || '—') + '</td>' +
+                '<td>' + esc(pMap[t.ProgrammeID] || '—') + '</td>' +
+                '<td>' + esc(t.TotalMarks) + '</td>' +
+                '<td>' + badge(t.Status) + '</td>' +
+                '<td>' + (t.submissions || 0) + '</td>' +
+                '<td>' + (t.pendingManual ? '<span class="gpn-tag warn">' + t.pendingManual + '</span>' : '0') + '</td>' +
+                '<td><div class="gpn-row-actions">' +
+                  '<button class="gpn-btn sm ghost" data-manage="' + esc(t.TestID) + '">Manage</button>' +
+                  (t.FormID ? '<button class="gpn-btn sm ghost" data-sync="' + esc(t.TestID) + '">Sync</button>' : '') +
+                  '<button class="gpn-btn sm ghost" data-edit="' + esc(t.TestID) + '">Edit</button>' +
+                '</div></td>' +
+              '</tr>';
+            }).join('') : '<tr><td colspan="9" class="gpn-empty">No tests.</td></tr>') +
+          '</tbody>' +
+        '</table></div>' +
+      '</div>';
+
+    el('btnNewTest').addEventListener('click', function(){ testCreate(subjects, programmes, chapters); });
+    v.querySelectorAll('[data-manage]').forEach(function(b){
+      b.addEventListener('click', function(){ testManage(b.getAttribute('data-manage')); });
+    });
+    v.querySelectorAll('[data-sync]').forEach(function(b){
+      b.addEventListener('click', function(){
+        var btn = b; btn.disabled = true;
+        API.call('adminSyncSubmissions', { testId: b.getAttribute('data-sync') }).then(function(r){
+          btn.disabled = false;
+          if (!r.ok){ toast(r.error, true); return; }
+          toast('Synced: ' + r.data.processed + ' new, ' + r.data.rejected + ' rejected');
+          render();
+        });
+      });
+    });
+    v.querySelectorAll('[data-edit]').forEach(function(b){
+      b.addEventListener('click', function(){
+        var t = tests.find(function(x){ return x.TestID === b.getAttribute('data-edit'); });
+        testEdit(t, subjects, programmes, chapters);
+      });
+    });
+  });
+}
+
+function testFormHtml(subjects, programmes, chapters, t){
+  var sOpts = '<option value="">— none —</option>' + subjects.map(function(x){
+    return '<option value="' + esc(x.SubjectID) + '"' + (t && x.SubjectID === t.SubjectID ? ' selected' : '') + '>' + esc(x.Name) + '</option>';
+  }).join('');
+  var pOpts = '<option value="">— none —</option>' + programmes.map(function(x){
+    return '<option value="' + esc(x.ProgrammeID) + '"' + (t && x.ProgrammeID === t.ProgrammeID ? ' selected' : '') + '>' + esc(x.Name) + '</option>';
+  }).join('');
+  var cOpts = '<option value="">— none —</option>' + (chapters || []).map(function(x){
+    return '<option value="' + esc(x.ChapterID) + '"' + (t && x.ChapterID === t.ChapterID ? ' selected' : '') + '>' + esc(x.Name) + '</option>';
+  }).join('');
+  return '<div class="gpn-form-row"><div class="gpn-field"><label>Title *</label><input id="ftTitle" value="' + esc(t ? t.Title : '') + '" placeholder="Science Ch 2 — Motion"></div></div>' +
+    '<div class="gpn-form-row two">' +
+      '<div class="gpn-field"><label>Subject</label><select id="ftSub">' + sOpts + '</select></div>' +
+      '<div class="gpn-field"><label>Chapter</label><select id="ftChp">' + cOpts + '</select></div>' +
+    '</div>' +
+    '<div class="gpn-form-row two">' +
+      '<div class="gpn-field"><label>Programme</label><select id="ftProg">' + pOpts + '</select></div>' +
+      '<div class="gpn-field"><label>Duration (min)</label><input id="ftDur" type="number" value="' + esc(t ? t.Duration : 60) + '"></div>' +
+    '</div>' +
+    '<div class="gpn-form-row"><div class="gpn-field"><label>Status</label><select id="ftStatus">' +
+      ['DRAFT','SCHEDULED','AVAILABLE'].map(function(x){
+        return '<option' + (t && x === String(t.Status).toUpperCase() ? ' selected' : '') + '>' + x + '</option>';
+      }).join('') +
+    '</select></div></div>';
+}
+
+function readTestForm(){
+  return {
+    Title: valTrim('#ftTitle'),
+    SubjectID: val('#ftSub'),
+    ChapterID: val('#ftChp'),
+    ProgrammeID: val('#ftProg'),
+    Duration: Number(val('#ftDur') || 0),
+    Status: val('#ftStatus')
+  };
+}
+
+function testCreate(subjects, programmes, chapters){
+  var m = modal(
+    '<h3>New Test</h3>' +
+    testFormHtml(subjects, programmes, chapters, null) +
+    '<div class="gpn-modal-actions">' +
+      '<button class="gpn-btn ghost" id="ftCancel">Cancel</button>' +
+      '<button class="gpn-btn gold" id="ftSave">Create</button>' +
+    '</div>'
+  );
+  m.querySelector('#ftCancel').addEventListener('click', closeModal);
+  m.querySelector('#ftSave').addEventListener('click', function(){
+    var data = readTestForm();
+    if (!data.Title){ toast('Title required', true); return; }
+    if (data.Status === 'AVAILABLE') {
+      toast('Generate the Google Form before making this test AVAILABLE.', true);
+      return;
+    }
+    API.call('adminCreateTest', data).then(function(r){
+      if (!r.ok){ toast(r.error, true); return; }
+      toast('Created ' + r.data.TestID);
+      closeModal();
+      render();
+    });
+  });
+}
+
+function testEdit(t, subjects, programmes, chapters){
+  var m = modal(
+    '<h3>Edit ' + esc(t.TestID) + '</h3>' +
+    testFormHtml(subjects, programmes, chapters, t) +
+    '<div class="gpn-modal-actions">' +
+      '<button class="gpn-btn ghost" id="ftCancel">Cancel</button>' +
+      '<button class="gpn-btn gold" id="ftSave">Save</button>' +
+    '</div>'
+  );
+  m.querySelector('#ftCancel').addEventListener('click', closeModal);
+  m.querySelector('#ftSave').addEventListener('click', function(){
+    var patch = readTestForm();
+    if (patch.Status === 'AVAILABLE' && !t.FormID) {
+      toast('Generate the Google Form before making this test AVAILABLE.', true);
+      return;
+    }
+    API.call('adminUpdateTest', { id: t.TestID, patch: patch }).then(function(r){
+      if (!r.ok){ toast(r.error, true); return; }
+      toast('Saved');
+      closeModal();
+      render();
+    });
+  });
+}
+
+/* FIX 3: Save Questions button is disabled/hidden once FormID exists. */
+function testManage(testId){
+  Promise.all([API.call('adminGetTest', { id: testId }), API.call('adminListQuestions')]).then(function(arr){
+    var tr = arr[0], qr = arr[1];
+    if (!tr.ok){ toast(tr.error, true); return; }
+    var test = tr.data.test;
+    var current = (tr.data.questions || []).map(function(x){ return x.question.QuestionID; });
+    var qs = (qr.ok && qr.data.questions) || [];
+
+    var hasForm = !!test.FormID;
+
+    var lockNotice = hasForm
+      ? '<div class="gpn-lock-notice">🔒 The question set is locked because the Google Form has already been generated. To change questions, create a new test.</div>'
+      : '<p class="gpn-muted" style="margin:0 0 8px;font-size:.8rem;">Select the questions, then Save Questions. The Google Form can be generated afterwards.</p>';
+
+    var saveQBtn = hasForm
+      ? '<button class="gpn-btn" id="tmSaveQ" disabled title="Question set is locked">Save Questions (locked)</button>'
+      : '<button class="gpn-btn" id="tmSaveQ">Save Questions</button>';
+
+    var genBtn = hasForm
+      ? ''
+      : '<button class="gpn-btn gold" id="tmGenForm">Generate Form</button>';
+
+    var checkboxDisabled = hasForm ? ' disabled' : '';
+
+    var m = modal(
+      '<h3>' + esc(test.Title) + ' · ' + esc(test.TestID) + '</h3>' +
+      '<div class="gpn-kv" style="margin-bottom:14px;">' +
+        '<div><div class="k">Status</div><div class="v" style="font-size:.9rem;">' + esc(test.Status) + '</div></div>' +
+        '<div><div class="k">Total Marks</div><div class="v" style="font-size:.9rem;">' + esc(test.TotalMarks) + '</div></div>' +
+        '<div><div class="k">Duration</div><div class="v" style="font-size:.9rem;">' + esc(test.Duration) + ' min</div></div>' +
+        '<div><div class="k">Form</div><div class="v" style="font-size:.72rem;word-break:break-all;">' + (test.FormID ? esc(String(test.FormID).substring(0,18)) + '…' : '— none —') + '</div></div>' +
+      '</div>' +
+      '<h2 class="gpn-card-title">Questions in Test</h2>' +
+      lockNotice +
+      '<div style="max-height:280px;overflow-y:auto;border:1px solid var(--gpn-divider);border-radius:8px;padding:8px;margin-bottom:12px;">' +
+        (qs.length ? qs.map(function(q){
+          return '<label class="gpn-checkbox"><input type="checkbox" value="' + esc(q.QuestionID) + '"' + (current.indexOf(q.QuestionID) >= 0 ? ' checked' : '') + checkboxDisabled + '> ' +
+            '<span style="flex:1;">' + esc(String(q.Question || '').substring(0,90)) + '</span>' +
+            '<span class="gpn-dim">' + esc(q.Type) + ' · ' + esc(q.Marks) + 'm</span></label>';
+        }).join('') : '<div class="gpn-empty">No questions in bank yet.</div>') +
+      '</div>' +
+      '<h2 class="gpn-card-title">Google Form</h2>' +
+      '<p class="gpn-muted" style="margin:0 0 10px;font-size:.78rem;">' +
+        (hasForm
+          ? 'A form has been generated. Regenerating is disabled to protect existing attempts.'
+          : 'No form yet. Save questions first, then generate.') +
+      '</p>' +
+      (test.FormURL ? '<p class="gpn-muted" style="font-size:.72rem;word-break:break-all;">' + esc(test.FormURL) + '</p>' : '') +
+      '<div class="gpn-modal-actions">' +
+        '<button class="gpn-btn ghost" id="tmClose">Close</button>' +
+        saveQBtn +
+        genBtn +
+      '</div>', true
+    );
+
+    m.querySelector('#tmClose').addEventListener('click', closeModal);
+
+    if (!hasForm) {
+      var saveBtn = m.querySelector('#tmSaveQ');
+      if (saveBtn) {
+        saveBtn.addEventListener('click', function(){
+          var checked = Array.prototype.slice.call(m.querySelectorAll('input[type=checkbox]:checked')).map(function(c){ return c.value; });
+          if (!checked.length){ toast('Select at least one question.', true); return; }
+          var items = checked.map(function(qid, i){
+            var q = qs.find(function(x){ return x.QuestionID === qid; });
+            return { questionId: qid, marks: Number(q.Marks || 1), order: i+1 };
+          });
+          saveBtn.disabled = true;
+          API.call('adminSetTestQuestions', { testId: testId, items: items }).then(function(r){
+            saveBtn.disabled = false;
+            if (!r.ok){ toast(r.error, true); return; }
+            toast('Saved (' + r.data.totalMarks + ' marks)');
+            closeModal();
+            render();
+          });
+        });
+      }
+
+      var gen = m.querySelector('#tmGenForm');
+      if (gen) {
+        gen.addEventListener('click', function(){
+          gen.disabled = true;
+          API.call('adminGenerateForm', { testId: testId }).then(function(r){
+            gen.disabled = false;
+            if (!r.ok){ toast(r.error, true); return; }
+            toast('Form ready');
+            closeModal();
+            render();
+          });
+        });
+      }
+    }
+  });
+}
+
+/* ── 16  EVALUATION ────────────────────────────────────────── */
+function viewEvaluation(){
+  return API.call('adminPendingEvaluations').then(function(r){
+    var v = el('view');
+    if (!r.ok){ v.innerHTML = '<div class="gpn-err">' + esc(r.error) + '</div>'; return; }
+    var pending = r.data.pending || [];
+
+    v.innerHTML =
+      '<div class="gpn-card">' +
+        '<div class="gpn-card-head">' +
+          '<h1 class="gpn-h1">Evaluation Center</h1>' +
+          '<span class="gpn-tag ' + (pending.length ? 'warn' : 'ok') + '">' + pending.length + ' pending</span>' +
+        '</div>' +
+        (pending.length
+          ? '<div class="gpn-table-wrap"><table class="gpn-table"><thead><tr><th>Student</th><th>Test</th><th>Pending</th><th>Action</th></tr></thead><tbody>' +
+            pending.map(function(p){
+              return '<tr>' +
+                '<td>' + esc(p.StudentName) + '<div class="gpn-dim">' + esc(p.StudentID) + '</div></td>' +
+                '<td>' + esc(p.TestTitle) + '</td>' +
+                '<td><span class="gpn-tag warn">' + p.PendingCount + '</span></td>' +
+                '<td><button class="gpn-btn sm gold" data-eval="' + esc(p.AttemptID) + '">Evaluate</button></td>' +
+              '</tr>';
+            }).join('') + '</tbody></table></div>'
+          : '<div class="gpn-empty">No pending evaluations. 🎉</div>') +
+      '</div>';
+
+    v.querySelectorAll('[data-eval]').forEach(function(b){
+      b.addEventListener('click', function(){ openEvaluation(b.getAttribute('data-eval')); });
+    });
+  });
+}
+
+function openEvaluation(attemptId){
+  API.call('adminAttemptDetail', { attemptId: attemptId }).then(function(r){
+    if (!r.ok){ toast(r.error, true); return; }
+    var d = r.data;
+    var pendingAns = (d.answers || []).filter(function(a){ return String(a.Status) === 'PENDING_MANUAL'; });
+    if (!pendingAns.length){ toast('No pending answers.', true); return; }
+
+    var body = pendingAns.map(function(a, i){
+      return '<div class="gpn-answer">' +
+        '<div class="gpn-answer-label">Q' + (i+1) + '. ' + esc(a.QuestionText) + '</div>' +
+        '<div class="gpn-dim" style="margin-bottom:4px;">Student answer:</div>' +
+        '<div class="gpn-answer-box">' + esc(a.StudentAnswer || '—') + '</div>' +
+        (a.ModelAnswer ? '<div class="gpn-dim" style="margin-bottom:4px;">Model answer:</div>' +
+          '<div class="gpn-answer-model">' + esc(a.ModelAnswer) + '</div>' : '') +
+        '<div class="gpn-form-row two">' +
+          '<div class="gpn-field"><label>Marks (0 – ' + a.MaxMarks + ')</label><input type="number" id="em' + i + '" value="0" min="0" max="' + a.MaxMarks + '"></div>' +
+          '<div class="gpn-field"><label>Remark</label><input id="er' + i + '" placeholder="Optional"></div>' +
+        '</div>' +
+        '<input type="hidden" id="eq' + i + '" value="' + esc(a.QuestionID) + '">' +
+      '</div>';
+    }).join('');
+
+    var m = modal(
+      '<h3>Evaluate — ' + esc(d.student ? d.student.Name : '') + ' · ' + esc(d.test ? d.test.Title : '') + '</h3>' +
+      '<p class="gpn-muted" style="margin:0 0 12px;">' + pendingAns.length + ' descriptive answer(s) to grade.</p>' +
+      body +
+      '<div class="gpn-modal-actions">' +
+        '<button class="gpn-btn ghost" id="evCancel">Cancel</button>' +
+        '<button class="gpn-btn" id="evSave">Save All</button>' +
+        '<button class="gpn-btn gold" id="evPublish">Save &amp; Publish</button>' +
+      '</div>', true
+    );
+
+    m.querySelector('#evCancel').addEventListener('click', closeModal);
+
+    function saveAll(){
+      var chain = Promise.resolve(true);
+      pendingAns.forEach(function(a, i){
+        chain = chain.then(function(prev){
+          if (!prev) return false;
+          var marks = Number(val('#em' + i) || 0);
+          var remark = val('#er' + i);
+          var qid = val('#eq' + i);
+          var max = a.MaxMarks;
+          if (marks < 0 || marks > max) { toast('Marks for Q' + (i+1) + ' must be 0–' + max, true); return false; }
+          return API.call('adminSaveEvaluation', { attemptId: attemptId, questionId: qid, marks: marks, remark: remark })
+            .then(function(res){ if (!res.ok){ toast(res.error, true); return false; } return true; });
+        });
+      });
+      return chain;
+    }
+
+    m.querySelector('#evSave').addEventListener('click', function(){
+      saveAll().then(function(ok){
+        if (!ok) return;
+        toast('Saved');
+        closeModal();
+        render();
+      });
+    });
+
+    m.querySelector('#evPublish').addEventListener('click', function(){
+      saveAll().then(function(ok){
+        if (!ok) return;
+        API.call('adminPublishResult', { attemptId: attemptId }).then(function(res){
+          if (!res.ok){ toast(res.error, true); return; }
+          toast('Published: ' + res.data.MarksObtained + '/' + res.data.MaxMarks + ' (' + res.data.Percentage + '%)');
+          closeModal();
+          render();
+        });
+      });
+    });
+  });
+}
+
+/* ── 17  RESULTS ───────────────────────────────────────────── */
+function viewResults(){
+  return API.call('adminListResults').then(function(r){
+    var v = el('view');
+    if (!r.ok){ v.innerHTML = '<div class="gpn-err">' + esc(r.error) + '</div>'; return; }
+    var results = r.data.results || [];
+    state.cache.results = results;
+
+    v.innerHTML =
+      '<div class="gpn-card">' +
+        '<div class="gpn-card-head"><h1 class="gpn-h1">Results</h1></div>' +
+        '<div class="gpn-table-wrap"><table class="gpn-table">' +
+          '<thead><tr><th>Result</th><th>Student</th><th>Test</th><th>Attempt</th><th>Score</th><th>%</th><th>Status</th><th>Published</th></tr></thead>' +
+          '<tbody>' +
+            (results.length ? results.map(function(r){
+              return '<tr>' +
+                '<td class="nowrap">' + esc(r.ResultID) + '</td>' +
+                '<td class="nowrap">' + esc(r.StudentID) + '</td>' +
+                '<td class="nowrap">' + esc(r.TestID) + '</td>' +
+                '<td class="nowrap">' + esc(r.AttemptID || '—') + '</td>' +
+                '<td>' + r.MarksObtained + '/' + r.MaxMarks + '</td>' +
+                '<td>' + r.Percentage + '%</td>' +
+                '<td>' + badge(r.PublicationStatus) + '</td>' +
+                '<td class="nowrap">' + esc(fmtDate(r.PublishedDate)) + '</td>' +
+              '</tr>';
+            }).join('') : '<tr><td colspan="8" class="gpn-empty">No results yet.</td></tr>') +
+          '</tbody>' +
+        '</table></div>' +
+      '</div>';
+  });
+}
+
+/* ── 18  ANALYTICS ─────────────────────────────────────────── */
+function viewAnalytics(){
+  return API.call('adminAnalytics').then(function(r){
+    var v = el('view');
+    if (!r.ok){ v.innerHTML = '<div class="gpn-err">' + esc(r.error) + '</div>'; return; }
+    var students = (r.data.students || []).filter(function(s){ return s.tests > 0; });
+
+    v.innerHTML =
+      '<div class="gpn-card">' +
+        '<div class="gpn-card-head"><h1 class="gpn-h1">Analytics</h1></div>' +
+        '<p class="gpn-muted" style="margin:0 0 12px;">' + students.length + ' student(s) with published results.</p>' +
+        '<div class="gpn-table-wrap"><table class="gpn-table">' +
+          '<thead><tr><th>Student</th><th>Tests</th><th>Average</th><th>Highest</th><th>Lowest</th><th>Actions</th></tr></thead>' +
+          '<tbody>' +
+            (students.length ? students.map(function(s){
+              return '<tr>' +
+                '<td>' + esc(s.Name) + '<div class="gpn-dim">' + esc(s.StudentID) + '</div></td>' +
+                '<td>' + s.tests + '</td>' +
+                '<td>' + s.avg + '%</td>' +
+                '<td>' + s.highest + '%</td>' +
+                '<td>' + s.lowest + '%</td>' +
+                '<td><button class="gpn-btn sm ghost" data-drill="' + esc(s.StudentID) + '">Drill-down</button></td>' +
+              '</tr>';
+            }).join('') : '<tr><td colspan="6" class="gpn-empty">No data yet.</td></tr>') +
+          '</tbody>' +
+        '</table></div>' +
+      '</div>';
+
+    v.querySelectorAll('[data-drill]').forEach(function(b){
+      b.addEventListener('click', function(){ analyticsDrillDown(b.getAttribute('data-drill')); });
+    });
+  });
+}
+
+function analyticsDrillDown(studentId){
+  API.call('adminStudentAnalytics', { studentId: studentId }).then(function(r){
+    if (!r.ok){ toast(r.error, true); return; }
+    var s = r.data.summary || {};
+    var bySub = r.data.bySubject || [];
+    var bySubHtml = bySub.length
+      ? '<div class="gpn-table-wrap"><table class="gpn-table"><thead><tr><th>Subject</th><th>Tests</th><th>Average</th></tr></thead><tbody>' +
+        bySub.map(function(b){ return '<tr><td>' + esc(b.name) + '</td><td>' + b.tests + '</td><td>' + b.avg + '%</td></tr>'; }).join('') + '</tbody></table></div>'
+      : '<div class="gpn-empty">No subject-level data.</div>';
+
+    var m = modal(
+      '<h3>' + esc(studentId) + ' — Performance</h3>' +
+      '<div class="gpn-kv" style="margin-bottom:14px;">' +
+        '<div><div class="k">Average</div><div class="v">' + s.avg + '%</div></div>' +
+        '<div><div class="k">Tests</div><div class="v">' + s.tests + '</div></div>' +
+        '<div><div class="k">Highest</div><div class="v">' + s.highest + '%</div></div>' +
+        '<div><div class="k">Lowest</div><div class="v">' + s.lowest + '%</div></div>' +
+      '</div>' +
+      '<h2 class="gpn-card-title">By Subject</h2>' + bySubHtml +
+      '<div class="gpn-modal-actions"><button class="gpn-btn ghost" id="ddClose">Close</button></div>',
+      true
+    );
+    m.querySelector('#ddClose').addEventListener('click', closeModal);
+  });
+}
+
+/* ── 19  PAYMENTS ──────────────────────────────────────────── */
+function viewPayments(){
+  return API.call('adminListPayments').then(function(r){
+    var v = el('view');
+    if (!r.ok){ v.innerHTML = '<div class="gpn-err">' + esc(r.error) + '</div>'; return; }
+    var payments = r.data.payments || [];
+
+    v.innerHTML =
+      '<div class="gpn-card">' +
+        '<div class="gpn-card-head">' +
+          '<h1 class="gpn-h1">Payments / Access</h1>' +
+          '<button class="gpn-btn gold" id="btnNewPay">+ Record Payment</button>' +
+        '</div>' +
+        '<p class="gpn-muted" style="margin:0 0 12px;">Manual payment records. Access is governed by enrolments.</p>' +
+        '<div class="gpn-table-wrap"><table class="gpn-table">' +
+          '<thead><tr><th>ID</th><th>Student</th><th>Programme</th><th>Amount</th><th>Date</th><th>Access Until</th><th>Status</th></tr></thead>' +
+          '<tbody>' +
+            (payments.length ? payments.map(function(p){
+              return '<tr>' +
+                '<td class="nowrap">' + esc(p.PaymentID) + '</td>' +
+                '<td class="nowrap">' + esc(p.StudentID) + '</td>' +
+                '<td>' + esc(p.ProgrammeID || '—') + '</td>' +
+                '<td>' + esc(p.Amount || 0) + '</td>' +
+                '<td>' + esc(fmtDate(p.PaymentDate)) + '</td>' +
+                '<td>' + esc(fmtDate(p.EndDate)) + '</td>' +
+                '<td>' + badge(p.Status) + '</td>' +
+              '</tr>';
+            }).join('') : '<tr><td colspan="7" class="gpn-empty">No payments recorded.</td></tr>') +
+          '</tbody>' +
+        '</table></div>' +
+      '</div>';
+
+    el('btnNewPay').addEventListener('click', paymentCreate);
+  });
+}
+
+function paymentCreate(){
+  var m = modal(
+    '<h3>Record Payment</h3>' +
+    '<div class="gpn-form-row two">' +
+      '<div class="gpn-field"><label>Student ID</label><input id="npStu" placeholder="STU-0001"></div>' +
+      '<div class="gpn-field"><label>Programme ID</label><input id="npProg" placeholder="PRG-0001"></div>' +
+    '</div>' +
+    '<div class="gpn-form-row two">' +
+      '<div class="gpn-field"><label>Amount</label><input id="npAmt" type="number" value="0"></div>' +
+      '<div class="gpn-field"><label>Payment Date</label><input type="date" id="npDate" value="' + todayStr() + '"></div>' +
+    '</div>' +
+    '<div class="gpn-form-row"><div class="gpn-field"><label>Reference</label><input id="npRef" placeholder="UPI / Receipt no."></div></div>' +
+    '<div class="gpn-form-row two">' +
+      '<div class="gpn-field"><label>Access Start</label><input type="date" id="npStart" value="' + todayStr() + '"></div>' +
+      '<div class="gpn-field"><label>Access End</label><input type="date" id="npEnd"></div>' +
+    '</div>' +
+    '<div class="gpn-form-row"><div class="gpn-field"><label>Notes</label><textarea id="npNotes"></textarea></div></div>' +
+    '<div class="gpn-modal-actions">' +
+      '<button class="gpn-btn ghost" id="npCancel">Cancel</button>' +
+      '<button class="gpn-btn gold" id="npSave">Save</button>' +
+    '</div>'
+  );
+  m.querySelector('#npCancel').addEventListener('click', closeModal);
+  m.querySelector('#npSave').addEventListener('click', function(){
+    var data = {
+      StudentID: String(val('#npStu')).trim().toUpperCase(),
+      ProgrammeID: String(val('#npProg')).trim().toUpperCase(),
+      Amount: Number(val('#npAmt') || 0),
+      PaymentDate: val('#npDate'),
+      Reference: valTrim('#npRef'),
+      StartDate: val('#npStart'),
+      EndDate: val('#npEnd'),
+      Status: 'PAID',
+      Notes: valTrim('#npNotes')
+    };
+    if (!data.StudentID){ toast('Student ID required', true); return; }
+    API.call('adminCreatePayment', data).then(function(r){
+      if (!r.ok){ toast(r.error, true); return; }
+      toast('Recorded ' + r.data.PaymentID);
+      closeModal();
+      render();
+    });
+  });
+}
+
+/* ── 20  ACTIVITY ──────────────────────────────────────────── */
+function viewActivity(){
+  return API.call('adminActivity').then(function(r){
+    var v = el('view');
+    if (!r.ok){ v.innerHTML = '<div class="gpn-err">' + esc(r.error) + '</div>'; return; }
+    var activity = r.data.activity || [];
+
+    v.innerHTML =
+      '<div class="gpn-card">' +
+        '<div class="gpn-card-head">' +
+          '<h1 class="gpn-h1">Activity Log</h1>' +
+          '<span class="gpn-dim">' + activity.length + ' recent events</span>' +
+        '</div>' +
+        '<div class="gpn-table-wrap"><table class="gpn-table">' +
+          '<thead><tr><th>Time</th><th>User</th><th>Role</th><th>Action</th><th>Entity</th><th>Description</th></tr></thead>' +
+          '<tbody>' +
+            (activity.length ? activity.map(function(a){
+              return '<tr>' +
+                '<td class="nowrap">' + esc(fmtDT(a.Timestamp)) + '</td>' +
+                '<td class="nowrap">' + esc(a.UserID) + '</td>' +
+                '<td>' + esc(a.Role) + '</td>' +
+                '<td>' + esc(a.Action) + '</td>' +
+                '<td class="nowrap">' + esc(a.EntityType + (a.EntityID ? ' · ' + a.EntityID : '')) + '</td>' +
+                '<td class="gpn-dim">' + esc(a.Description || '') + '</td>' +
+              '</tr>';
+            }).join('') : '<tr><td colspan="6" class="gpn-empty">No activity logged.</td></tr>') +
+          '</tbody>' +
+        '</table></div>' +
+      '</div>';
+  });
+}
+
+/* ── 21  SETTINGS ──────────────────────────────────────────── */
+function viewSettings(){
+  var v = el('view');
+  var user = getSession().user || {};
+  v.innerHTML =
+    '<div class="gpn-card">' +
+      '<h1 class="gpn-h1">Settings</h1>' +
+      '<p class="gpn-muted" style="margin:4px 0 16px;">System information and administrative notes.</p>' +
+      '<div class="gpn-kv">' +
+        '<div><div class="k">Signed in as</div><div class="v" style="font-size:.9rem;">' + esc(user.name || '—') + '</div></div>' +
+        '<div><div class="k">Admin ID</div><div class="v" style="font-size:.9rem;">' + esc(user.id || '—') + '</div></div>' +
+        '<div><div class="k">App</div><div class="v" style="font-size:.9rem;">Guided Path One-on-One</div></div>' +
+        '<div><div class="k">Backend Version</div><div class="v" style="font-size:.9rem;">2.4.1</div></div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="gpn-card">' +
+      '<h2 class="gpn-card-title">Administrative Notes</h2>' +
+      '<ul style="padding-left:20px;margin:0;font-size:.85rem;line-height:1.75;color:var(--gpn-muted);">' +
+        '<li>Reset a student password from the <strong>Students</strong> module.</li>' +
+        '<li>Generate the Google Form for a test from <strong>Tests → Manage</strong>, after saving the question set.</li>' +
+        '<li>Once a Google Form is generated, the question set is frozen — create a new test to change questions.</li>' +
+        '<li>A test cannot be made AVAILABLE until its Google Form has been generated.</li>' +
+        '<li>Sync submissions after students submit — use the <strong>Sync</strong> button on a test row.</li>' +
+        '<li>Publish results only from the <strong>Evaluation Center</strong> after all descriptive answers are graded.</li>' +
+      '</ul>' +
+    '</div>' +
+    '<div style="text-align:center;margin:20px 0;color:var(--gpn-dim);font-size:.72rem;">Guided Path Noida · Admin v2.4.1</div>';
+}
+
+/* ── 22  BOOT ──────────────────────────────────────────────── */
+(function boot(){
+  var s = getSession();
+  if (!s.token || s.role !== 'ADMIN') {
+    window.location.href = 'login.html';
+    return;
+  }
+  if (s.user && s.user.id) {
+    el('userChip').textContent = (s.user.name ? s.user.name + ' · ' : '') + s.user.id;
+  }
+  el('logoutBtn').addEventListener('click', function(){
+    confirmDialog('Sign out of the admin panel?').then(function(ok){
+      if (ok) doLogout();
+    });
+  });
+  render();
+})();
+</script>
+</body>
+</html>

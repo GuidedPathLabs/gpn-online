@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a192f">
+<title>Guided Path · Student</title>
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   GUIDED PATH — STUDENT (Global Style tokens)
+   ═══════════════════════════════════════════════════════════════ */
+:root{
+  --gpn-navy:#0a192f; --gpn-navy-2:#0d1f3a; --gpn-navy-3:#102844;
+  --gpn-cyan:#00b8d4; --gpn-cyan-hi:#00e5ff;
+  --gpn-gold:#ffd54f; --gpn-gold-dim:#b58900;
+  --gpn-text:#e0e0e0; --gpn-muted:#c0c0c0; --gpn-dim:#b0c4de;
+  --gpn-border:rgba(0,184,212,0.25);
+  --gpn-border-hi:rgba(0,184,212,0.55);
+  --gpn-divider:rgba(0,184,212,0.18);
+  --gpn-danger:#ef5350; --gpn-danger-soft:#ff9e9e;
+  --gpn-ok:#4caf50; --gpn-warn:#ffb300;
+  --gpn-radius:10px; --gpn-radius-sm:6px;
+  --gpn-serif:Georgia,'Times New Roman',serif;
+  --gpn-sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;}
+html,body{margin:0;padding:0;height:100%;}
+body{
+  font-family:var(--gpn-sans);
+  background:
+    radial-gradient(900px 500px at 0% -10%, rgba(0,184,212,0.06), transparent 55%),
+    radial-gradient(700px 400px at 100% 0%, rgba(255,213,79,0.04), transparent 50%),
+    var(--gpn-navy);
+  color:var(--gpn-text);
+  font-size:15px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+  display:flex;flex-direction:column;
+}
+a{color:var(--gpn-gold);text-decoration:none;}
+
+/* TOPBAR */
+.gpn-topbar{
+  position:sticky;top:0;z-index:30;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:10px;padding:10px 14px;
+  background:rgba(10,25,47,0.94);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--gpn-divider);
+}
+.gpn-top-left{display:flex;align-items:center;gap:10px;min-width:0;}
+.gpn-brand{
+  width:34px;height:34px;border-radius:8px;display:grid;place-items:center;flex-shrink:0;
+  background:linear-gradient(135deg,var(--gpn-cyan),#007b8f);
+  color:#04121e;font-family:var(--gpn-serif);font-weight:800;font-size:13px;
+  border:1px solid rgba(0,229,255,0.35);box-shadow:0 0 10px rgba(0,184,212,0.25);
+}
+.gpn-titles{display:flex;flex-direction:column;line-height:1.15;min-width:0;}
+.gpn-title{font-family:var(--gpn-serif);font-weight:700;font-size:14px;color:var(--gpn-cyan-hi);letter-spacing:.4px;}
+.gpn-sub{font-size:11px;color:var(--gpn-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:170px;}
+.gpn-top-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.gpn-icon-btn{
+  width:34px;height:34px;border-radius:8px;background:transparent;
+  border:1px solid var(--gpn-border);color:var(--gpn-cyan-hi);
+  font-size:15px;cursor:pointer;display:grid;place-items:center;
+  transition:border-color .2s, background .2s;
+}
+.gpn-icon-btn:hover{border-color:var(--gpn-border-hi);background:rgba(0,184,212,0.06);}
+.gpn-access{
+  padding:4px 10px;border-radius:20px;font-size:.62rem;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;
+  border:1px solid var(--gpn-border);color:var(--gpn-dim);
+}
+.gpn-access.ACTIVE{color:#7fe3a4;border-color:rgba(76,175,80,0.5);background:rgba(76,175,80,0.08);}
+.gpn-access.EXPIRING{color:var(--gpn-gold);border-color:rgba(255,213,79,0.5);background:rgba(255,213,79,0.08);}
+.gpn-access.EXPIRED,.gpn-access.NONE{color:var(--gpn-danger-soft);border-color:rgba(239,83,80,0.5);background:rgba(239,83,80,0.08);}
+
+/* MAIN */
+.gpn-main{
+  flex:1;
+  max-width:720px;
+  width:100%;
+  margin:0 auto;
+  padding:16px 14px 96px;
+}
+
+/* CARDS */
+.gpn-card{
+  background:var(--gpn-navy);border:1px solid var(--gpn-border);
+  border-radius:var(--gpn-radius);padding:16px;margin-bottom:14px;
+  transition:border-color .25s, box-shadow .25s;
+}
+.gpn-card:hover{border-color:var(--gpn-border-hi);box-shadow:0 0 16px rgba(0,184,212,0.10);}
+.gpn-card-title{
+  font-family:var(--gpn-serif);font-size:.72rem;font-weight:700;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--gpn-cyan);
+  margin:0 0 12px;display:flex;align-items:center;gap:8px;
+}
+.gpn-card-title::after{content:'';flex:1;height:1px;background:var(--gpn-divider);}
+.gpn-h1{font-family:var(--gpn-serif);font-size:1.35rem;font-weight:700;color:#fff;margin:0 0 4px;line-height:1.2;}
+.gpn-h2{font-family:var(--gpn-serif);font-size:1.05rem;font-weight:700;color:var(--gpn-cyan-hi);margin:0 0 6px;line-height:1.3;}
+.gpn-muted{color:var(--gpn-muted);font-size:.82rem;line-height:1.55;}
+.gpn-dim{color:var(--gpn-dim);font-size:.78rem;}
+
+.gpn-kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;}
+.gpn-kv > div{
+  background:rgba(0,184,212,0.03);border:1px solid var(--gpn-divider);
+  border-radius:var(--gpn-radius-sm);padding:11px 13px;
+}
+.gpn-kv .k{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gpn-cyan);font-weight:600;margin-bottom:3px;}
+.gpn-kv .v{font-family:var(--gpn-serif);font-size:1.1rem;font-weight:700;color:#fff;line-height:1.2;}
+.gpn-kv .v small{font-size:.72rem;color:var(--gpn-dim);font-weight:400;}
+
+/* BUTTONS */
+.gpn-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  padding:10px 16px;background:rgba(0,184,212,0.05);
+  border:1px solid rgba(0,184,212,0.45);border-radius:var(--gpn-radius-sm);
+  color:var(--gpn-cyan-hi);font-family:var(--gpn-serif);font-size:.82rem;font-weight:700;
+  letter-spacing:.02em;cursor:pointer;white-space:nowrap;
+  transition:background .2s, border-color .2s, color .2s, box-shadow .2s;
+  line-height:1.2;text-decoration:none;
+}
+.gpn-btn:hover{background:rgba(0,184,212,0.14);border-color:var(--gpn-cyan-hi);color:#fff;box-shadow:0 0 12px rgba(0,229,255,0.18);}
+.gpn-btn:active{transform:translateY(1px);}
+.gpn-btn[disabled]{opacity:.5;cursor:not-allowed;box-shadow:none;}
+.gpn-btn.gold{background:linear-gradient(135deg,var(--gpn-gold),var(--gpn-gold-dim));border-color:transparent;color:#1a1405;box-shadow:0 0 14px rgba(255,213,79,0.20);}
+.gpn-btn.gold:hover{background:linear-gradient(135deg,#ffe082,var(--gpn-gold));color:#1a1405;box-shadow:0 0 20px rgba(255,213,79,0.35);}
+.gpn-btn.ghost{background:transparent;border-color:var(--gpn-border);color:var(--gpn-dim);}
+.gpn-btn.ghost:hover{color:#fff;border-color:var(--gpn-border-hi);background:rgba(0,184,212,0.06);}
+.gpn-btn.danger{background:rgba(239,83,80,0.06);border-color:rgba(239,83,80,0.4);color:var(--gpn-danger-soft);}
+.gpn-btn.danger:hover{background:rgba(239,83,80,0.14);border-color:var(--gpn-danger);color:#fff;}
+.gpn-btn.sm{padding:6px 11px;font-size:.72rem;}
+.gpn-btn.block{width:100%;}
+
+/* FORMS */
+.gpn-field{margin-bottom:12px;}
+.gpn-field label{
+  display:block;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--gpn-cyan);font-weight:600;margin-bottom:5px;
+}
+.gpn-field input,.gpn-field select,.gpn-field textarea{
+  width:100%;padding:11px 13px;background:var(--gpn-navy-2);
+  border:1px solid var(--gpn-border);border-radius:var(--gpn-radius-sm);
+  color:var(--gpn-text);font-family:inherit;font-size:.92rem;outline:none;
+  transition:border-color .2s, box-shadow .2s;
+}
+.gpn-field input:focus,.gpn-field select:focus,.gpn-field textarea:focus{
+  border-color:var(--gpn-cyan-hi);box-shadow:0 0 0 3px rgba(0,229,255,0.10);
+}
+
+/* LISTS */
+.gpn-list{list-style:none;padding:0;margin:0;}
+.gpn-list > li{
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+  padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.04);
+}
+.gpn-list > li:last-child{border-bottom:none;}
+.gpn-list .li-main{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1;}
+.gpn-list .li-title{font-weight:600;font-size:.94rem;color:#fff;line-height:1.35;}
+.gpn-list .li-sub{font-size:.75rem;color:var(--gpn-dim);}
+
+/* TAGS */
+.gpn-tag{
+  display:inline-block;padding:3px 9px;border-radius:20px;
+  font-size:.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  border:1px solid var(--gpn-border);color:var(--gpn-dim);white-space:nowrap;
+}
+.gpn-tag.ok{color:#7fe3a4;border-color:rgba(76,175,80,0.5);background:rgba(76,175,80,0.06);}
+.gpn-tag.warn{color:var(--gpn-gold);border-color:rgba(255,213,79,0.5);background:rgba(255,213,79,0.06);}
+.gpn-tag.danger{color:var(--gpn-danger-soft);border-color:rgba(239,83,80,0.5);background:rgba(239,83,80,0.06);}
+.gpn-tag.info{color:var(--gpn-cyan-hi);border-color:rgba(0,229,255,0.45);background:rgba(0,229,255,0.06);}
+
+/* ACCORDION */
+details.gpn-details{
+  border:1px solid var(--gpn-divider);border-radius:var(--gpn-radius-sm);
+  margin-bottom:8px;overflow:hidden;background:rgba(0,184,212,0.02);
+}
+details.gpn-details[open]{border-color:var(--gpn-border);}
+details.gpn-details > summary{
+  list-style:none;padding:12px 14px;cursor:pointer;
+  font-family:var(--gpn-serif);font-size:.88rem;font-weight:700;
+  color:var(--gpn-gold);display:flex;justify-content:space-between;align-items:center;gap:8px;
+  user-select:none;transition:background .2s,color .2s;
+}
+details.gpn-details > summary::-webkit-details-marker{display:none;}
+details.gpn-details > summary::after{
+  content:'+';color:var(--gpn-cyan-hi);font-size:1.15rem;font-weight:400;line-height:1;flex-shrink:0;
+}
+details.gpn-details[open] > summary{background:rgba(0,229,255,0.05);border-bottom:1px solid var(--gpn-divider);}
+details.gpn-details[open] > summary::after{content:'×';}
+details.gpn-details > summary:hover{background:rgba(0,229,255,0.07);}
+.gpn-details-body{padding:10px 14px 14px;background:rgba(0,0,0,0.12);}
+
+/* MODAL */
+.gpn-modal-back{
+  position:fixed;inset:0;background:rgba(0,0,0,0.72);z-index:100;
+  display:flex;align-items:center;justify-content:center;padding:16px;
+  animation:gpnFade .18s ease;
+}
+@keyframes gpnFade{from{opacity:0;}to{opacity:1;}}
+.gpn-modal{
+  background:var(--gpn-navy);border:1px solid var(--gpn-border-hi);
+  border-radius:var(--gpn-radius);max-width:520px;width:100%;
+  max-height:90vh;overflow-y:auto;padding:20px 22px 18px;
+  box-shadow:0 0 32px rgba(0,184,212,0.25);
+}
+.gpn-modal h3{
+  font-family:var(--gpn-serif);font-size:1.1rem;color:var(--gpn-cyan-hi);
+  margin:0 0 12px;padding-bottom:10px;border-bottom:1px solid var(--gpn-divider);
+}
+.gpn-modal-actions{
+  display:flex;justify-content:flex-end;gap:8px;margin-top:14px;
+  padding-top:12px;border-top:1px solid var(--gpn-divider);flex-wrap:wrap;
+}
+.gpn-code{
+  display:block;
+  font-family:'Courier New',monospace;
+  font-size:1.9rem;font-weight:800;
+  letter-spacing:.24em;
+  color:var(--gpn-gold);
+  background:rgba(255,213,79,0.06);
+  border:1px dashed rgba(255,213,79,0.4);
+  border-radius:var(--gpn-radius-sm);
+  padding:14px 10px;margin:14px 0;text-align:center;
+  user-select:all;
+}
+
+/* LOADING / EMPTY / ERR */
+.gpn-loading{padding:40px 16px;text-align:center;color:var(--gpn-dim);font-size:.88rem;}
+.gpn-empty{
+  padding:20px 16px;text-align:center;color:var(--gpn-dim);font-size:.85rem;
+  border:1px dashed var(--gpn-divider);border-radius:var(--gpn-radius-sm);
+  background:rgba(0,184,212,0.02);
+}
+.gpn-err{
+  padding:11px 14px;border-radius:var(--gpn-radius-sm);
+  background:rgba(239,83,80,0.08);border:1px solid rgba(239,83,80,0.35);
+  border-left:3px solid var(--gpn-danger);color:var(--gpn-danger-soft);
+  font-size:.85rem;margin-bottom:12px;
+}
+.gpn-toast{
+  position:fixed;left:50%;bottom:110px;transform:translateX(-50%) translateY(20px);
+  background:var(--gpn-navy-3);border:1px solid var(--gpn-cyan-hi);
+  color:#fff;padding:10px 18px;border-radius:24px;
+  font-size:.82rem;font-weight:600;box-shadow:0 0 16px rgba(0,184,212,0.3);
+  z-index:200;opacity:0;pointer-events:none;
+  transition:opacity .2s, transform .2s;max-width:90vw;
+}
+.gpn-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.gpn-toast.err{border-color:var(--gpn-danger);color:var(--gpn-danger-soft);}
+
+/* BOTTOM NAV */
+.gpn-nav{
+  position:fixed;left:0;right:0;bottom:0;z-index:40;
+  background:rgba(10,25,47,0.97);backdrop-filter:blur(10px);
+  border-top:1px solid var(--gpn-divider);
+  display:flex;overflow-x:auto;overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+}
+.gpn-nav::-webkit-scrollbar{display:none;}
+.gpn-nav-btn{
+  flex:0 0 auto;min-width:76px;padding:10px 12px 12px;
+  background:transparent;border:0;color:var(--gpn-dim);
+  font-family:var(--gpn-serif);font-size:.68rem;font-weight:700;
+  letter-spacing:.05em;text-transform:uppercase;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  transition:color .2s;border-top:2px solid transparent;
+}
+.gpn-nav-btn .ic{font-size:1.05rem;line-height:1;}
+.gpn-nav-btn.is-active{color:var(--gpn-cyan-hi);border-top-color:var(--gpn-cyan-hi);}
+.gpn-nav-btn:hover{color:#fff;}
+
+/* INLINE MESSAGES */
+.gpn-att{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
+.gpn-att-item{
+  padding:12px 15px;border-radius:var(--gpn-radius);
+  font-size:.88rem;font-weight:600;line-height:1.4;
+  border:1px solid var(--gpn-border);border-left:3px solid var(--gpn-cyan);
+}
+.gpn-att-item.red{border-left-color:var(--gpn-danger);background:rgba(239,83,80,0.06);color:var(--gpn-danger-soft);}
+.gpn-att-item.yellow{border-left-color:var(--gpn-gold);background:rgba(255,213,79,0.05);color:var(--gpn-gold);}
+.gpn-att-item.ok{border-left-color:var(--gpn-ok);background:rgba(76,175,80,0.05);color:#7fe3a4;}
+
+/* RESPONSIVE */
+@media (min-width:768px){
+  .gpn-main{padding:22px 20px 96px;}
+  .gpn-nav{justify-content:center;}
+  .gpn-nav-btn{min-width:96px;}
+  .gpn-toast{bottom:26px;}
+}
+</style>
+</head>
+<body>
+
+<header class="gpn-topbar">
+  <div class="gpn-top-left">
+    <div class="gpn-brand">GP</div>
+    <div class="gpn-titles">
+      <span class="gpn-title">GUIDED PATH</span>
+      <span class="gpn-sub" id="topSub">Student</span>
+    </div>
+  </div>
+  <div class="gpn-top-right">
+    <span class="gpn-access" id="accessPill">—</span>
+    <button class="gpn-icon-btn" id="logoutBtn" aria-label="Logout" title="Logout">⎋</button>
+  </div>
+</header>
+
+<main class="gpn-main" id="view">
+  <div class="gpn-loading">Loading…</div>
+</main>
+
+<nav class="gpn-nav" aria-label="Student navigation">
+  <button class="gpn-nav-btn is-active" data-view="home"><span class="ic">⌂</span>Home</button>
+  <button class="gpn-nav-btn" data-view="materials"><span class="ic">▤</span>Material</button>
+  <button class="gpn-nav-btn" data-view="schedule"><span class="ic">◷</span>Schedule</button>
+  <button class="gpn-nav-btn" data-view="tests"><span class="ic">✎</span>Tests</button>
+  <button class="gpn-nav-btn" data-view="results"><span class="ic">★</span>Results</button>
+  <button class="gpn-nav-btn" data-view="performance"><span class="ic">↗</span>Progress</button>
+  <button class="gpn-nav-btn" data-view="profile"><span class="ic">◉</span>Profile</button>
+</nav>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   GUIDED PATH — STUDENT SCRIPT
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── 1  CONFIG ─────────────────────────────────────────────── */
+var CONFIG = {
+  API_URL: 'https://script.google.com/macros/s/AKfycbx0dOo1ovROMdFYedx4Gm3a1tmpZjjXEwqcxLjCzWXC3Tgxupo9Mc3obk5zDS3uat_7/exec',
+  TOKEN_KEY: 'gp_token',
+  ROLE_KEY:  'gp_role',
+  USER_KEY:  'gp_user'
+};
+
+/* ── 2  API ────────────────────────────────────────────────── */
+var API = (function(){
+  var busy = {};
+
+  function call(action, payload, opts){
+    opts = opts || {};
+    var key = action + '|' + JSON.stringify(payload || {});
+    if (busy[key] && !opts.allowDuplicate) {
+      return Promise.resolve({ ok:false, error:'Duplicate request suppressed.', code:'DUPLICATE' });
+    }
+    busy[key] = true;
+
+    var token = localStorage.getItem(CONFIG.TOKEN_KEY) || '';
+    var body = { action: action, token: token, payload: payload || {} };
+
+    return fetch(CONFIG.API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(body),
+      redirect: 'follow'
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      delete busy[key];
+      if (!data || typeof data.ok === 'undefined') {
+        return { ok:false, error:'Malformed server response.', code:'BAD_RESPONSE' };
+      }
+      if (!data.ok) {
+        var c = data.code || '';
+        if (c === 'SESSION_EXPIRED' || c === 'SESSION_REVOKED' || c === 'ACCOUNT_INACTIVE') {
+          handleSessionFailure(data.error || 'Session ended.');
+        } else if (c === 'FORBIDDEN') {
+          handleSessionFailure('This session is not authorized.');
+        }
+      }
+      return data;
+    })
+    .catch(function(){
+      delete busy[key];
+      return { ok:false, error:'Network error. Please check your connection.', code:'NETWORK' };
+    });
+  }
+
+  return { call: call };
+})();
+
+/* ── 3  UI HELPERS ─────────────────────────────────────────── */
+function el(id){ return document.getElementById(id); }
+function esc(s){
+  return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function fmtDate(iso){
+  if (!iso) return '—';
+  var s = String(iso);
+  return s.length >= 10 ? s.substring(0,10) : s;
+}
+function fmtDT(iso){
+  if (!iso) return '—';
+  return String(iso).replace('T',' ').substring(0,16);
+}
+function todayStr(){
+  var d = new Date();
+  return d.getFullYear() + '-' +
+         String(d.getMonth()+1).padStart(2,'0') + '-' +
+         String(d.getDate()).padStart(2,'0');
+}
+function toast(msg, isErr){
+  var t = document.querySelector('.gpn-toast');
+  if (!t){ t = document.createElement('div'); t.className='gpn-toast'; document.body.appendChild(t); }
+  t.textContent = msg;
+  t.className = 'gpn-toast show' + (isErr ? ' err' : '');
+  clearTimeout(t._t);
+  t._t = setTimeout(function(){ t.className='gpn-toast'; }, 2800);
+}
+function modal(html){
+  closeModal();
+  var back = document.createElement('div');
+  back.className = 'gpn-modal-back';
+  back.innerHTML = '<div class="gpn-modal">' + html + '</div>';
+  back.addEventListener('click', function(e){ if (e.target === back) closeModal(); });
+  document.body.appendChild(back);
+  return back;
+}
+function closeModal(){
+  var m = document.querySelector('.gpn-modal-back');
+  if (m) m.remove();
+}
+function confirmDialog(msg){
+  return new Promise(function(resolve){
+    var m = modal(
+      '<h3>Confirm</h3>' +
+      '<p class="gpn-muted">' + esc(msg) + '</p>' +
+      '<div class="gpn-modal-actions">' +
+        '<button class="gpn-btn ghost" id="cfNo">Cancel</button>' +
+        '<button class="gpn-btn danger" id="cfYes">Confirm</button>' +
+      '</div>'
+    );
+    m.querySelector('#cfNo').addEventListener('click', function(){ closeModal(); resolve(false); });
+    m.querySelector('#cfYes').addEventListener('click', function(){ closeModal(); resolve(true); });
+  });
+}
+function badge(status){
+  var s = String(status || '').toUpperCase();
+  if (!s) return '<span class="gpn-tag">—</span>';
+  if (['PUBLISHED','AUTO_EVALUATED','MANUALLY_EVALUATED','ACTIVE','PAID'].indexOf(s) >= 0)
+    return '<span class="gpn-tag ok">' + esc(s) + '</span>';
+  if (['PENDING','PENDING_MANUAL','SCHEDULED','ISSUED','SUBMITTED','EXPIRING','DRAFT','AVAILABLE'].indexOf(s) >= 0)
+    return '<span class="gpn-tag warn">' + esc(s) + '</span>';
+  if (['EXPIRED','CANCELLED','SUSPENDED','MISSED'].indexOf(s) >= 0)
+    return '<span class="gpn-tag danger">' + esc(s) + '</span>';
+  return '<span class="gpn-tag info">' + esc(s) + '</span>';
+}
+function val(sel){ var n = document.querySelector(sel); return n ? n.value : ''; }
+function valTrim(sel){ return String(val(sel)).trim(); }
+function safeNum(n){
+  var x = Number(n);
+  return isNaN(x) ? 0 : x;
+}
+
+/* ── 4  SESSION GUARD ──────────────────────────────────────── */
+function getSession(){
+  return {
+    token: localStorage.getItem(CONFIG.TOKEN_KEY),
+    role:  localStorage.getItem(CONFIG.ROLE_KEY),
+    user:  (function(){ try { return JSON.parse(localStorage.getItem(CONFIG.USER_KEY) || 'null'); } catch(e){ return null; } })()
+  };
+}
+function clearSession(){
+  localStorage.removeItem(CONFIG.TOKEN_KEY);
+  localStorage.removeItem(CONFIG.ROLE_KEY);
+  localStorage.removeItem(CONFIG.USER_KEY);
+}
+function handleSessionFailure(msg){
+  clearSession();
+  toast(msg || 'Session ended.', true);
+  setTimeout(function(){ window.location.href = 'login.html'; }, 800);
+}
+function doLogout(){
+  var t = localStorage.getItem(CONFIG.TOKEN_KEY) || '';
+  var body = { action:'logout', token:t, payload:{} };
+  fetch(CONFIG.API_URL, {
+    method:'POST',
+    headers:{ 'Content-Type':'text/plain;charset=utf-8' },
+    body: JSON.stringify(body),
+    redirect:'follow'
+  }).catch(function(){}).then(function(){
+    clearSession();
+    window.location.href = 'login.html';
+  });
+}
+
+/* ── 5  ROUTER ─────────────────────────────────────────────── */
+var state = { view: 'home' };
+
+function setActiveNav(v){
+  document.querySelectorAll('.gpn-nav-btn').forEach(function(b){
+    b.classList.toggle('is-active', b.getAttribute('data-view') === v);
+  });
+}
+
+function setAccessPill(status){
+  var p = el('accessPill');
+  p.className = 'gpn-access ' + (status || '');
+  p.textContent = status || '—';
+}
+
+function render(){
+  el('view').innerHTML = '<div class="gpn-loading">Loading…</div>';
+  switch (state.view) {
+    case 'home':        return viewHome();
+    case 'materials':   return viewMaterials();
+    case 'schedule':    return viewSchedule();
+    case 'tests':       return viewTests();
+    case 'results':     return viewResults();
+    case 'performance': return viewPerformance();
+    case 'profile':     return viewProfile();
+    default:            return viewHome();
+  }
+}
+
+function navigate(v){
+  state.view = v;
+  setActiveNav(v);
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+document.querySelectorAll('.gpn-nav-btn').forEach(function(b){
+  b.addEventListener('click', function(){ navigate(b.getAttribute('data-view')); });
+});
+
+/* ── 6  HOME ───────────────────────────────────────────────── */
+function viewHome(){
+  return API.call('studentDashboard').then(function(r){
+    var v = el('view');
+    if (!r.ok){ v.innerHTML = '<div class="gpn-err">' + esc(r.error) + '</div>'; return; }
+    var d = r.data || {};
+    setAccessPill(d.access);
+
+    var banner = '';
+    if (d.access === 'EXPIRED' || d.access === 'NONE') {
+      banner = '<div class="gpn-att"><div class="gpn-att-item red">Your programme access has expired. Please contact your teacher.</div></div>';
+    } else if (d.access === 'EXPIRING') {
+      banner = '<div class="gpn-att"><div class="gpn-att-item yellow">Your programme is expiring soon. Please contact your teacher.</div></div>';
+    }
+
+    var student = d.student || {};
+    var greeting =
+      '<h1 class="gpn-h1">Hello' + (student.Name ? ', ' + esc(String(student.Name).split(' ')[0]) : '') + '.</h1>' +
+      '<p class="gpn-muted" style="margin:0 0 16px;">' +
+        (student.Class ? esc(student.Class) : '') +
+        (student.Board ? ' · ' + esc(student.Board) : '') +
+      '</p>';
+
+    var todayHtml;
+    if (!d.todayTasks || !d.todayTasks.length) {
+      todayHtml = '<div class="gpn-empty">No tasks scheduled for today.</div>';
+    } else {
+      todayHtml = '<ul class="gpn-list">' + d.todayTasks.map(function(t){
+        return '<li>' +
+          '<div class="li-main">' +
+            '<span class="li-title">' + esc(t.Type) + (t.SubjectID ? ' · ' + esc(t.SubjectID) : '') + '</span>' +
+            '<span class="li-sub">' +
+              esc(fmtDate(t.Date)) + (t.StartTime ? ' · ' + esc(t.StartTime) : '') +
+              (t.EndTime ? ' – ' + esc(t.EndTime) : '') +
+            '</span>' +
+          '</div>' +
+          badge(t.Status) +
+        '</li>';
+      }).join('') + '</ul>';
+    }
+
+    var nextTestHtml;
+    if (d.nextTest) {
+      nextTestHtml =
+        '<div class="gpn-kv">' +
+          '<div><div class="k">Type</div><div class="v" style="font-size:.92rem;">' + esc(d.nextTest.Type) + '</div></div>' +
+          '<div><div class="k">Date</div><div class="v" style="font-size:.92rem;">' + esc(fmtDate(d.nextTest.Date)) + '</div></div>' +
+          (d.nextTest.StartTime ? '<div><div class="k">Time</div><div class="v" style="font-size:.92rem;">' + esc(d.nextTest.StartTime) + '</div></div>' : '') +
+          (d.nextTest.SubjectID ? '<div><div class="k">Subject</div><div class="v" style="font-size:.92rem;">' + esc(d.nextTest.SubjectID) + '</div></div>' : '') +
+        '</div>';
+    } else {
+      nextTestHtml = '<div class="gpn-empty">No upcoming test.</div>';
+    }
+
+    var recentHtml;
+    if (d.recentResult) {
+      recentHtml =
+        '<div class="gpn-kv">' +
+          '<div><div class="k">Test</div><div class="v" style="font-size:.92rem;">' + esc(d.recentResult.TestTitle || d.recentResult.TestID) + '</div></div>' +
+          '<div><div class="k">Score</div><div class="v">' +
+            safeNum(d.recentResult.MarksObtained) + '<small> / ' + safeNum(d.recentResult.MaxMarks) + '</small></div></div>' +
+          '<div><div class="k">Percentage</div><div class="v">' + safeNum(d.recentResult.Percentage) + '%</div></div>' +
+          '<div><div class="k">Published</div><div class="v" style="font-size:.85rem;">' + esc(fmtDate(d.recentResult.PublishedDate)) + '</div></div>' +
+        '</div>';
+    } else {
+      recentHtml = '<div class="gpn-empty">No published results yet.</div>';
+    }
+
+    var s = d.summary || {};
+    var progressHtml =
+      '<div class="gpn-kv">' +
+        '<div><div class="k">Average</div><div class="v">' + safeNum(s.avg) + '%</div></div>' +
+        '<div><div class="k">Tests</div><div class="v">' + safeNum(s.tests) + '</div></div>' +
+        '<div><div class="k">Highest</div><div class="v">' + safeNum(s.highest) + '%</div></div>' +
+        '<div><div class="k">Lowest</div><div class="v">' + safeNum(s.lowest) + '%</div></div>' +
+      '</div>';
+
+    var remarksHtml;
+    if (!d.remarks || !d.remarks.length) {
+      remarksHtml = '<div class="gpn-empty">No teacher remarks yet.</div>';
+    } else {
+      remarksHtml = d.remarks.map(function(r){
+        return '<div style="padding:11px 12px;background:rgba(0,184,212,0.03);border-left:3px solid var(--gpn-cyan);border-radius:0 6px 6px 0;margin-bottom:8px;">' +
+          '<div style="font-size:.9rem;line-height:1.55;">' + esc(r.Text) + '</div>' +
+          '<div style="font-size:.7rem;color:var(--gpn-dim);margin-top:5px;">' + esc(fmtDate(r.CreatedDate)) + '</div>' +
+        '</div>';
+      }).join('');
+    }
+
+    v.innerHTML =
+      banner + greeting +
+      '<section class="gpn-card">' +
+        '<h2 class="gpn-card-title">Today\'s Task</h2>' + todayHtml +
+      '</section>' +
+      '<section class="gpn-card">' +
+        '<h2 class="gpn-card-title">Next Test</h2>' + nextTestHtml +
+      '</section>' +
+      '<section class="gpn-card">' +
+        '<h2 class="gpn-card-title">Recent Result</h2>' + recentHtml +
+      '</section>' +
+      '<section class="gpn-card">' +
+        '<h2 class="gpn-card-title">My Progress</h2>' + progressHtml +
+      '</section>' +
+      '<section class="gpn-card">' +
+        '<h2 class="gpn-card-title">Teacher Remark</h2>' + remarksHtml +
+      '</section>';
+  });
+}
+
+/* ── 7  MATERIALS ──────────────────────────────────────────── */
+function viewMaterials(){
+  return API.call('studentMaterials').then(function(r){
+    var v = el('view');
+    if (!r.ok){ v.innerHTML = '<div class="gpn-err">' + esc(r.error) + '</div>'; return; }
+    var mats = r.data.materials || [];
+    var views = r.data.views || {};
+
+    if (!mats.length) {
+      v.innerHTML = '<h1 class="gpn-h1">Study Material</h1>' +
+        '<div class="gpn-empty" style="margin-top:14px;">No material assigned yet.</div>';
+      return;
+    }
+
+    var bySubject = {};
+    mats.forEach(function(m){
+      var sid = m.SubjectID || 'Other';
+      if (!bySubject[sid]) bySubject[sid] = [];
+      bySubject[sid].push(m);
+    });
+
+    var html = '<h1 class="gpn-h1">Study Material</h1>';
+    html += '<p class="gpn-muted" style="margin:4px 0 16px;">' + mats.length + ' resource(s) available</p>';
+
+    Object.keys(bySubject).forEach(function(subjId){
+      var items = bySubject[subjId];
+      var openCount = items.filter(function(m){ return views[m.MaterialID]; }).length;
+      html += '<details class="gpn-details" open>' +
+        '<summary>' + esc(subjId) +
+          ' <span style="color:var(--gpn-cyan);font-weight:400;">(' + items.length + ' · ' + openCount + ' opened)</span>' +
+        '</summary>' +
+        '<div class="gpn-details-body">' +
+          '<ul class="gpn-list">' +
+            items.map(function(m){
+              var vw = views[m.MaterialID];
+              var opened = vw ? (safeNum(vw.ViewCount) + ' open' + (safeNum(vw.ViewCount) > 1 ? 's' : '')) : 'Not opened';
+              return '<li>' +
+                '<div class="li-main">' +
+                  '<span class="li-title">' + esc(m.Title) + '</span>' +
+                  '<span class="li-sub">' + esc(m.Type) + ' · ' + esc(opened) + '</span>' +
+                '</div>' +
+                '<button class="gpn-btn sm gold" data-open="' + esc(m.MaterialID) + '">Open</button>' +
+              '</li>';
+            }).join('') +
+          '</ul>' +
+        '</div>' +
+      '</details>';
+    });
+
+    v.innerHTML = html;
+
+    v.querySelectorAll('[data-open]').forEach(function(b){
+      b.addEventListener('click', function(){ openMaterial(b.getAttribute('data-open'), b); });
+    });
+  });
+}
+
+function openMaterial(materialId, btn){
+  if (btn) { btn.disabled = true; btn.textContent = 'Opening…'; }
+
+  API.call('studentOpenMaterial', { materialId: materialId }).then(function(r){
+    if (btn) { btn.disabled = false; btn.textContent = 'Open'; }
+    if (!r.ok){
+      if (r.code === 'R2_NOT_CONFIGURED') {
+        toast('Material delivery is not configured. Please contact your teacher.', true);
+      } else if (r.code === 'FORBIDDEN') {
+        toast('You are not authorized for this material.', true);
+      } else {
+        toast(r.error || 'Could not open material.', true);
+      }
+      return;
+    }
+    var url = r.data && r.data.url;
+    if (!url){ toast('No URL available for this material.', true); return; }
+    window.open(url, '_blank', 'noopener');
+    toast('Opening: ' + (r.data.title || 'material'));
+  });
+}
+
+/* ── 8  SCHEDULE ───────────────────────────────────────────── */
+function viewSchedule(){
+  return API.call('studentSchedule').then(function(r){
+    var v = el('view');
+    if (!r.ok){ v.innerHTML = '<div class="gpn-err">' + esc(r.error) + '</div>'; return; }
+    var items = r.data.schedule || [];
+
+    if (!items.length) {
+      v.innerHTML = '<h1 class="gpn-h1">My Schedule</h1>' +
+        '<div class="gpn-empty" style="margin-top:14px;">No schedule yet.</div>';
+      return;
+    }
+
+    var byDate = {};
+    items.forEach(function(s){
+      var k = String(s.Date);
+      if (!byDate[k]) byDate[k] = [];
+      byDate[k].push(s);
+    });
+    var dates = Object.keys(byDate).sort();
+    var today = todayStr();
+
+    var html = '<h1 class="gpn-h1">My Schedule</h1>';
+    html += '<p class="gpn-muted" style="margin:4px 0 16px;">' + items.length + ' scheduled item(s)</p>';
+
+    dates.forEach(function(d){
+      var label = d;
+      if (d === today) label = d + ' · Today';
+
+      var sub = [];
+      byDate[d].forEach(function(s){
+        var time = s.StartTime ? s.StartTime + (s.EndTime ? ' – ' + s.EndTime : '') : '—';
+        var lines = [];
+        lines.push('<span class="li-title">' + esc(s.Type) +
+          (s.SubjectID ? ' · ' + esc(s.SubjectID) : '') +
+          (s.ChapterID ? ' · ' + esc(s.ChapterID) : '') + '</span>');
+        lines.push('<span class="li-sub">' + esc(time) +
+          (s.RefID ? ' · Ref: ' + esc(s.RefID) : '') + '</span>');
+        sub.push('<li>' +
+          '<div class="li-main">' + lines.join('') + '</div>' +
+          badge(s.Status) +
+        '</li>');
+      });
+
+      html += '<section class="gpn-card">' +
+        '<h2 class="gpn-card-title">' + esc(label) + '</h2>' +
+        '<ul class="gpn-list">' + sub.join('') + '</ul>' +
+      '</section>';
+    });
+
+    v.innerHTML = html;
+  });
+}
+
+/* ── 9  TESTS ──────────────────────────────────────────────── */
+function viewTests(){
+  return API.call('studentTests').then(function(r){
+    var v = el('view');
+    if (!r.ok){ v.innerHTML = '<div class="gpn-err">' + esc(r.error) + '</div>'; return; }
+    var list = r.data.tests || [];
+
+    if (!list.length) {
+      v.innerHTML = '<h1 class="gpn-h1">My Tests</h1>' +
+        '<div class="gpn-empty" style="margin-top:14px;">No tests assigned yet.</div>';
+      return;
+    }
+
+    var html = '<h1 class="gpn-h1">My Tests</h1>';
+    html += '<p class="gpn-muted" style="margin:4px 0 16px;">' + list.length + ' test(s)</p>';
+
+    list.forEach(function(item){
+      var t = item.test || {};
+      var sub = [];
+      var action = '';
+      var status = t.Status || 'SCHEDULED';
+
+      if (item.result) {
+        status = 'PUBLISHED';
+        sub.push('Score: ' + safeNum(item.result.MarksObtained) + ' / ' + safeNum(item.result.MaxMarks) +
+                 ' · ' + safeNum(item.result.Percentage) + '%');
+      } else if (item.attempt) {
+        status = item.attempt.Status;
+        if (status === 'ISSUED') sub.push('Code issued — open the form to submit.');
+        else if (status === 'SUBMITTED') sub.push('Submitted — awaiting evaluation.');
+        else if (status === 'AUTO_EVALUATED') sub.push('Auto-evaluated — awaiting teacher review.');
+        else if (status === 'PENDING_MANUAL') sub.push('Pending manual evaluation.');
+        else if (status === 'MANUALLY_EVALUATED') sub.push('Evaluated — awaiting publication.');
+        else if (status === 'EXPIRED') sub.push('This attempt expired.');
+      }
+
+      if (item.schedule) {
+        sub.unshift('Scheduled: ' + fmtDate(item.schedule.Date) +
+          (item.schedule.StartTime ? ' · ' + item.schedule.StartTime : ''));
+      }
+
+      // Decide action button
+      if (item.result) {
+        action = '<span class="gpn-tag ok">' + safeNum(item.result.MarksObtained) + '/' + safeNum(item.result.MaxMarks) + '</span>';
+      } else if (item.attempt) {
+        if (item.attempt.Status === 'ISSUED') {
+          action = '<button class="gpn-btn sm gold" data-start="' + esc(t.TestID) + '">Show Code</button>';
+        }
+      } else if (String(t.Status).toUpperCase() === 'AVAILABLE') {
+        action = '<button class="gpn-btn sm gold" data-start="' + esc(t.TestID) + '">Start Test</button>';
+      } else if (String(t.Status).toUpperCase() === 'SCHEDULED') {
+        action = '<span class="gpn-tag info">Not yet open</span>';
+      }
+
+      html += '<section class="gpn-card">' +
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:8px;">' +
+          '<div style="flex:1;min-width:0;">' +
+            '<h2 class="gpn-h2">' + esc(t.Title || t.TestID) + '</h2>' +
+            '<div class="gpn-muted" style="font-size:.8rem;">' +
+              (t.SubjectID ? esc(t.SubjectID) + ' · ' : '') +
+              safeNum(t.TotalMarks) + ' marks' +
+            '</div>' +
+          '</div>' +
+          badge(status) +
+        '</div>' +
+        (sub.length ? '<div class="gpn-muted" style="margin-bottom:10px;font-size:.8rem;">' +
+          sub.map(esc).join('<br>') + '</div>' : '') +
+        (action ? '<div style="display:flex;gap:8px;flex-wrap:wrap;">' + action + '</div>' : '') +
+      '</section>';
+    });
+
+    v.innerHTML = html;
+
+    v.querySelectorAll('[data-start]').forEach(function(b){
+      b.addEventListener('click', function(){ startTest(b.getAttribute('data-start'), b); });
+    });
+  });
+}
+
+function startTest(testId, btn){
+  if (btn) { btn.disabled = true; btn.textContent = 'Preparing…'; }
+
+  API.call('studentStartTest', { testId: testId }).then(function(r){
+    if (btn) { btn.disabled = false; btn.textContent = 'Start Test'; }
+    if (!r.ok){
+      var msg = r.error || 'Could not start test.';
+      if (r.code === 'NOT_AVAILABLE') msg = 'This test is not currently open for submissions.';
+      else if (r.code === 'NOT_READY') msg = 'This test is not yet ready for submission.';
+      else if (r.code === 'FORBIDDEN') msg = 'You are not authorized for this test.';
+      else if (r.code === 'ALREADY_SUBMITTED') msg = 'You have already submitted this test.';
+      else if (r.code === 'ATTEMPT_EXPIRED') msg = 'This attempt has expired. Please contact your teacher.';
+      toast(msg, true);
+      return;
+    }
+
+    var d = r.data || {};
+    var code = d.code || '';
+    var formUrl = d.formUrl || '';
+    var expiresAt = d.expiresAt || '';
+
+    var m = modal(
+      '<h3>Test Access Code</h3>' +
+      '<p class="gpn-muted">Copy this code and enter it in the Google Form below. This submission code remains valid until the expiry time shown below.</p>' +  
+        '<div class="gpn-code" id="codeBox">' + esc(code) + '</div>' +
+      '<div style="display:flex;gap:8px;flex-wrap:wrap;">' +
+        '<button class="gpn-btn" id="copyBtn">Copy Code</button>' +
+        (formUrl ? '<a class="gpn-btn gold" href="' + esc(formUrl) + '" target="_blank" rel="noopener">Open Google Form</a>' : '') +
+      '</div>' +
+      (expiresAt ? '<p class="gpn-muted" style="margin-top:14px;font-size:.78rem;">Expires: ' + esc(fmtDT(expiresAt)) + '</p>' : '') +
+      '<p class="gpn-muted" style="margin-top:10px;font-size:.76rem;">In the form, enter your <strong>Student ID</strong>, this <strong>Submission Code</strong>, then answer the questions.</p>' +
+      '<div class="gpn-modal-actions">' +
+        '<button class="gpn-btn ghost" id="smClose">Close</button>' +
+      '</div>'
+    );
+
+    m.querySelector('#smClose').addEventListener('click', closeModal);
+    m.querySelector('#copyBtn').addEventListener('click', function(){
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(code).then(function(){ toast('Code copied'); })
+          .catch(function(){ toast('Copy failed', true); });
+      } else {
+        var ta = document.createElement('textarea');
+        ta.value = code;
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); toast('Code copied'); } catch(e){ toast('Copy failed', true); }
+        ta.remove();
+      }
+    });
+  });
+}
+
+/* ── 10  RESULTS ───────────────────────────────────────────── */
+function viewResults(){
+  return API.call('studentResults').then(function(r){
+    var v = el('view');
+    if (!r.ok){ v.innerHTML = '<div class="gpn-err">' + esc(r.error) + '</div>'; return; }
+    var results = r.data.results || [];
+    var remarks = r.data.remarks || [];
+
+    var html = '<h1 class="gpn-h1">My Results</h1>';
+
+    if (!results.length) {
+      html += '<div class="gpn-empty" style="margin-top:14px;">No published results yet.</div>';
+    } else {
+      html += '<p class="gpn-muted" style="margin:4px 0 16px;">' + results.length + ' published result(s)</p>';
+      results.slice().sort(function(a, b){
+        return String(b.PublishedDate || '').localeCompare(String(a.PublishedDate || ''));
+      }).forEach(function(r){
+        html += '<section class="gpn-card">' +
+          '<div style="display:flex;justify-content:space-between;gap:10px;margin-bottom:8px;">' +
+            '<div style="flex:1;min-width:0;">' +
+              '<h2 class="gpn-h2">' + esc(r.TestTitle || r.TestID) + '</h2>' +
+              '<div class="gpn-muted" style="font-size:.78rem;">' +
+                (r.SubjectName ? esc(r.SubjectName) : '') +
+                (r.TestDate ? ' · ' + esc(fmtDate(r.TestDate)) : '') +
+              '</div>' +
+            '</div>' +
+            '<span class="gpn-tag ok">' + safeNum(r.Percentage) + '%</span>' +
+          '</div>' +
+          '<div class="gpn-kv">' +
+            '<div><div class="k">Score</div><div class="v">' + safeNum(r.MarksObtained) + '<small> / ' + safeNum(r.MaxMarks) + '</small></div></div>' +
+            '<div><div class="k">Published</div><div class="v" style="font-size:.85rem;">' + esc(fmtDate(r.PublishedDate)) + '</div></div>' +
+          '</div>' +
+        '</section>';
+      });
+    }
+
+    html += '<section class="gpn-card"><h2 class="gpn-card-title">Teacher Remarks</h2>';
+    if (!remarks.length) {
+      html += '<div class="gpn-empty">No remarks yet.</div>';
+    } else {
+      html += remarks.map(function(rm){
+        return '<div style="padding:11px 12px;background:rgba(0,184,212,0.03);border-left:3px solid var(--gpn-cyan);border-radius:0 6px 6px 0;margin-bottom:8px;">' +
+          '<div style="font-size:.9rem;line-height:1.55;">' + esc(rm.Text) + '</div>' +
+          '<div style="font-size:.7rem;color:var(--gpn-dim);margin-top:5px;">' + esc(fmtDate(rm.CreatedDate)) + '</div>' +
+        '</div>';
+      }).join('');
+    }
+    html += '</section>';
+
+    v.innerHTML = html;
+  });
+}
+
+/* ── 11  PERFORMANCE ───────────────────────────────────────── */
+function viewPerformance(){
+  return API.call('studentPerformance').then(function(r){
+    var v = el('view');
+    if (!r.ok){ v.innerHTML = '<div class="gpn-err">' + esc(r.error) + '</div>'; return; }
+    var s = r.data.summary || {};
+    var bySubject = r.data.bySubject || [];
+    var results = r.data.results || [];
+
+    var html = '<h1 class="gpn-h1">My Progress</h1>';
+
+    html += '<section class="gpn-card">' +
+      '<h2 class="gpn-card-title">Overall</h2>' +
+      '<div class="gpn-kv">' +
+        '<div><div class="k">Average</div><div class="v">' + safeNum(s.avg) + '%</div></div>' +
+        '<div><div class="k">Tests</div><div class="v">' + safeNum(s.tests) + '</div></div>' +
+        '<div><div class="k">Highest</div><div class="v">' + safeNum(s.highest) + '%</div></div>' +
+        '<div><div class="k">Lowest</div><div class="v">' + safeNum(s.lowest) + '%</div></div>' +
+      '</div>' +
+    '</section>';
+
+    html += '<section class="gpn-card"><h2 class="gpn-card-title">By Subject</h2>';
+    if (!bySubject.length) {
+      html += '<div class="gpn-empty">No subject data yet.</div>';
+    } else {
+      html += '<ul class="gpn-list">' + bySubject.map(function(b){
+        return '<li>' +
+          '<div class="li-main">' +
+            '<span class="li-title">' + esc(b.name || b.subjectId) + '</span>' +
+            '<span class="li-sub">' + safeNum(b.tests) + ' test' + (safeNum(b.tests) === 1 ? '' : 's') + '</span>' +
+          '</div>' +
+          '<span class="gpn-tag info">' + safeNum(b.avg) + '%</span>' +
+        '</li>';
+      }).join('') + '</ul>';
+    }
+    html += '</section>';
+
+    if (results.length) {
+      var recent = results.slice().sort(function(a, b){
+        return String(b.PublishedDate || '').localeCompare(String(a.PublishedDate || ''));
+      }).slice(0, 8);
+
+      html += '<section class="gpn-card"><h2 class="gpn-card-title">Recent Scores</h2><ul class="gpn-list">';
+      recent.forEach(function(x){
+        var pct = safeNum(x.Percentage);
+        var cls = pct >= 60 ? 'ok' : (pct >= 40 ? 'warn' : 'danger');
+        html += '<li>' +
+          '<div class="li-main">' +
+            '<span class="li-title">' + esc(x.TestTitle || x.TestID) + '</span>' +
+            '<span class="li-sub">' + esc(fmtDate(x.TestDate || x.PublishedDate)) + '</span>' +
+          '</div>' +
+          '<span class="gpn-tag ' + cls + '">' + pct + '%</span>' +
+        '</li>';
+      });
+      html += '</ul></section>';
+    }
+
+    v.innerHTML = html;
+  });
+}
+
+/* ── 12  PROFILE ───────────────────────────────────────────── */
+function viewProfile(){
+  return API.call('studentProfile').then(function(r){
+    var v = el('view');
+    if (!r.ok){ v.innerHTML = '<div class="gpn-err">' + esc(r.error) + '</div>'; return; }
+    var s = r.data.student || {};
+    var access = r.data.access;
+    var programmes = r.data.programmes || [];
+    setAccessPill(access);
+
+    var html = '<h1 class="gpn-h1">Profile</h1>';
+    html += '<p class="gpn-muted" style="margin:4px 0 16px;">Your account and enrolment details.</p>';
+
+    html += '<section class="gpn-card">' +
+      '<h2 class="gpn-card-title">Account</h2>' +
+      '<div class="gpn-kv">' +
+        '<div><div class="k">Student ID</div><div class="v" style="font-size:.92rem;">' + esc(s.StudentID) + '</div></div>' +
+        '<div><div class="k">Name</div><div class="v" style="font-size:.92rem;">' + esc(s.Name) + '</div></div>' +
+        '<div><div class="k">Class</div><div class="v" style="font-size:.92rem;">' + esc(s.Class || '—') + '</div></div>' +
+        '<div><div class="k">Board</div><div class="v" style="font-size:.92rem;">' + esc(s.Board || '—') + '</div></div>' +
+        '<div><div class="k">School</div><div class="v" style="font-size:.85rem;">' + esc(s.School || '—') + '</div></div>' +
+        '<div><div class="k">Parent</div><div class="v" style="font-size:.85rem;">' + esc(s.ParentName || '—') + '</div></div>' +
+        '<div><div class="k">Phone</div><div class="v" style="font-size:.85rem;">' + esc(s.Phone || '—') + '</div></div>' +
+        '<div><div class="k">Access</div><div class="v" style="font-size:.85rem;">' + esc(access || '—') + '</div></div>' +
+      '</div>' +
+    '</section>';
+
+    html += '<section class="gpn-card"><h2 class="gpn-card-title">Programmes</h2>';
+    if (!programmes.length) {
+      html += '<div class="gpn-empty">Not enrolled yet.</div>';
+    } else {
+      programmes.forEach(function(p){
+        var e = p.enrolment || {};
+        html += '<details class="gpn-details" open>' +
+          '<summary>' + esc(p.Name || p.ProgrammeID) + '</summary>' +
+          '<div class="gpn-details-body">' +
+            '<div class="gpn-kv">' +
+              '<div><div class="k">Programme ID</div><div class="v" style="font-size:.85rem;">' + esc(p.ProgrammeID) + '</div></div>' +
+              '<div><div class="k">Status</div><div class="v" style="font-size:.85rem;">' + esc(e.Status || '—') + '</div></div>' +
+              '<div><div class="k">Start</div><div class="v" style="font-size:.85rem;">' + esc(fmtDate(e.StartDate)) + '</div></div>' +
+              '<div><div class="k">End</div><div class="v" style="font-size:.85rem;">' + esc(fmtDate(e.EndDate)) + '</div></div>' +
+            '</div>' +
+          '</div>' +
+        '</details>';
+      });
+    }
+    html += '</section>';
+
+    html += '<section class="gpn-card">' +
+      '<h2 class="gpn-card-title">Actions</h2>' +
+      '<div style="display:flex;gap:8px;flex-wrap:wrap;">' +
+        '<button class="gpn-btn" id="btnChangePw">Change Password</button>' +
+        '<button class="gpn-btn danger" id="btnLogout">Logout</button>' +
+      '</div>' +
+    '</section>';
+
+    html += '<div style="text-align:center;margin:20px 0;color:var(--gpn-dim);font-size:.72rem;">Guided Path Noida · Student</div>';
+
+    v.innerHTML = html;
+
+    el('btnChangePw').addEventListener('click', openChangePassword);
+    el('btnLogout').addEventListener('click', function(){
+      confirmDialog('Sign out of your account?').then(function(ok){
+        if (ok) doLogout();
+      });
+    });
+  });
+}
+
+/* ── 13  CHANGE PASSWORD ───────────────────────────────────── */
+function openChangePassword(){
+  var m = modal(
+    '<h3>Change Password</h3>' +
+    '<p class="gpn-muted" style="margin-bottom:12px;">Choose a new password. You will be signed out of all devices and asked to log in again.</p>' +
+    '<div class="gpn-field">' +
+      '<label>New Password</label>' +
+      '<input type="password" id="cpNew" autocomplete="new-password" placeholder="At least 6 characters">' +
+    '</div>' +
+    '<div class="gpn-field">' +
+      '<label>Confirm New Password</label>' +
+      '<input type="password" id="cpConfirm" autocomplete="new-password" placeholder="Repeat new password">' +
+    '</div>' +
+    '<div class="gpn-modal-actions">' +
+      '<button class="gpn-btn ghost" id="cpCancel">Cancel</button>' +
+      '<button class="gpn-btn gold" id="cpSave">Update Password</button>' +
+    '</div>'
+  );
+
+  m.querySelector('#cpCancel').addEventListener('click', closeModal);
+  m.querySelector('#cpSave').addEventListener('click', function(){
+    var pw = val('#cpNew');
+    var cf = val('#cpConfirm');
+    if (!pw || pw.length < 6){ toast('Password must be at least 6 characters.', true); return; }
+    if (pw !== cf){ toast('Passwords do not match.', true); return; }
+
+    var btn = m.querySelector('#cpSave');
+    btn.disabled = true;
+    btn.textContent = 'Updating…';
+
+    API.call('studentPasswordChange', { newPassword: pw }).then(function(r){
+      btn.disabled = false;
+      btn.textContent = 'Update Password';
+      if (!r.ok){ toast(r.error || 'Could not update password.', true); return; }
+      closeModal();
+      toast('Password updated. Please sign in again.');
+      clearSession();
+      setTimeout(function(){ window.location.href = 'login.html'; }, 1200);
+    });
+  });
+}
+
+/* ── 14  BOOT ──────────────────────────────────────────────── */
+(function boot(){
+  var s = getSession();
+  if (!s.token || s.role !== 'STUDENT') {
+    window.location.href = 'login.html';
+    return;
+  }
+
+  var user = s.user || {};
+  el('topSub').textContent = (user.name ? user.name : 'Student') + (user.id ? ' · ' + user.id : '');
+
+  el('logoutBtn').addEventListener('click', function(){
+    confirmDialog('Sign out of your account?').then(function(ok){
+      if (ok) doLogout();
+    });
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

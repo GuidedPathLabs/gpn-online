@@ -78,6 +78,7 @@ table.tbl{width:100%;min-width:700px;border-collapse:collapse;font-size:.82rem}
 .bdg.submitted{color:var(--wn);border-color:rgba(255,179,0,.5);background:rgba(255,179,0,.08)}
 .bdg.issued{color:var(--cy);border-color:rgba(0,229,255,.4)}
 .bdg.expired{color:var(--mu);border-color:rgba(138,155,176,.3)}
+.all-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.66rem;color:var(--mu);border:1px dashed rgba(138,155,176,.4);letter-spacing:.04em}
 .load{padding:28px 20px;text-align:center;border-radius:8px;font-size:.9rem;color:var(--cy);background:rgba(0,184,212,.04)}
 .empty{padding:28px 20px;text-align:center;border-radius:8px;font-size:.9rem;color:var(--mu);background:rgba(255,255,255,.02);border:1px dashed var(--l2)}
 .err{padding:28px 20px;text-align:center;border-radius:8px;font-size:.9rem;color:var(--dng);background:rgba(255,107,107,.06);border:1px solid rgba(255,107,107,.3)}
@@ -90,13 +91,12 @@ table.tbl{width:100%;min-width:700px;border-collapse:collapse;font-size:.82rem}
 .mono{font-family:'Courier New',monospace;font-size:.8rem;color:var(--cy)}
 .quiet{color:var(--mu);font-size:.82rem}
 .mt16{margin-top:16px}
-.tabs{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:16px;border-bottom:1px solid var(--l2);padding-bottom:2px}
-.tab{background:transparent;border:none;border-bottom:2px solid transparent;color:var(--mu);font-family:inherit;font-size:.82rem;font-weight:700;padding:8px 12px;cursor:pointer;letter-spacing:.03em}
-.tab:hover{color:var(--cy)}
-.tab.active{color:var(--gold);border-bottom-color:var(--gold)}
-.qbox{background:rgba(0,0,0,.25);border:1px solid var(--l2);border-radius:6px;padding:12px;font-family:'Courier New',monospace;font-size:.82rem;white-space:pre;overflow-x:auto;line-height:1.5}
-.link-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(0,184,212,.08);border:1px solid var(--l2);border-radius:6px;padding:4px 10px;font-size:.72rem;color:var(--cy);cursor:pointer;user-select:all}
-.link-badge:hover{background:rgba(0,184,212,.16);border-color:var(--cy)}
+.social-row{display:grid;grid-template-columns:40px 1fr 2fr 80px;gap:8px;align-items:center;margin-bottom:8px;padding:8px;background:rgba(0,0,0,.15);border-radius:6px}
+.social-row .sr-icon{font-size:1.2rem;text-align:center}
+.social-row input{padding:8px 10px;background:rgba(0,0,0,.35);border:1px solid var(--l2);border-radius:5px;color:var(--tx);font-family:inherit;font-size:.83rem;min-height:36px;width:100%}
+.social-row input:focus{outline:none;border-color:var(--cy)}
+.social-row .sr-active{display:flex;align-items:center;justify-content:center}
+@media(max-width:700px){.social-row{grid-template-columns:36px 1fr;grid-template-areas:"ic lb" "ur ur" "ac ac";gap:6px}.social-row .sr-icon{grid-area:ic}.social-row .sr-label{grid-area:lb}.social-row .sr-url{grid-area:ur}.social-row .sr-active{grid-area:ac;justify-content:flex-start}}
 @media(max-width:900px){
   .layout{grid-template-columns:1fr;padding:16px 12px 60px}
   .sidebar{position:fixed;top:56px;left:0;right:0;bottom:0;z-index:40;border-radius:0;max-height:none;transform:translateX(-100%);transition:transform .22s ease;background:var(--bg2)}
@@ -137,6 +137,7 @@ table.tbl{width:100%;min-width:700px;border-collapse:collapse;font-size:.82rem}
       <button class="navbtn" data-view="results">Results</button>
       <button class="navbtn" data-view="remarks">Remarks</button>
       <h4>Promotion</h4>
+      <button class="navbtn" data-view="socials">Social Links</button>
       <button class="navbtn" data-view="announcements">Announcements</button>
       <button class="navbtn" data-view="counters">Counters</button>
       <h4>Account</h4>
@@ -227,6 +228,7 @@ function errorState(m){content.innerHTML='<div class="err">'+esc(m)+'</div>';}
 function emptyState(m){return '<div class="empty">'+esc(m||'Nothing here yet.')+'</div>';}
 function header(t,s){return '<h2 class="stitle">'+esc(t)+'</h2>'+(s?'<p class="ssub">'+esc(s)+'</p>':'');}
 function badge(t,cls){var c=cls||String(t||'').toLowerCase();return '<span class="bdg '+esc(c)+'">'+esc(t)+'</span>';}
+function allBadge(label){return '<span class="all-badge">'+esc(label||'All Subjects')+'</span>';}
 function stat(l,v,cls){return '<div class="stat"><span class="lbl">'+esc(l)+'</span><span class="val '+(cls||'')+'">'+esc(v)+'</span></div>';}
 function fmtDate(d){if(!d) return '—';return String(d).split('T')[0];}
 function fmtDateTime(d){if(!d) return '—';return String(d).replace('T',' ').substring(0,19);}
@@ -254,7 +256,7 @@ function fg(label,id,type,opts){
 }
 function val(id){var el=document.getElementById(id);return el?el.value.trim():'';}
 function rowsToOpts(rows,idKey,nameKey,emptyLabel){
-  return [{value:'',label:emptyLabel||'— Optional —'}].concat(rows.map(function(r){
+  return [{value:'',label:emptyLabel||'— Select —'}].concat(rows.map(function(r){
     return {value:r[idKey],label:(r[nameKey]||r[idKey])};
   }));
 }
@@ -356,8 +358,7 @@ VIEWS.activity=async function(){
 
 /* ========== PROGRAMMES ========== */
 VIEWS.programmes=async function(){
-  var rs=await Promise.all([apiCall('adminListProgrammes'),apiCall('adminListSubjects')]);
-  var rp=rs[0];
+  var rp=await apiCall('adminListProgrammes');
   if(!rp.ok)return errorState(rp.error||'Failed to load.');
   var programmes=(rp.data&&rp.data.programmes)||[];
   var html=header('Programmes','NumWeeks & TestsPerWeek define duration and cadence.');
@@ -537,13 +538,15 @@ VIEWS.students=async function(){
   html+='<div class="panel"><div class="ptitle">Create Student</div><div class="fgrid">'+
     fg('Student ID','st_id','text',{required:true,placeholder:'e.g. Arnav10 or GPN-STU-01',hint:'3–20 chars. Letters, numbers, dot, dash, underscore.'})+
     fg('Name','st_name','text',{required:true})+
-    fg('Email','st_email','email',{hint:'Optional — mailing list'})+
     fg('Password','st_pass','password',{required:true,minlength:6,hint:'Min 6 characters.'})+
     fg('Class','st_class','text',{})+
     fg('Board','st_board','text',{})+
     fg('School','st_school','text',{})+
+    fg('Location / City','st_location','text',{})+
     fg('Parent Name','st_parent','text',{})+
     fg('Phone','st_phone','text',{})+
+    fg('WhatsApp','st_wa','text',{hint:'Leave blank to default to Phone'})+
+    fg('Email','st_email','email',{hint:'Optional — mailing list'})+
   '</div><div class="arow mt16"><button class="btn gold" id="st_create">Create Student</button></div></div>';
   html+='<div class="panel"><div class="ptitle">All Students ('+rows.length+')</div>';
   if(!rows.length)html+=emptyState('No students yet.');
@@ -570,7 +573,7 @@ VIEWS.students=async function(){
   html+='</div>';
   content.innerHTML=html;
   document.getElementById('st_create').addEventListener('click',async function(){
-    var p={StudentID:val('st_id'),Name:val('st_name'),Email:val('st_email'),Password:val('st_pass'),Class:val('st_class'),Board:val('st_board'),School:val('st_school'),ParentName:val('st_parent'),Phone:val('st_phone')};
+    var p={StudentID:val('st_id'),Name:val('st_name'),Password:val('st_pass'),Class:val('st_class'),Board:val('st_board'),School:val('st_school'),Location:val('st_location'),ParentName:val('st_parent'),Phone:val('st_phone'),WhatsApp:val('st_wa'),Email:val('st_email')};
     if(!p.StudentID||!p.Name||!p.Password)return toast('Student ID, Name, Password required.','error');
     if(p.Password.length<6)return toast('Password ≥ 6 characters.','error');
     var r=await apiCall('adminCreateStudent',p);
@@ -714,7 +717,7 @@ VIEWS.enrolments=async function(){
         '<td class="mono">'+esc(e.EnrolmentID)+'</td>'+
         '<td>'+esc(st.Name||e.StudentID)+'</td>'+
         '<td>'+esc(p.Name||e.ProgrammeID)+'</td>'+
-        '<td class="wrap">'+esc(e.SubjectIDs||'—')+'</td>'+
+        '<td>'+(String(e.SubjectIDs||'').trim()?esc(e.SubjectIDs):allBadge('All Subjects'))+'</td>'+
         '<td>'+esc(fmtDate(e.StartDate))+'</td>'+
         '<td>'+esc(fmtDate(e.EndDate))+'</td>'+
         '<td>'+badge(e.Status||'')+'</td>'+
@@ -751,7 +754,7 @@ VIEWS.enrolments=async function(){
     toast('Created. End: '+((r.data||{}).EndDate||''),'ok');render('enrolments');
   });
   content.querySelectorAll('button[data-edit]').forEach(function(b){
-    b.addEventListener('click',function(){editEnrolment(b.getAttribute('data-edit'),enrol,programmes,students);});
+    b.addEventListener('click',function(){editEnrolment(b.getAttribute('data-edit'),enrol);});
   });
   content.querySelectorAll('button[data-del]').forEach(function(b){
     b.addEventListener('click',async function(){
@@ -764,7 +767,7 @@ VIEWS.enrolments=async function(){
   });
 };
 
-function editEnrolment(id,enrol,programmes,students){
+function editEnrolment(id,enrol){
   var e=enrol.filter(function(x){return String(x.EnrolmentID)===String(id);})[0];
   if(!e)return toast('Not found','error');
   var html=header('Edit Enrolment — '+e.EnrolmentID,'Update dates, subjects or status.');
@@ -845,32 +848,35 @@ VIEWS.materials=async function(){
   var chapters=(rs[2].ok&&rs[2].data&&rs[2].data.chapters)||[];
   var programmes=(rs[3].ok&&rs[3].data&&rs[3].data.programmes)||[];
   var types=(rs[4].ok&&rs[4].data&&rs[4].data.types)||['NOTES','SOLUTION','WORKSHEET','VIDEO','OTHER'];
+  var subMap={}; subjects.forEach(function(s){subMap[s.SubjectID]=s.Name;});
   var html=header('Study Materials','ViewURL opens in browser; DownloadURL triggers download.');
   html+='<div class="panel"><div class="ptitle">Add Material</div><div class="fgrid">'+
     fg('Title','m_title','text',{required:true})+
     fg('Type','m_type','select',{options:types,value:'NOTES'})+
     fg('ViewURL (https)','m_vurl','text',{full:true,required:true,hint:'https://files.guidedpathnoida.in/…'})+
     fg('DownloadURL (https)','m_durl','text',{full:true,required:true,hint:'https://download.guidedpathnoida.in/…'})+
-    fg('Subject','m_subject','select',{options:rowsToOpts(subjects,'SubjectID','Name')})+
-    fg('Chapter','m_chapter','select',{options:rowsToOpts(chapters,'ChapterID','Name')})+
-    fg('Programme','m_programme','select',{options:rowsToOpts(programmes,'ProgrammeID','Name')})+
+    fg('Subject (blank = all)','m_subject','select',{options:rowsToOpts(subjects,'SubjectID','Name','— All Subjects —')})+
+    fg('Chapter (blank = all)','m_chapter','select',{options:rowsToOpts(chapters,'ChapterID','Name','— All Chapters —')})+
+    fg('Programme (blank = all)','m_programme','select',{options:rowsToOpts(programmes,'ProgrammeID','Name','— All Programmes —')})+
     fg('Class','m_class','text',{})+
     fg('Description','m_desc','textarea',{full:true})+
   '</div><div class="arow mt16"><button class="btn gold" id="m_create">Add Material</button></div></div>';
   html+='<div class="panel"><div class="ptitle">All Materials ('+materials.length+')</div>';
   if(!materials.length)html+=emptyState('No materials yet.');
   else{
-    html+='<div class="twrap"><table class="tbl"><thead><tr><th>ID</th><th>Title</th><th>Type</th><th>Class</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+    html+='<div class="twrap"><table class="tbl"><thead><tr><th>ID</th><th>Title</th><th>Type</th><th>Subject</th><th>Class</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
     materials.forEach(function(m){
+      var subjLabel = m.SubjectID ? esc(subMap[m.SubjectID]||m.SubjectID) : allBadge('All Subjects');
       html+='<tr>'+
         '<td class="mono">'+esc(m.MaterialID)+'</td>'+
         '<td>'+esc(m.Title)+'</td>'+
         '<td>'+esc(m.Type||'')+'</td>'+
+        '<td>'+subjLabel+'</td>'+
         '<td>'+esc(m.Class||'')+'</td>'+
         '<td>'+badge(m.Status||'')+'</td>'+
         '<td>'+
-          '<button class="btn ghost sm" data-view="'+esc(m.MaterialID)+'">View</button> '+
-          '<button class="btn gold sm" data-dl="'+esc(m.MaterialID)+'">Download</button> '+
+          (m.ViewURL?'<a class="btn ghost sm" href="'+esc(m.ViewURL)+'" target="_blank" rel="noopener">View</a> ':'')+
+          (m.DownloadURL?'<a class="btn gold sm" href="'+esc(m.DownloadURL)+'" target="_blank" rel="noopener">Download</a> ':'')+
           '<button class="btn dng sm" data-del="'+esc(m.MaterialID)+'">Delete</button>'+
         '</td>'+
       '</tr>';
@@ -887,18 +893,6 @@ VIEWS.materials=async function(){
     var r=await apiCall('adminCreateMaterial',p);
     if(!r.ok)return toast(r.error||'Failed.','error');
     toast('Added.','ok');render('materials');
-  });
-  content.querySelectorAll('button[data-view]').forEach(function(b){
-    b.addEventListener('click',function(){
-      var m=materials.filter(function(x){return String(x.MaterialID)===String(b.getAttribute('data-view'));})[0];
-      if(m&&m.ViewURL)window.open(m.ViewURL,'_blank','noopener');
-    });
-  });
-  content.querySelectorAll('button[data-dl]').forEach(function(b){
-    b.addEventListener('click',function(){
-      var m=materials.filter(function(x){return String(x.MaterialID)===String(b.getAttribute('data-dl'));})[0];
-      if(m&&m.DownloadURL)window.open(m.DownloadURL,'_blank','noopener');
-    });
   });
   content.querySelectorAll('button[data-del]').forEach(function(b){
     b.addEventListener('click',async function(){
@@ -1025,6 +1019,8 @@ VIEWS.tests=async function(){
   var subjects=(rs[1].ok&&rs[1].data&&rs[1].data.subjects)||[];
   var chapters=(rs[2].ok&&rs[2].data&&rs[2].data.chapters)||[];
   var programmes=(rs[3].ok&&rs[3].data&&rs[3].data.programmes)||[];
+  var subMap={}; subjects.forEach(function(s){subMap[s.SubjectID]=s.Name;});
+
   var html=header('Tests','External Google Forms. Create metadata (DRAFT), link form, advance lifecycle.');
   html+='<div class="panel"><div class="ptitle">Create Test (metadata only — starts as DRAFT)</div><div class="fgrid">'+
     fg('Title','t_title','text',{required:true})+
@@ -1032,19 +1028,22 @@ VIEWS.tests=async function(){
     fg('Duration (min)','t_dur','number',{required:true})+
     fg('Price (₹)','t_price','number',{value:'0'})+
     fg('Gap Hours','t_gap','number',{value:'3',hint:'Twice-appearing: gap between windows'})+
-    fg('Subject','t_subject','select',{options:rowsToOpts(subjects,'SubjectID','Name')})+
-    fg('Chapter','t_chapter','select',{options:rowsToOpts(chapters,'ChapterID','Name')})+
-    fg('Programme','t_programme','select',{options:rowsToOpts(programmes,'ProgrammeID','Name')})+
+    fg('Subject (blank = all)','t_subject','select',{options:rowsToOpts(subjects,'SubjectID','Name','— All Subjects —')})+
+    fg('Chapter (blank = all)','t_chapter','select',{options:rowsToOpts(chapters,'ChapterID','Name','— All Chapters —')})+
+    fg('Programme (blank = all)','t_programme','select',{options:rowsToOpts(programmes,'ProgrammeID','Name','— All Programmes —')})+
     fg('Class','t_class','text',{})+
   '</div><div class="arow mt16"><button class="btn gold" id="t_create">Create Test</button></div></div>';
+
   html+='<div class="panel"><div class="ptitle">All Tests ('+tests.length+')</div>';
   if(!tests.length)html+=emptyState('No tests yet.');
   else{
-    html+='<div class="twrap"><table class="tbl"><thead><tr><th>ID</th><th>Title</th><th>Marks</th><th>Price</th><th>Status</th><th>Form</th><th>Att</th><th>Sub</th><th>Eval</th><th>Pub</th><th></th></tr></thead><tbody>';
+    html+='<div class="twrap"><table class="tbl"><thead><tr><th>ID</th><th>Title</th><th>Subject</th><th>Marks</th><th>Price</th><th>Status</th><th>Form</th><th>Att</th><th>Sub</th><th>Eval</th><th>Pub</th><th></th></tr></thead><tbody>';
     tests.forEach(function(t){
+      var subjLabel = t.SubjectID ? esc(subMap[t.SubjectID]||t.SubjectID) : allBadge('All Subjects');
       html+='<tr>'+
         '<td class="mono">'+esc(t.TestID)+'</td>'+
         '<td class="wrap">'+esc(t.Title)+'</td>'+
+        '<td>'+subjLabel+'</td>'+
         '<td>'+esc(t.TotalMarks)+'</td>'+
         '<td>₹'+esc(t.Price||0)+'</td>'+
         '<td>'+badge(t.Status||'')+'</td>'+
@@ -1085,15 +1084,15 @@ async function openTestEditor(testId){
   html+='<div class="arow"><button class="btn ghost sm" id="te_back">← Back to Tests</button></div>';
   html+='<div class="panel"><div class="ptitle">Google Form</div>';
   if(test.FormID){
-    html+='<div class="quiet" style="margin-bottom:8px">Form linked.</div>'+
+    html+='<div class="quiet" style="margin-bottom:8px">Form linked. Saved in '+esc('GPN-TESTS-DB')+' folder.</div>'+
       '<div class="fgrid">'+
       '<div><div class="quiet" style="font-size:.68rem;text-transform:uppercase">Form ID</div><div class="mono wrap">'+esc(test.FormID)+'</div></div>'+
       '</div>'+
       '<div class="arow mt16">'+
         '<button class="btn ghost sm" data-copy="'+esc(test.FormURL||'')+'">📋 Copy Sender URL</button> '+
         '<button class="btn ghost sm" data-copy="'+esc(test.FormID||'')+'">📋 Copy Form ID</button> '+
-        '<button class="btn ghost sm" data-open-url="'+esc(test.FormURL||'')+'">🔗 Open Sender</button> '+
-        '<button class="btn ghost sm" data-open-url="https://docs.google.com/forms/d/'+esc(test.FormID||'')+'/edit" target="_blank">✏️ Edit Form</button>'+
+        '<a class="btn ghost sm" href="'+esc(test.FormURL||'')+'" target="_blank" rel="noopener">🔗 Open Sender</a> '+
+        '<a class="btn ghost sm" href="https://docs.google.com/forms/d/'+esc(test.FormID||'')+'/edit" target="_blank" rel="noopener">✏️ Edit Form</a>'+
       '</div>';
   } else {
     html+='<div class="fgrid">'+
@@ -1119,8 +1118,9 @@ async function openTestEditor(testId){
   html+='<div class="panel"><div class="ptitle">Attempts ('+attempts.length+')</div>';
   if(!attempts.length)html+=emptyState('No attempts yet.');
   else{
-    html+='<div class="twrap"><table class="tbl"><thead><tr><th>Attempt</th><th>Student</th><th>Token</th><th>Status</th><th>Cost</th><th>Submitted</th></tr></thead><tbody>';
+    html+='<div class="twrap"><table class="tbl"><thead><tr><th>Attempt</th><th>Student</th><th>Token</th><th>Status</th><th>Cost</th><th>Submitted</th><th></th></tr></thead><tbody>';
     attempts.forEach(function(a){
+      var canEval = String(a.Status).toUpperCase()==='SUBMITTED';
       html+='<tr>'+
         '<td class="mono">'+esc(a.AttemptID)+'</td>'+
         '<td>'+esc(a.StudentID)+'</td>'+
@@ -1128,6 +1128,7 @@ async function openTestEditor(testId){
         '<td>'+badge(a.Status||'')+'</td>'+
         '<td>₹'+esc(a.CostCharged||0)+'</td>'+
         '<td>'+esc(fmtDateTime(a.SubmittedAt))+'</td>'+
+        '<td>'+(canEval?'<button class="btn gold sm" data-eval="'+esc(a.AttemptID)+'">Evaluate</button>':'')+'</td>'+
       '</tr>';
     });
     html+='</tbody></table></div>';
@@ -1155,11 +1156,8 @@ async function openTestEditor(testId){
   content.querySelectorAll('button[data-copy]').forEach(function(b){
     b.addEventListener('click',function(){copyToClipboard(b.getAttribute('data-copy'));});
   });
-  content.querySelectorAll('button[data-open-url]').forEach(function(b){
-    b.addEventListener('click',function(){
-      var u=b.getAttribute('data-open-url');
-      if(u)window.open(u,'_blank','noopener');
-    });
+  content.querySelectorAll('button[data-eval]').forEach(function(b){
+    b.addEventListener('click',function(){openEvaluation(b.getAttribute('data-eval'));});
   });
   var linkBtn=document.getElementById('te_link');
   if(linkBtn){
@@ -1208,7 +1206,8 @@ function openFormCreator(testId,title){
       '<b>TF</b> | text | true/false | points<br>'+
       '<b>ONE</b> | text | expected | points<br>'+
       '<b>SHORT</b> | text | points<br>'+
-      '<b>LONG</b> | text | points'+
+      '<b>LONG</b> | text | points<br>'+
+      '<br><b>Note:</b> Identity fields (Name, ID, Code, Class, School, Board, Location, Phone, Email, WhatsApp) are added automatically.'+
     '</div>'+
     '<div class="fg full"><textarea id="fc_block" style="min-height:220px" placeholder="# Sample\nMCQ | Which word is a noun? | Run; Quickly; Elephant; Beautiful | 2 | 1\nTF | Sun rises in the east. | true | 1\nONE | Capital of India? | New Delhi | 1\nSHORT | Why did the author write this? | 3"></textarea></div>'+
     '<div class="arow mt16"><button class="btn gold" id="fc_create">Create &amp; Link</button></div>'+
@@ -1284,12 +1283,15 @@ async function openEvaluation(attemptId){
   else{
     manualRows.forEach(function(m,i){
       var cur=(m.ManualMarks===''||m.ManualMarks==null)?'':m.ManualMarks;
+      var maxLabel = (m.MaxPoints > 0) ? 'Marks (0–'+m.MaxPoints+')' : 'Marks (no max set)';
+      var maxInputAttr = (m.MaxPoints > 0) ? ' max="'+m.MaxPoints+'"' : '';
+      var maxHint = (m.MaxPoints > 0) ? ('Max: '+m.MaxPoints) : 'Enter marks freely';
       html+='<div style="border:1px solid var(--l2);border-radius:8px;padding:12px;margin-bottom:12px">'+
         '<div style="font-size:.85rem;color:var(--cy);margin-bottom:6px">'+esc(m.QuestionTitle)+'</div>'+
-        '<div class="quiet" style="font-size:.72rem;margin-bottom:6px">Max: '+esc(m.MaxPoints)+'</div>'+
+        '<div class="quiet" style="font-size:.72rem;margin-bottom:6px">'+esc(maxHint)+'</div>'+
         '<div style="background:rgba(0,0,0,.25);border-radius:6px;padding:10px;font-size:.85rem;white-space:pre-wrap;margin-bottom:10px">'+esc(m.StudentAnswer||'(blank)')+'</div>'+
         '<div class="fgrid">'+
-          '<div class="fg"><label>Marks (0–'+esc(m.MaxPoints)+')</label><input id="ev_m_'+i+'" type="number" min="0" max="'+esc(m.MaxPoints)+'" value="'+esc(cur)+'"></div>'+
+          '<div class="fg"><label>'+esc(maxLabel)+'</label><input id="ev_m_'+i+'" type="number" min="0"'+maxInputAttr+' value="'+esc(cur)+'"></div>'+
           '<div class="fg"><label>Remark</label><input id="ev_r_'+i+'" type="text" value="'+esc(m.EvaluatorRemark||'')+'"></div>'+
         '</div>'+
       '</div>';
@@ -1372,6 +1374,78 @@ VIEWS.remarks=async function(){
     var r=await apiCall('adminAddRemark',p);
     if(!r.ok)return toast(r.error||'Failed.','error');
     toast('Saved.','ok');render('remarks');
+  });
+};
+
+/* ========== SOCIALS (V16) ========== */
+var SOCIAL_SLOTS = [
+  {key:'fb_page',   icon:'📘', label:'Facebook Page',              group:'connect'},
+  {key:'fb_group',  icon:'👥', label:'Facebook Group',             group:'connect'},
+  {key:'instagram', icon:'📷', label:'Instagram Page',             group:'connect'},
+  {key:'x',         icon:'✖️',  label:'X (Twitter)',                group:'connect'},
+  {key:'pinterest', icon:'📌', label:'Pinterest',                  group:'connect'},
+  {key:'youtube',   icon:'▶️',  label:'YouTube',                    group:'watch'},
+  {key:'wa_channel',icon:'📢', label:'WhatsApp Channel',           group:'chat'},
+  {key:'wa_catalogue',icon:'🛒',label:'WhatsApp Catalogue',        group:'chat'},
+  {key:'wa_business',icon:'💬',label:'WhatsApp Business Profile',  group:'chat'},
+  {key:'custom_1',  icon:'🔗', label:'',                           group:'more', custom:true},
+  {key:'custom_2',  icon:'🔗', label:'',                           group:'more', custom:true},
+  {key:'custom_3',  icon:'🔗', label:'',                           group:'more', custom:true}
+];
+
+VIEWS.socials=async function(){
+  var r=await apiCall('adminGetSocials');
+  if(!r.ok)return errorState(r.error||'Failed to load.');
+  var saved=r.data.links||[];
+  var gbp=r.data.gbp||'';
+  var byLabel={};
+  saved.forEach(function(l){ byLabel[l.label.toLowerCase()] = l; });
+
+  var html=header('Social Links','Links shown on the student dashboard. Fill any URL to enable. Empty = hidden.');
+
+  html+='<div class="panel"><div class="ptitle">Social Channels</div>';
+  SOCIAL_SLOTS.forEach(function(s){
+    var savedLink = null;
+    for (var i=0;i<saved.length;i++){ if (String(saved[i].label).toLowerCase()===String(s.label).toLowerCase()) { savedLink = saved[i]; break; } }
+    var url = savedLink ? savedLink.url : '';
+    var active = savedLink ? savedLink.active : false;
+    var labelVal = s.custom ? (savedLink ? savedLink.label : '') : s.label;
+    var inputId = 'soc_'+s.key;
+    html+='<div class="social-row">'+
+      '<div class="sr-icon">'+esc(s.icon)+'</div>'+
+      (s.custom
+        ? '<input class="sr-label" id="'+inputId+'_label" type="text" placeholder="Custom label" value="'+esc(labelVal)+'">'
+        : '<div class="sr-label" style="font-size:.82rem;color:var(--tx)">'+esc(s.label)+'</div>')+
+      '<input class="sr-url" id="'+inputId+'_url" type="url" placeholder="https://…" value="'+esc(url)+'" data-group="'+esc(s.group)+'" data-icon="'+esc(s.icon)+'"'+(s.custom?' data-custom="1"':'')+' data-label="'+esc(s.custom?'':s.label)+'"'+(s.custom?' data-label-input="'+inputId+'_label"':'')+'>'+
+      '<div class="sr-active"><label style="font-size:.72rem;color:var(--mu);display:flex;align-items:center;gap:5px;cursor:pointer"><input type="checkbox" id="'+inputId+'_active" '+(active?'checked':'')+' style="width:auto;min-height:auto"> On</label></div>'+
+    '</div>';
+  });
+  html+='</div>';
+
+  html+='<div class="panel"><div class="ptitle">Google Business Profile — Reviews &amp; Ratings</div>'+
+    '<div class="fg"><label>Google Review URL</label><input id="soc_gbp" type="url" placeholder="https://g.page/r/… or your GBP short link" value="'+esc(gbp)+'"><span class="hint">Found in your Google Business dashboard → Share → Get more reviews.</span></div>'+
+  '</div>';
+
+  html+='<div class="arow"><button class="btn gold" id="soc_save">Save All</button></div>';
+
+  content.innerHTML=html;
+
+  document.getElementById('soc_save').addEventListener('click',async function(){
+    var links=[];
+    SOCIAL_SLOTS.forEach(function(s){
+      var inputId='soc_'+s.key;
+      var url = val(inputId+'_url');
+      var active = document.getElementById(inputId+'_active').checked;
+      if(!url) return;
+      if(url.indexOf('http')!==0) return;
+      var label = s.custom ? val(inputId+'_label') : s.label;
+      if(!label) return;
+      links.push({icon:s.icon,label:label,url:url,group:s.group,active:active});
+    });
+    var gbpVal = val('soc_gbp');
+    var r2=await apiCall('adminSetSocials',{links:links,gbp:gbpVal});
+    if(!r2.ok)return toast(r2.error||'Failed.','error');
+    toast('Saved '+((r2.data||{}).count||0)+' links.','ok');
   });
 };
 

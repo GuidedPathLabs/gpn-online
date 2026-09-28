@@ -1,1 +1,1595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Admin — Guided Path One-on-One</title>
+<style>
+:root{--bg:#060f1e;--bg2:#0a192f;--bg3:#102844;--line:rgba(0,184,212,.22);--l2:rgba(0,184,212,.12);--cy:#00e5ff;--gold:#ffd54f;--tx:#e0e0e0;--mu:#8a9bb0;--dng:#ff6b6b;--ok:#4caf50;--wn:#ffb300}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--tx);font-family:Georgia,'Times New Roman',serif;font-size:16px;line-height:1.5;overflow-x:hidden;-webkit-text-size-adjust:100%}
+a{color:var(--gold);text-decoration:none}
+a:hover{color:var(--cy)}
+.app-root{min-height:100vh;width:100%;overflow-x:hidden}
+.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:12px;padding:12px 16px;background:rgba(6,15,30,.96);border-bottom:1px solid var(--line);min-height:56px}
+.brand{font-size:1rem;font-weight:700;color:var(--cy);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand b{color:var(--gold)}
+.user{font-size:.8rem;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:45vw}
+.burger{display:none;background:transparent;border:1px solid var(--line);color:var(--cy);font-size:1.2rem;border-radius:6px;width:40px;height:40px;cursor:pointer}
+.layout{display:grid;grid-template-columns:230px 1fr;gap:20px;max-width:1400px;margin:0 auto;padding:20px 16px 60px}
+.sidebar{position:sticky;top:72px;align-self:start;background:var(--bg2);border:1px solid var(--l2);border-radius:10px;padding:12px;max-height:calc(100vh - 96px);overflow-y:auto}
+.sidebar h4{margin:12px 8px 6px;font-size:.68rem;letter-spacing:.14em;color:var(--mu);text-transform:uppercase}
+.navbtn{display:block;width:100%;text-align:left;background:transparent;border:1px solid transparent;color:var(--tx);font-family:inherit;font-size:.83rem;padding:9px 12px;border-radius:6px;cursor:pointer;margin-bottom:2px;transition:.15s}
+.navbtn:hover{background:rgba(0,184,212,.06);color:var(--cy)}
+.navbtn.active{background:rgba(0,184,212,.1);border-color:var(--line);color:var(--gold);font-weight:700}
+.navbtn.danger{color:var(--dng)}
+.content{min-width:0}
+.stitle{font-size:1.3rem;color:var(--cy);margin:0 0 4px;font-weight:700}
+.ssub{color:var(--mu);font-size:.85rem;margin:0 0 20px}
+.panel{background:var(--bg2);border:1px solid var(--l2);border-radius:10px;padding:18px;margin-bottom:18px}
+.ptitle{font-size:.95rem;color:var(--gold);margin:0 0 12px;font-weight:700}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px}
+.stat{background:var(--bg3);border:1px solid var(--l2);border-radius:8px;padding:14px 16px}
+.stat .lbl{display:block;font-size:.68rem;color:var(--mu);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.stat .val{display:block;font-size:1.5rem;font-weight:700;color:var(--cy);line-height:1.1}
+.stat .val.gold{color:var(--gold)}
+.stat .val.dng{color:var(--dng)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 16px;font-family:inherit;font-size:.83rem;font-weight:700;letter-spacing:.03em;border-radius:6px;cursor:pointer;border:1px solid var(--line);background:rgba(0,184,212,.08);color:var(--cy);min-height:38px;text-decoration:none}
+.btn:hover{background:rgba(0,184,212,.16);border-color:var(--cy)}
+.btn.gold{border-color:rgba(255,213,79,.45);color:var(--gold);background:rgba(255,213,79,.06)}
+.btn.gold:hover{background:rgba(255,213,79,.14);border-color:var(--gold)}
+.btn.dng{border-color:rgba(255,107,107,.5);color:var(--dng);background:rgba(255,107,107,.06)}
+.btn.dng:hover{background:rgba(255,107,107,.14);border-color:var(--dng)}
+.btn.ghost{background:transparent;color:var(--tx);border-color:var(--l2)}
+.btn.ghost:hover{border-color:var(--cy);color:var(--cy)}
+.btn.block{width:100%}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.arow{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px;align-items:center}
+.fgrid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.fg{display:flex;flex-direction:column;gap:4px;min-width:0}
+.fg.full{grid-column:1/-1}
+.fg label{font-size:.68rem;color:var(--mu);letter-spacing:.08em;text-transform:uppercase}
+.fg input,.fg select,.fg textarea{width:100%;padding:10px 12px;background:rgba(0,0,0,.35);border:1px solid var(--l2);border-radius:6px;color:var(--tx);font-family:inherit;font-size:.9rem;min-height:40px}
+.fg textarea{min-height:100px;resize:vertical;font-family:'Courier New',monospace;font-size:.82rem}
+.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--cy);box-shadow:0 0 0 2px rgba(0,229,255,.12)}
+.hint{font-size:.7rem;color:var(--mu);line-height:1.4}
+.twrap{width:100%;overflow-x:auto;border:1px solid var(--l2);border-radius:8px;background:var(--bg2);-webkit-overflow-scrolling:touch}
+table.tbl{width:100%;min-width:700px;border-collapse:collapse;font-size:.82rem}
+.tbl th,.tbl td{padding:9px 11px;text-align:left;border-bottom:1px solid rgba(255,255,255,.04);white-space:nowrap}
+.tbl th{font-size:.66rem;color:var(--mu);letter-spacing:.08em;text-transform:uppercase;background:rgba(0,184,212,.04);position:sticky;top:0;z-index:1}
+.tbl td.wrap{white-space:normal;word-break:break-word}
+.tbl tr:hover td{background:rgba(0,184,212,.03)}
+.bdg{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.66rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;border:1px solid transparent}
+.bdg.draft{color:#8a9bb0;border-color:rgba(138,155,176,.4)}
+.bdg.available{color:var(--cy);border-color:rgba(0,229,255,.5);background:rgba(0,229,255,.08)}
+.bdg.closed{color:var(--wn);border-color:rgba(255,179,0,.5);background:rgba(255,179,0,.08)}
+.bdg.evaluated{color:var(--gold);border-color:rgba(255,213,79,.5);background:rgba(255,213,79,.08)}
+.bdg.published{color:var(--ok);border-color:rgba(76,175,80,.5);background:rgba(76,175,80,.08)}
+.bdg.active{color:var(--ok);border-color:rgba(76,175,80,.4)}
+.bdg.inactive{color:var(--mu);border-color:rgba(138,155,176,.3)}
+.bdg.credit{color:var(--ok);border-color:rgba(76,175,80,.4)}
+.bdg.debit{color:var(--dng);border-color:rgba(255,107,107,.4)}
+.bdg.refund{color:var(--cy);border-color:rgba(0,229,255,.4)}
+.bdg.settle{color:var(--wn);border-color:rgba(255,179,0,.4)}
+.bdg.dng{color:var(--dng);border-color:rgba(255,107,107,.4)}
+.bdg.submitted{color:var(--wn);border-color:rgba(255,179,0,.5);background:rgba(255,179,0,.08)}
+.bdg.issued{color:var(--cy);border-color:rgba(0,229,255,.4)}
+.bdg.expired{color:var(--mu);border-color:rgba(138,155,176,.3)}
+.load{padding:28px 20px;text-align:center;border-radius:8px;font-size:.9rem;color:var(--cy);background:rgba(0,184,212,.04)}
+.empty{padding:28px 20px;text-align:center;border-radius:8px;font-size:.9rem;color:var(--mu);background:rgba(255,255,255,.02);border:1px dashed var(--l2)}
+.err{padding:28px 20px;text-align:center;border-radius:8px;font-size:.9rem;color:var(--dng);background:rgba(255,107,107,.06);border:1px solid rgba(255,107,107,.3)}
+.spin{display:inline-block;width:18px;height:18px;border:2px solid rgba(0,229,255,.25);border-top-color:var(--cy);border-radius:50%;animation:sp .8s linear infinite;vertical-align:middle;margin-right:8px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.tw{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:100;display:flex;flex-direction:column;gap:8px;max-width:calc(100% - 32px);pointer-events:none}
+.tt{background:var(--bg3);border:1px solid var(--line);color:var(--tx);padding:10px 16px;border-radius:6px;font-size:.85rem;box-shadow:0 4px 16px rgba(0,0,0,.4);pointer-events:auto}
+.tt.ok{border-color:rgba(76,175,80,.5);color:#b6e8b6}
+.tt.error{border-color:rgba(255,107,107,.5);color:#ffbaba}
+.mono{font-family:'Courier New',monospace;font-size:.8rem;color:var(--cy)}
+.quiet{color:var(--mu);font-size:.82rem}
+.mt16{margin-top:16px}
+.tabs{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:16px;border-bottom:1px solid var(--l2);padding-bottom:2px}
+.tab{background:transparent;border:none;border-bottom:2px solid transparent;color:var(--mu);font-family:inherit;font-size:.82rem;font-weight:700;padding:8px 12px;cursor:pointer;letter-spacing:.03em}
+.tab:hover{color:var(--cy)}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.qbox{background:rgba(0,0,0,.25);border:1px solid var(--l2);border-radius:6px;padding:12px;font-family:'Courier New',monospace;font-size:.82rem;white-space:pre;overflow-x:auto;line-height:1.5}
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr;padding:16px 12px 60px}
+  .sidebar{position:fixed;top:56px;left:0;right:0;bottom:0;z-index:40;border-radius:0;max-height:none;transform:translateX(-100%);transition:transform .22s ease;background:var(--bg2)}
+  .sidebar.open{transform:translateX(0)}
+  .burger{display:inline-flex;align-items:center;justify-content:center}
+  .user{display:none}
+}
+</style>
+</head>
+<body>
+<div class="app-root">
+  <div class="topbar">
+    <button class="burger" id="burger" aria-label="Menu">☰</button>
+    <div class="brand">Guided Path <b>Admin</b></div>
+    <div class="user" id="topUser">…</div>
+  </div>
 
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <h4>Overview</h4>
+      <button class="navbtn active" data-view="dashboard">Dashboard</button>
+      <button class="navbtn" data-view="analytics">Analytics</button>
+      <button class="navbtn" data-view="activity">Activity Log</button>
+      <h4>Curriculum</h4>
+      <button class="navbtn" data-view="programmes">Programmes</button>
+      <button class="navbtn" data-view="subjects">Subjects</button>
+      <button class="navbtn" data-view="chapters">Chapters</button>
+      <h4>People</h4>
+      <button class="navbtn" data-view="students">Students</button>
+      <button class="navbtn" data-view="enrolments">Enrolments</button>
+      <button class="navbtn" data-view="payments">Payments</button>
+      <h4>Content</h4>
+      <button class="navbtn" data-view="materials">Study Materials</button>
+      <button class="navbtn" data-view="questionbank">Question Bank</button>
+      <button class="navbtn" data-view="schedule">Schedule</button>
+      <h4>Assessment</h4>
+      <button class="navbtn" data-view="tests">Tests</button>
+      <button class="navbtn" data-view="evaluations">Evaluations</button>
+      <button class="navbtn" data-view="results">Results</button>
+      <button class="navbtn" data-view="remarks">Remarks</button>
+      <h4>Promotion</h4>
+      <button class="navbtn" data-view="announcements">Announcements</button>
+      <button class="navbtn" data-view="counters">Counters</button>
+      <h4>Account</h4>
+      <button class="navbtn" data-view="password">Change Password</button>
+      <button class="navbtn danger" id="logoutBtn">Sign out</button>
+    </aside>
+    <main class="content" id="content">
+      <div class="load"><span class="spin"></span>Loading…</div>
+    </main>
+  </div>
+</div>
+
+<div class="tw" id="toastWrap"></div>
+
+<script>
+(function(){
+'use strict';
+var GPN_API_URL='https://script.google.com/macros/s/AKfycbx0dOo1ovROMdFYedx4Gm3a1tmpZjjXEwqcxLjCzWXC3Tgxupo9Mc3obk5zDS3uat_7/exec';
+var K_TOKEN='gpn_token',K_ROLE='gpn_role',K_USER='gpn_user',K_NAME='gpn_name';
+
+function getToken(){return localStorage.getItem(K_TOKEN)||'';}
+function getRole(){return localStorage.getItem(K_ROLE)||'';}
+function getUser(){return localStorage.getItem(K_USER)||'';}
+function getName(){return localStorage.getItem(K_NAME)||'';}
+function clearSession(){[K_TOKEN,K_ROLE,K_USER,K_NAME].forEach(function(k){localStorage.removeItem(k);});}
+
+function toast(msg,kind){
+  var w=document.getElementById('toastWrap');
+  var el=document.createElement('div');
+  el.className='tt '+(kind||'');
+  el.textContent=msg;
+  w.appendChild(el);
+  setTimeout(function(){el.remove();},4500);
+}
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+
+async function apiCall(action,payload){
+  try{
+    var res=await fetch(GPN_API_URL,{
+      method:'POST',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify({action:action,token:getToken(),payload:payload||{}}),
+      redirect:'follow'
+    });
+    var j=await res.json();
+    if(j&&j.ok===false&&['SESSION_EXPIRED','SESSION_REVOKED','ACCOUNT_INACTIVE'].indexOf(j.code)>=0){
+      clearSession();
+      toast('Session expired. Redirecting…','error');
+      setTimeout(function(){window.location.href='login.html';},1200);
+    }
+    return j;
+  }catch(e){return {ok:false,error:'Network error.',code:'NETWORK'};}
+}
+
+(function guard(){
+  if(!getToken()){window.location.href='login.html';return;}
+  if(String(getRole()).toUpperCase()!=='ADMIN'){window.location.href='student.html';return;}
+  var u=document.getElementById('topUser');
+  if(u) u.textContent='Admin: '+(getName()||getUser());
+})();
+
+var sidebar=document.getElementById('sidebar');
+var burger=document.getElementById('burger');
+var content=document.getElementById('content');
+burger.addEventListener('click',function(){sidebar.classList.toggle('open');});
+
+document.querySelectorAll('.navbtn[data-view]').forEach(function(b){
+  b.addEventListener('click',function(){
+    var v=b.getAttribute('data-view');
+    document.querySelectorAll('.navbtn').forEach(function(x){x.classList.remove('active');});
+    b.classList.add('active');
+    if(window.matchMedia('(max-width:900px)').matches)sidebar.classList.remove('open');
+    render(v);
+  });
+});
+document.getElementById('logoutBtn').addEventListener('click',async function(){
+  await apiCall('logout');
+  clearSession();
+  window.location.href='login.html';
+});
+
+function loading(){content.innerHTML='<div class="load"><span class="spin"></span>Loading…</div>';}
+function errorState(m){content.innerHTML='<div class="err">'+esc(m)+'</div>';}
+function emptyState(m){return '<div class="empty">'+esc(m||'Nothing here yet.')+'</div>';}
+function header(t,s){return '<h2 class="stitle">'+esc(t)+'</h2>'+(s?'<p class="ssub">'+esc(s)+'</p>':'');}
+function badge(t,cls){var c=cls||String(t||'').toLowerCase();return '<span class="bdg '+esc(c)+'">'+esc(t)+'</span>';}
+function stat(l,v,cls){return '<div class="stat"><span class="lbl">'+esc(l)+'</span><span class="val '+(cls||'')+'">'+esc(v)+'</span></div>';}
+function fmtDate(d){ if(!d) return '—'; return String(d).split('T')[0]; }
+function fmtDateTime(d){ if(!d) return '—'; var s=String(d).replace('T',' '); return s.substring(0,19); }
+function fg(label,id,type,opts){
+  opts=opts||{};
+  var a='';
+  if(opts.required)a+=' required';
+  if(opts.minlength)a+=' minlength="'+opts.minlength+'"';
+  if(opts.placeholder)a+=' placeholder="'+esc(opts.placeholder)+'"';
+  if(opts.value!=null)a+=' value="'+esc(opts.value)+'"';
+  var full=opts.full?' full':'';
+  var hint=opts.hint?'<span class="hint">'+esc(opts.hint)+'</span>':'';
+  if(type==='textarea')return '<div class="fg'+full+'"><label for="'+esc(id)+'">'+esc(label)+'</label><textarea id="'+esc(id)+'"'+a+'>'+esc(opts.value||'')+'</textarea>'+hint+'</div>';
+  if(type==='select'){
+    var o=(opts.options||[]).map(function(x){
+      var v=(typeof x==='string')?x:x.value;
+      var t=(typeof x==='string')?x:x.label;
+      var sel=(opts.value!=null&&String(opts.value)===String(v))?' selected':'';
+      return '<option value="'+esc(v)+'"'+sel+'>'+esc(t)+'</option>';
+    }).join('');
+    return '<div class="fg'+full+'"><label for="'+esc(id)+'">'+esc(label)+'</label><select id="'+esc(id)+'"'+a+'>'+o+'</select>'+hint+'</div>';
+  }
+  return '<div class="fg'+full+'"><label for="'+esc(id)+'">'+esc(label)+'</label><input id="'+esc(id)+'" type="'+esc(type)+'"'+a+'>'+hint+'</div>';
+}
+function val(id){var el=document.getElementById(id);return el?el.value.trim():'';}
+function rowsToOpts(rows,idKey,nameKey,emptyLabel){
+  return [{value:'',label:emptyLabel||'— Optional —'}].concat(rows.map(function(r){
+    return {value:r[idKey],label:(r[nameKey]||r[idKey])};
+  }));
+}
+
+function render(v){
+  loading();
+  var fn=VIEWS[v]||VIEWS.dashboard;
+  Promise.resolve(fn()).catch(function(e){errorState(e&&e.message?e.message:String(e));});
+}
+var VIEWS={};
+
+/* ========== DASHBOARD ========== */
+VIEWS.dashboard=async function(){
+  var r=await apiCall('adminOverview');
+  if(!r.ok)return errorState(r.error||'Failed to load.');
+  var d=r.data||{};
+  var html=header('Dashboard','Live overview of GPN activity.');
+  html+='<div class="stats">'+
+    stat('Total Students',d.totalStudents||0)+
+    stat('Active',d.activeStudents||0)+
+    stat('Suspended',d.suspendedStudents||0,'dng')+
+    stat('Active Programmes',d.activeProgrammes||0,'gold')+
+    stat('Total Wallet Balance','₹'+(d.totalWalletBalance||0),'gold')+
+    stat('Tests Today',d.testsToday||0)+
+    stat('Tests This Week',d.testsThisWeek||0)+
+    stat('Pending Evaluations',d.pendingEvaluations||0,'dng')+
+    stat('Pending Publications',d.pendingPublications||0)+
+  '</div>';
+  content.innerHTML=html;
+};
+
+/* ========== ANALYTICS ========== */
+VIEWS.analytics=async function(){
+  var r=await apiCall('adminAnalytics');
+  if(!r.ok)return errorState(r.error||'Failed to load.');
+  var rows=(r.data&&r.data.students)||[];
+  var html=header('Analytics','Per-student performance summary.');
+  if(!rows.length){content.innerHTML=html+emptyState('No results yet.');return;}
+  html+='<div class="twrap"><table class="tbl"><thead><tr><th>Student</th><th>Wallet</th><th>Tests</th><th>Avg %</th><th>Highest</th><th>Lowest</th><th></th></tr></thead><tbody>';
+  rows.forEach(function(s){
+    html+='<tr>'+
+      '<td>'+esc(s.Name||s.StudentID)+'</td>'+
+      '<td>₹'+esc(s.Wallet||0)+'</td>'+
+      '<td>'+esc(s.tests||0)+'</td>'+
+      '<td>'+esc(s.avg||0)+'%</td>'+
+      '<td>'+esc(s.highest||0)+'%</td>'+
+      '<td>'+esc(s.lowest||0)+'%</td>'+
+      '<td><button class="btn ghost" data-drill="'+esc(s.StudentID)+'">Details</button></td>'+
+    '</tr>';
+  });
+  html+='</tbody></table></div>';
+  content.innerHTML=html;
+  content.querySelectorAll('button[data-drill]').forEach(function(b){
+    b.addEventListener('click',async function(){
+      var sid=b.getAttribute('data-drill');
+      var r2=await apiCall('adminStudentAnalytics',{studentId:sid});
+      if(!r2.ok)return toast(r2.error||'Failed.','error');
+      var s=r2.data.summary||{}, bys=r2.data.bySubject||[];
+      var h=header('Analytics — '+sid,'Detailed performance.');
+      h+='<div class="arow"><button class="btn ghost" id="an_back">← Back</button></div>';
+      h+='<div class="stats">'+
+        stat('Tests',s.tests||0)+
+        stat('Avg %',s.avg||0,'gold')+
+        stat('Highest',(s.highest||0)+'%')+
+        stat('Lowest',(s.lowest||0)+'%')+
+      '</div>';
+      h+='<div class="panel"><div class="ptitle">By Subject</div>';
+      if(!bys.length) h+=emptyState('No subject data.');
+      else{
+        h+='<div class="twrap"><table class="tbl"><thead><tr><th>Subject</th><th>Tests</th><th>Avg %</th></tr></thead><tbody>';
+        bys.forEach(function(x){
+          h+='<tr><td>'+esc(x.name||x.subjectId)+'</td><td>'+esc(x.tests)+'</td><td>'+esc(x.avg)+'%</td></tr>';
+        });
+        h+='</tbody></table></div>';
+      }
+      h+='</div>';
+      content.innerHTML=h;
+      document.getElementById('an_back').addEventListener('click',function(){render('analytics');});
+    });
+  });
+};
+
+/* ========== ACTIVITY ========== */
+VIEWS.activity=async function(){
+  var r=await apiCall('adminActivity',{limit:200});
+  if(!r.ok)return errorState(r.error||'Failed to load.');
+  var rows=(r.data&&r.data.activity)||[];
+  var html=header('Activity Log','Last 200 events.');
+  if(!rows.length){content.innerHTML=html+emptyState('No activity yet.');return;}
+  html+='<div class="twrap"><table class="tbl"><thead><tr><th>Time</th><th>User</th><th>Role</th><th>Action</th><th>Entity</th><th>Description</th></tr></thead><tbody>';
+  rows.forEach(function(a){
+    html+='<tr>'+
+      '<td>'+esc(fmtDateTime(a.Timestamp))+'</td>'+
+      '<td>'+esc(a.UserID)+'</td>'+
+      '<td>'+esc(a.Role)+'</td>'+
+      '<td>'+esc(a.Action)+'</td>'+
+      '<td>'+esc(a.EntityType)+(a.EntityID?' / '+esc(a.EntityID):'')+'</td>'+
+      '<td class="wrap">'+esc(a.Description)+'</td>'+
+    '</tr>';
+  });
+  html+='</tbody></table></div>';
+  content.innerHTML=html;
+};
+
+/* ========== PROGRAMMES ========== */
+VIEWS.programmes=async function(){
+  var rs=await Promise.all([apiCall('adminListProgrammes'),apiCall('adminListSubjects')]);
+  var rp=rs[0];
+  if(!rp.ok)return errorState(rp.error||'Failed to load.');
+  var programmes=(rp.data&&rp.data.programmes)||[];
+  var subjects=(rs[1].ok&&rs[1].data&&rs[1].data.subjects)||[];
+
+  var html=header('Programmes','NumWeeks & TestsPerWeek define duration and cadence.');
+  html+='<div class="panel"><div class="ptitle">Create Programme</div>'+
+    '<div class="fgrid">'+
+      fg('Name','p_name','text',{required:true})+
+      fg('Class','p_class','text',{})+
+      fg('Board','p_board','text',{})+
+      fg('Num Weeks','p_weeks','number',{required:true,hint:'Duration in weeks'})+
+      fg('Tests Per Week','p_tpw','number',{required:true,hint:'Informational cadence'})+
+      fg('Description','p_desc','textarea',{full:true})+
+    '</div>'+
+    '<div class="arow mt16"><button class="btn gold" id="p_create">Create Programme</button></div>'+
+  '</div>';
+
+  html+='<div class="panel"><div class="ptitle">All Programmes ('+programmes.length+')</div>';
+  if(!programmes.length) html+=emptyState('No programmes yet.');
+  else{
+    html+='<div class="twrap"><table class="tbl"><thead><tr><th>ID</th><th>Name</th><th>Weeks</th><th>Tests/Wk</th><th>Tests</th><th>Total ₹</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+    programmes.forEach(function(p){
+      html+='<tr>'+
+        '<td class="mono">'+esc(p.ProgrammeID)+'</td>'+
+        '<td>'+esc(p.Name)+'</td>'+
+        '<td>'+esc(p.NumWeeks||0)+'</td>'+
+        '<td>'+esc(p.TestsPerWeek||0)+'</td>'+
+        '<td>'+esc(p.TestCount||0)+'</td>'+
+        '<td>₹'+esc(p.TotalPrice||0)+'</td>'+
+        '<td>'+badge(p.Status||'')+'</td>'+
+        '<td><button class="btn ghost" data-manage="'+esc(p.ProgrammeID)+'">Manage</button></td>'+
+      '</tr>';
+    });
+    html+='</tbody></table></div>';
+  }
+  html+='</div>';
+  content.innerHTML=html;
+
+  document.getElementById('p_create').addEventListener('click',async function(){
+    var p={Name:val('p_name'),Class:val('p_class'),Board:val('p_board'),NumWeeks:val('p_weeks'),TestsPerWeek:val('p_tpw'),Description:val('p_desc'),Status:'ACTIVE'};
+    if(!p.Name)return toast('Name required.','error');
+    if(!p.NumWeeks)return toast('NumWeeks required.','error');
+    var r=await apiCall('adminCreateProgramme',p);
+    if(!r.ok)return toast(r.error||'Failed.','error');
+    toast('Programme created.','ok');render('programmes');
+  });
+  content.querySelectorAll('button[data-manage]').forEach(function(b){
+    b.addEventListener('click',function(){openProgrammeSubjects(b.getAttribute('data-manage'));});
+  });
+};
+
+async function openProgrammeSubjects(programmeId){
+  var rs=await Promise.all([apiCall('adminListProgrammes'),apiCall('adminListSubjects')]);
+  var rp=rs[0];
+  if(!rp.ok)return toast('Failed to load.','error');
+  var prog=(rp.data.programmes||[]).filter(function(x){return String(x.ProgrammeID)===String(programmeId);})[0];
+  if(!prog)return toast('Programme not found.','error');
+  var subjects=(rs[1].ok&&rs[1].data&&rs[1].data.subjects)||[];
+  var linked=(prog.Subjects||[]).map(function(x){return String(x.SubjectID);});
+  var available=subjects.filter(function(s){return linked.indexOf(String(s.SubjectID))<0;});
+
+  var html=header('Programme — '+prog.Name,'Manage subjects, view linked tests.');
+  html+='<div class="arow"><button class="btn ghost" id="pm_back">← Back</button></div>';
+
+  html+='<div class="panel"><div class="ptitle">Programme Details</div>'+
+    '<div class="fgrid">'+
+      '<div><div class="quiet" style="font-size:.68rem;text-transform:uppercase">Weeks</div><div>'+esc(prog.NumWeeks||0)+'</div></div>'+
+      '<div><div class="quiet" style="font-size:.68rem;text-transform:uppercase">Tests/Week</div><div>'+esc(prog.TestsPerWeek||0)+'</div></div>'+
+      '<div><div class="quiet" style="font-size:.68rem;text-transform:uppercase">Linked Tests</div><div>'+esc(prog.TestCount||0)+'</div></div>'+
+      '<div><div class="quiet" style="font-size:.68rem;text-transform:uppercase">Total Price</div><div style="color:var(--gold);font-weight:700">₹'+esc(prog.TotalPrice||0)+'</div></div>'+
+    '</div></div>';
+
+  html+='<div class="panel"><div class="ptitle">Attach Subject</div><div class="fgrid">'+
+    fg('Subject','pm_subject','select',{options:rowsToOpts(available,'SubjectID','Name','— Select —'),required:true})+
+  '</div><div class="arow mt16"><button class="btn gold" id="pm_add">Add Subject</button></div></div>';
+
+  html+='<div class="panel"><div class="ptitle">Attached Subjects ('+(prog.Subjects||[]).length+')</div>';
+  if(!prog.Subjects||!prog.Subjects.length) html+=emptyState('No subjects attached.');
+  else{
+    html+='<div class="twrap"><table class="tbl"><thead><tr><th>ID</th><th>Name</th><th>Class</th><th></th></tr></thead><tbody>';
+    prog.Subjects.forEach(function(s){
+      html+='<tr><td class="mono">'+esc(s.SubjectID)+'</td><td>'+esc(s.Name)+'</td><td>'+esc(s.Class)+'</td><td><button class="btn dng" data-rem="'+esc(s.SubjectID)+'">Remove</button></td></tr>';
+    });
+    html+='</tbody></table></div>';
+  }
+  html+='</div>';
+
+  html+='<div class="panel"><div class="ptitle">Linked Tests ('+(prog.LinkedTests||[]).length+')</div>';
+  if(!prog.LinkedTests||!prog.LinkedTests.length) html+=emptyState('No tests linked. Create a test and set its Programme.');
+  else{
+    html+='<div class="twrap"><table class="tbl"><thead><tr><th>ID</th><th>Title</th><th>Marks</th><th>Price</th><th>Status</th></tr></thead><tbody>';
+    prog.LinkedTests.forEach(function(t){
+      html+='<tr>'+
+        '<td class="mono">'+esc(t.TestID)+'</td>'+
+        '<td>'+esc(t.Title)+'</td>'+
+        '<td>'+esc(t.TotalMarks)+'</td>'+
+        '<td>₹'+esc(t.Price||0)+'</td>'+
+        '<td>'+badge(t.Status||'')+'</td>'+
+      '</tr>';
+    });
+    html+='</tbody></table></div>';
+  }
+  html+='</div>';
+
+  content.innerHTML=html;
+
+  document.getElementById('pm_back').addEventListener('click',function(){render('programmes');});
+  document.getElementById('pm_add').addEventListener('click',async function(){
+    var sid=val('pm_subject');
+    if(!sid)return toast('Pick a subject.','error');
+    var r=await apiCall('adminAddProgrammeSubject',{programmeId:programmeId,subjectId:sid});
+    if(!r.ok)return toast(r.error||'Failed.','error');
+    toast('Attached.','ok');openProgrammeSubjects(programmeId);
+  });
+  content.querySelectorAll('button[data-rem]').forEach(function(b){
+    b.addEventListener('click',async function(){
+      var r=await apiCall('adminRemoveProgrammeSubject',{programmeId:programmeId,subjectId:b.getAttribute('data-rem')});
+      if(!r.ok)return toast(r.error||'Failed.','error');
+      toast('Removed.','ok');openProgrammeSubjects(programmeId);
+    });
+  });
+}
+
+/* ========== SUBJECTS ========== */
+VIEWS.subjects=async function(){
+  var r=await apiCall('adminListSubjects');
+  if(!r.ok)return errorState(r.error||'Failed to load.');
+  var rows=(r.data&&r.data.subjects)||[];
+  var html=header('Subjects','Create subjects.');
+  html+='<div class="panel"><div class="ptitle">Create Subject</div><div class="fgrid">'+
+    fg('Name','s_name','text',{required:true})+
+    fg('Class','s_class','text',{})+
+    fg('Board','s_board','text',{})+
+  '</div><div class="arow mt16"><button class="btn gold" id="s_create">Create Subject</button></div></div>';
+  html+='<div class="panel"><div class="ptitle">All Subjects ('+rows.length+')</div>';
+  if(!rows.length) html+=emptyState('No subjects yet.');
+  else{
+    html+='<div class="twrap"><table class="tbl"><thead><tr><th>ID</th><th>Name</th><th>Class</th><th>Board</th><th>Status</th></tr></thead><tbody>';
+    rows.forEach(function(s){
+      html+='<tr><td class="mono">'+esc(s.SubjectID)+'</td><td>'+esc(s.Name)+'</td><td>'+esc(s.Class)+'</td><td>'+esc(s.Board)+'</td><td>'+badge(s.Status||'')+'</td></tr>';
+    });
+    html+='</tbody></table></div>';
+  }
+  html+='</div>';
+  content.innerHTML=html;
+  document.getElementById('s_create').addEventListener('click',async function(){
+    var p={Name:val('s_name'),Class:val('s_class'),Board:val('s_board'),Status:'ACTIVE'};
+    if(!p.Name)return toast('Name required.','error');
+    var r=await apiCall('adminCreateSubject',p);
+    if(!r.ok)return toast(r.error||'Failed.','error');
+    toast('Created.','ok');render('subjects');
+  });
+};
+
+/* ========== CHAPTERS ========== */
+VIEWS.chapters=async function(){
+  var rs=await Promise.all([apiCall('adminListChapters'),apiCall('adminListSubjects')]);
+  var rc=rs[0];
+  if(!rc.ok)return errorState(rc.error||'Failed to load.');
+  var chapters=(rc.data&&rc.data.chapters)||[];
+  var subjects=(rs[1].ok&&rs[1].data&&rs[1].data.subjects)||[];
+  var subMap={}; subjects.forEach(function(s){subMap[s.SubjectID]=s.Name;});
+
+  var html=header('Chapters','Chapters belong to a subject.');
+  html+='<div class="panel"><div class="ptitle">Create Chapter</div><div class="fgrid">'+
+    fg('Subject','c_subject','select',{options:rowsToOpts(subjects,'SubjectID','Name','— Select —'),required:true})+
+    fg('Name','c_name','text',{required:true})+
+    fg('Number','c_number','text',{})+
+    fg('Description','c_desc','textarea',{full:true})+
+  '</div><div class="arow mt16"><button class="btn gold" id="c_create">Create Chapter</button></div></div>';
+  html+='<div class="panel"><div class="ptitle">All Chapters ('+chapters.length+')</div>';
+  if(!chapters.length) html+=emptyState('No chapters yet.');
+  else{
+    html+='<div class="twrap"><table class="tbl"><thead><tr><th>ID</th><th>Subject</th><th>Name</th><th>#</th><th>Status</th></tr></thead><tbody>';
+    chapters.forEach(function(c){
+      html+='<tr><td class="mono">'+esc(c.ChapterID)+'</td><td>'+esc(subMap[c.SubjectID]||c.SubjectID)+'</td><td>'+esc(c.Name)+'</td><td>'+esc(c.Number)+'</td><td>'+badge(c.Status||'')+'</td></tr>';
+    });
+    html+='</tbody></table></div>';
+  }
+  html+='</div>';
+  content.innerHTML=html;
+  document.getElementById('c_create').addEventListener('click',async function(){
+    var p={SubjectID:val('c_subject'),Name:val('c_name'),Number:val('c_number'),Description:val('c_desc'),Status:'ACTIVE'};
+    if(!p.SubjectID||!p.Name)return toast('Subject and Name required.','error');
+    var r=await apiCall('adminCreateChapter',p);
+    if(!r.ok)return toast(r.error||'Failed.','error');
+    toast('Created.','ok');render('chapters');
+  });
+};
+
+/* ========== STUDENTS ========== */
+VIEWS.students=async function(){
+  var r=await apiCall('adminListStudents');
+  if(!r.ok)return errorState(r.error||'Failed to load.');
+  var rows=(r.data&&r.data.students)||[];
+  var html=header('Students','Manage students, wallets, passwords.');
+  html+='<div class="panel"><div class="ptitle">Create Student</div><div class="fgrid">'+
+    fg('Name','st_name','text',{required:true})+
+    fg('Email','st_email','email',{hint:'Optional — for mailing list'})+
+    fg('Password','st_pass','password',{required:true,minlength:6,hint:'Min 6 characters.'})+
+    fg('Class','st_class','text',{})+
+    fg('Board','st_board','text',{})+
+    fg('School','st_school','text',{})+
+    fg('Parent Name','st_parent','text',{})+
+    fg('Phone','st_phone','text',{})+
+  '</div><div class="arow mt16"><button class="btn gold" id="st_create">Create Student</button></div></div>';
+
+  html+='<div class="panel"><div class="ptitle">All Students ('+rows.length+')</div>';
+  if(!rows.length) html+=emptyState('No students yet.');
+  else{
+    html+='<div class="twrap"><table class="tbl"><thead><tr><th>ID</th><th>Name</th><th>Class</th><th>Wallet</th><th>Status</th><th>Access</th><th>Actions</th></tr></thead><tbody>';
+    rows.forEach(function(s){
+      html+='<tr>'+
+        '<td class="mono">'+esc(s.StudentID)+'</td>'+
+        '<td>'+esc(s.Name)+'</td>'+
+        '<td>'+esc(s.Class)+'</td>'+
+        '<td style="color:var(--gold);font-weight:700">₹'+esc(s.Wallet||0)+'</td>'+
+        '<td>'+badge(s.Status||'')+'</td>'+
+        '<td>'+badge(s.Access||'')+'</td>'+
+        '<td>'+
+          '<button class="btn ghost" data-wallet="'+esc(s.StudentID)+'">Wallet</button> '+
+          '<button class="btn ghost" data-reset="'+esc(s.StudentID)+'">Reset PW</button> '+
+          '<button class="btn ghost" data-toggle="'+esc(s.StudentID)+'" data-status="'+esc(s.Status||'')+'">Toggle</button>'+
+        '</td>'+
+      '</tr>';
+    });
+    html+='</tbody></table></div>';
+  }
+  html+='</div>';
+  content.innerHTML=html;
+
+  document.getElementById('st_create').addEventListener('click',async function(){
+    var p={Name:val('st_name'),Email:val('st_email'),Password:val('st_pass'),Class:val('st_class'),Board:val('st_board'),School:val('st_school'),ParentName:val('st_parent'),Phone:val('st_phone')};
+    if(!p.Name||!p.Password)return toast('Name and Password required.','error');
+    if(p.Password.length<6)return toast('Password ≥ 6 characters.','error');
+    var r=await apiCall('adminCreateStudent',p);
+    if(!r.ok)return toast(r.error||'Failed.','error');
+    toast('Created.','ok');render('students');
+  });
+
+  content.querySelectorAll('button[data-wallet]').forEach(function(b){
+    b.addEventListener('click',function(){openWallet(b.getAttribute('data-wallet'));});
+  });
+  content.querySelectorAll('button[data-reset]').forEach(function(b){
+    b.addEventListener('click',async function(){
+      var id=b.getAttribute('data-reset');
+      var np=prompt('New password for '+id+' (min 6):');
+      if(!np)return;
+      if(np.length<6)return toast('Password ≥ 6 characters.','error');
+      var r=await apiCall('adminResetPassword',{id:id,password:np});
+      if(!r.ok)return toast(r.error||'Failed.','error');
+      toast('Password reset. Revoked: '+((r.data||{}).sessionsRevoked||0),'ok');
+    });
+  });
+  content.querySelectorAll('button[data-toggle]').forEach(function(b){
+    b.addEventListener('click',async function(){
+      var cur=String(b.getAttribute('data-status')||'').toUpperCase();
+      var next=cur==='ACTIVE'?'SUSPENDED':'ACTIVE';
+      var r=await apiCall('adminUpdateStudent',{id:b.getAttribute('data-toggle'),patch:{Status:next}});
+      if(!r.ok)return toast(r.error||'Failed.','error');
+      toast('Status → '+next,'ok');render('students');
+    });
+  });
+};
+
+async function openWallet(studentId){
+  var rs=await Promise.all([
+    apiCall('adminGetStudent',{id:studentId}),
+    apiCall('adminGetPaymentInfo')
+  ]);
+  var r=rs[0], info=rs[1];
+  if(!r.ok)return toast(r.error||'Failed.','error');
+  var stu=r.data.student||{};
+  var wallet=r.data.wallet||{balance:0,history:[]};
+  var hist=wallet.history||[];
+  var methods=(info.ok&&info.data&&info.data.methods)||['UPI','NEFT','Cash','Card','Other'];
+
+  var html=header('Wallet — '+stu.Name,'Balance ₹'+(wallet.balance||0));
+  html+='<div class="arow"><button class="btn ghost" id="w_back">← Back</button></div>';
+
+  html+='<div class="stats">'+stat('Balance','₹'+(wallet.balance||0),'gold')+'</div>';
+
+  html+='<div class="panel"><div class="ptitle">Add Money</div><div class="fgrid">'+
+    fg('Amount (₹)','w_amount','number',{required:true})+
+    fg('Method','w_method','select',{options:methods,value:'UPI'})+
+    fg('Reference','w_ref','text',{hint:'UPI txn ID / cash receipt no.'})+
+    fg('Notes','w_notes','text',{full:true})+
+  '</div><div class="arow mt16"><button class="btn gold" id="w_credit">Add Money</button></div></div>';
+
+  html+='<div class="panel"><div class="ptitle">Refund (manual)</div><div class="fgrid">'+
+    fg('Amount (₹)','w_refund_amt','number',{hint:'Leave blank for full balance'})+
+    fg('Notes','w_refund_notes','text',{full:true})+
+  '</div><div class="arow mt16">'+
+    '<button class="btn" id="w_refund">Refund Amount</button>'+
+    '<button class="btn dng" id="w_settle">Settle (full → 0)</button>'+
+  '</div></div>';
+
+  html+='<div class="panel"><div class="ptitle">Transaction History ('+hist.length+')</div>';
+  if(!hist.length) html+=emptyState('No transactions yet.');
+  else{
+    html+='<div class="twrap"><table class="tbl"><thead><tr><th>Date</th><th>Type</th><th>Amount</th><th>Balance</th><th>Method</th><th>Notes</th></tr></thead><tbody>';
+    hist.forEach(function(h){
+      var amt=Number(h.Amount||0);
+      var color=amt>0?'#4caf50':'#ff6b6b';
+      html+='<tr>'+
+        '<td>'+esc(fmtDateTime(h.EntryDate))+'</td>'+
+        '<td>'+badge(h.Type||'',String(h.Type||'').toLowerCase())+'</td>'+
+        '<td style="color:'+color+';font-weight:700">'+(amt>0?'+':'')+'₹'+Math.abs(amt)+'</td>'+
+        '<td>₹'+esc(h.BalanceAfter||0)+'</td>'+
+        '<td>'+esc(h.Method||'—')+'</td>'+
+        '<td class="wrap">'+esc(h.Notes||'')+'</td>'+
+      '</tr>';
+    });
+    html+='</tbody></table></div>';
+  }
+  html+='</div>';
+  content.innerHTML=html;
+
+  document.getElementById('w_back').addEventListener('click',function(){render('students');});
+
+  document.getElementById('w_credit').addEventListener('click',async function(){
+    var amt=val('w_amount');
+    if(!amt||Number(amt)<=0)return toast('Enter a positive amount.','error');
+    var p={StudentID:studentId,Amount:amt,Method:val('w_method'),Reference:val('w_ref'),Notes:val('w_notes')};
+    var r2=await apiCall('adminCreatePayment',p);
+    if(!r2.ok)return toast(r2.error||'Failed.','error');
+    toast('Credited. New balance: ₹'+((r2.data||{}).BalanceAfter||0),'ok');
+    openWallet(studentId);
+  });
+  document.getElementById('w_refund').addEventListener('click',async function(){
+    var amt=val('w_refund_amt');
+    if(!amt||Number(amt)<=0)return toast('Enter amount.','error');
+    if(!confirm('Refund ₹'+amt+' to '+studentId+'?'))return;
+    var r2=await apiCall('adminWalletRefund',{studentId:studentId,amount:amt,notes:val('w_refund_notes')});
+    if(!r2.ok)return toast(r2.error||'Failed.','error');
+    toast('Refunded. New balance: ₹'+((r2.data||{}).BalanceAfter||0),'ok');
+    openWallet(studentId);
+  });
+  document.getElementById('w_settle').addEventListener('click',async function(){
+    if(!confirm('Settle: refund the full remaining balance and set wallet to ₹0?'))return;
+    var r2=await apiCall('adminWalletSettle',{studentId:studentId,notes:val('w_refund_notes')||'Programme end settlement'});
+    if(!r2.ok)return toast(r2.error||'Failed.','error');
+    toast('Settled. New balance: ₹'+((r2.data||{}).BalanceAfter||0),'ok');
+    openWallet(studentId);
+  });
+}
+
+/* ========== ENROLMENTS ========== */
+VIEWS.enrolments=async function(){
+  var rs=await Promise.all([
+    apiCall('adminListEnrolments'),
+    apiCall('adminListProgrammes'),
+    apiCall('adminListStudents')
+  ]);
+  var re=rs[0];
+  if(!re.ok)return errorState(re.error||'Failed to load.');
+  var enrol=(re.data&&re.data.enrolments)||[];
+  var programmes=(rs[1].ok&&rs[1].data&&rs[1].data.programmes)||[];
+  var students=(rs[2].ok&&rs[2].data&&rs[2].data.students)||[];
+  var progMap={}; programmes.forEach(function(p){progMap[p.ProgrammeID]=p;});
+
+  var html=header('Enrolments','End date is auto-computed from programme weeks.');
+  html+='<div class="panel"><div class="ptitle">New Enrolment</div><div class="fgrid">'+
+    fg('Student','e_student','select',{options:rowsToOpts(students,'StudentID','Name','— Select —'),required:true})+
+    fg('Programme','e_programme','select',{options:rowsToOpts(programmes,'ProgrammeID','Name','— Select —'),required:true})+
+    fg('Subject IDs (comma-separated)','e_subjects','text',{hint:'Leave blank for all programme subjects.'})+
+    fg('Start Date','e_start','date',{required:true})+
+    fg('Status','e_status','select',{options:['ACTIVE','SUSPENDED','EXPIRED','CANCELLED'],value:'ACTIVE'})+
+  '</div><div class="arow mt16">'+
+    '<button class="btn gold" id="e_create">Create Enrolment</button>'+
+    '<span class="quiet" id="e_preview"></span>'+
+  '</div></div>';
+  html+='<div class="panel"><div class="ptitle">All Enrolments ('+enrol.length+')</div>';
+  if(!enrol.length) html+=emptyState('No enrolments yet.');
+  else{
+    html+='<div class="twrap"><table class="tbl"><thead><tr><th>ID</th><th>Student</th><th>Programme</th><th>Subjects</th><th>Start</th><th>End</th><th>Status</th></tr></thead><tbody>';
+    enrol.forEach(function(e){
+      var p=progMap[e.ProgrammeID]||{};
+      html+='<tr>'+
+        '<td class="mono">'+esc(e.EnrolmentID)+'</td>'+
+        '<td>'+esc(e.StudentID)+'</td>'+
+        '<td>'+esc(p.Name||e.ProgrammeID)+'</td>'+
+        '<td class="wrap">'+esc(e.SubjectIDs||'—')+'</td>'+
+        '<td>'+esc(fmtDate(e.StartDate))+'</td>'+
+        '<td>'+esc(fmtDate(e.EndDate))+'</td>'+
+        '<td>'+badge(e.Status||'')+'</td>'+
+      '</tr>';
+    });
+    html+='</tbody></table></div>';
+  }
+  html+='</div>';
+  content.innerHTML=html;
+
+  function updatePreview(){
+    var pid=val('e_programme'), sd=val('e_start');
+    if(!pid||!sd){document.getElementById('e_preview').textContent='';return;}
+    var p=progMap[pid];
+    if(!p){document.getElementById('e_preview').textContent='';return;}
+    var weeks=Number(p.NumWeeks)||0;
+    if(!weeks){document.getElementById('e_preview').textContent='';return;}
+    var d=new Date(sd+'T00:00:00');
+    d.setDate(d.getDate()+weeks*7);
+    var yyyy=d.getFullYear(),mm=String(d.getMonth()+1).padStart(2,'0'),dd=String(d.getDate()).padStart(2,'0');
+    document.getElementById('e_preview').textContent='End date: '+yyyy+'-'+mm+'-'+dd+' ('+weeks+' weeks)';
+  }
+  document.getElementById('e_programme').addEventListener('change',updatePreview);
+  document.getElementById('e_start').addEventListener('change',updatePreview);
+  updatePreview();
+
+  document.getElementById('e_create').addEventListener('click',async function(){
+    var subs=val('e_subjects');
+    var p={
+      StudentID:val('e_student'),
+      ProgrammeID:val('e_programme'),
+      SubjectIDs:subs?subs.split(',').map(function(x){return x.trim();}).filter(Boolean):'',
+      StartDate:val('e_start'),
+      Status:val('e_status')
+    };
+    if(!p.StudentID||!p.ProgrammeID||!p.StartDate)return toast('Student, Programme and Start Date required.','error');
+    var r=await apiCall('adminCreateEnrolment',p);
+    if(!r.ok)return toast(r.error||'Failed.','error');
+    toast('Created. End: '+((r.data||{}).EndDate||''),'ok');
+    render('enrolments');
+  });
+};
+
+/* ========== PAYMENTS ========== */
+VIEWS.payments=async function(){
+  var rs=await Promise.all([
+    apiCall('adminListPayments'),
+    apiCall('adminListStudents'),
+    apiCall('adminListProgrammes'),
+    apiCall('adminGetPaymentInfo')
+  ]);
+  var rp=rs[0];
+  if(!rp.ok)return errorState(rp.error||'Failed to load.');
+  var payments=(rp.data&&rp.data.payments)||[];
+  var students=(rs[1].ok&&rs[1].data&&rs[1].data.students)||[];
+  var programmes=(rs[2].ok&&rs[2].data&&rs[2].data.programmes)||[];
+  var methods=(rs[3].ok&&rs[3].data&&rs[3].data.methods)||['UPI','NEFT','Cash','Card','Other'];
+
+  var html=header('Payments','Recording a payment also credits the wallet.');
+  html+='<div class="panel"><div class="ptitle">Record Payment</div><div class="fgrid">'+
+    fg('Student','pay_student','select',{options:rowsToOpts(students,'StudentID','Name','— Select —'),required:true})+
+    fg('Programme','pay_programme','select',{options:rowsToOpts(programmes,'ProgrammeID','Name')})+
+    fg('Amount (₹)','pay_amount','number',{required:true})+
+    fg('Method','pay_method','select',{options:methods,value:'UPI'})+
+    fg('Payment Date','pay_date','date',{})+
+    fg('Reference','pay_ref','text',{})+
+    fg('Notes','pay_notes','textarea',{full:true})+
+  '</div><div class="arow mt16"><button class="btn gold" id="pay_create">Record Payment &amp; Credit Wallet</button></div></div>';
+  html+='<div class="panel"><div class="ptitle">All Payments ('+payments.length+')</div>';
+  if(!payments.length) html+=emptyState('No payments yet.');
+  else{
+    html+='<div class="twrap"><table class="tbl"><thead><tr><th>ID</th><th>Student</th><th>Amount</th><th>Date</th><th>Method</th><th>Ref</th><th>Status</th></tr></thead><tbody>';
+    payments.forEach(function(p){
+      html+='<tr>'+
+        '<td class="mono">'+esc(p.PaymentID)+'</td>'+
+        '<td>'+esc(p.StudentID)+'</td>'+
+        '<td style="color:var(--gold);font-weight:700">₹'+esc(p.Amount)+'</td>'+
+        '<td>'+esc(fmtDate(p.PaymentDate))+'</td>'+
+        '<td>'+esc(p.Method||'—')+'</td>'+
+        '<td>'+esc(p.Reference||'')+'</td>'+
+        '<td>'+badge(p.Status||'')+'</td>'+
+      '</tr>';
+    });
+    html+='</tbody></table></div>';
+  }
+  html+='</div>';
+  content.innerHTML=html;
+
+  document.getElementById('pay_create').addEventListener('click',async function(){
+    var p={
+      StudentID:val('pay_student'),
+      ProgrammeID:val('pay_programme'),
+      Amount:val('pay_amount'),
+      Method:val('pay_method'),
+      PaymentDate:val('pay_date'),
+      Reference:val('pay_ref'),
+      Notes:val('pay_notes')
+    };
+    if(!p.StudentID||!p.Amount)return toast('Student and Amount required.','error');
+    var r=await apiCall('adminCreatePayment',p);
+    if(!r.ok)return toast(r.error||'Failed.','error');
+    toast('Recorded. New balance: ₹'+((r.data||{}).BalanceAfter||0),'ok');
+    render('payments');
+  });
+};
+
+/* ========== MATERIALS ========== */
+VIEWS.materials=async function(){
+  var rs=await Promise.all([
+    apiCall('adminListMaterials'),
+    apiCall('adminListSubjects'),
+    apiCall('adminListChapters'),
+    apiCall('adminListProgrammes')
+  ]);
+  var rm=rs[0];
+  if(!rm.ok)return errorState(rm.error||'Failed to load.');
+  var materials=(rm.data&&rm.data.materials)||[];
+  var subjects=(rs[1].ok&&rs[1].data&&rs[1].data.subjects)||[];
+  var chapters=(rs[2].ok&&rs[2].data&&rs[2].data.chapters)||[];
+  var programmes=(rs[3].ok&&rs[3].data&&rs[3].data.programmes)||[];
+
+  var html=header('Study Materials','ViewURL for browser, DownloadURL for download.');
+  html+='<div class="panel"><div class="ptitle">Add Material</div><div class="fgrid">'+
+    fg('Title','m_title','text',{required:true})+
+    fg('Type','m_type','select',{options:['PDF','VIDEO','LINK','DOC'],value:'PDF'})+
+    fg('ViewURL (https)','m_vurl','text',{full:true,required:true,hint:'Opens in browser. Example: https://files.guidedpathnoida.in/…'})+
+    fg('DownloadURL (https)','m_durl','text',{full:true,required:true,hint:'Triggers download. Example: https://download.guidedpathnoida.in/…'})+
+    fg('Subject','m_subject','select',{options:rowsToOpts(subjects,'SubjectID','Name')})+
+    fg('Chapter','m_chapter','select',{options:rowsToOpts(chapters,'ChapterID','Name')})+
+    fg('Programme','m_programme','select',{options:rowsToOpts(programmes,'ProgrammeID','Name')})+
+    fg('Class','m_class','text',{})+
+    fg('Description','m_desc','textarea',{full:true})+
+  '</div><div class="arow mt16"><button class="btn gold" id="m_create">Add Material</button></div></div>';
+
+  html+='<div class="panel"><div class="ptitle">All Materials ('+materials.length+')</div>';
+  if(!materials.length) html+=emptyState('No materials yet.');
+  else{
+    html+='<div class="twrap"><table class="tbl"><thead><tr><th>ID</th><th>Title</th><th>Type</th><th>Class</th><th>Status</th><th>View</th><th>Download</th></tr></thead><tbody>';
+    materials.forEach(function(m){
+      html+='<tr>'+
+        '<td class="mono">'+esc(m.MaterialID)+'</td>'+
+        '<td>'+esc(m.Title)+'</td>'+
+        '<td>'+esc(m.Type)+'</td>'+
+        '<td>'+esc(m.Class)+'</td>'+
+        '<td>'+badge(m.Status||'')+'</td>'+
+        '<td class="wrap mono" style="max-width:220px;overflow:hidden;text-overflow:ellipsis">'+esc(m.ViewURL||'')+'</td>'+
+        '<td class="wrap mono" style="max-width:220px;overflow:hidden;text-overflow:ellipsis">'+esc(m.DownloadURL||'')+'</td>'+
+      '</tr>';
+    });
+    html+='</tbody></table></div>';
+  }
+  html+='</div>';
+  content.innerHTML=html;
+
+  document.getElementById('m_create').addEventListener('click',async function(){
+    var p={
+      Title:val('m_title'), Type:val('m_type'),
+      ViewURL:val('m_vurl'), DownloadURL:val('m_durl'),
+      SubjectID:val('m_subject'), ChapterID:val('m_chapter'),
+      ProgrammeID:val('m_programme'), Class:val('m_class'),
+      Description:val('m_desc'), Status:'ACTIVE'
+    };
+    if(!p.Title||!p.ViewURL||!p.DownloadURL)return toast('Title and both URLs required.','error');
+    var r=await apiCall('adminCreateMaterial',p);
+    if(!r.ok)return toast(r.error||'Failed.','error');
+    toast('Added.','ok');render('materials');
+  });
+};
+
+/* ========== QUESTION BANK ========== */
+VIEWS.questionbank=async function(){
+  var rs=await Promise.all([
+    apiCall('adminListQuestionBank'),
+    apiCall('adminListSubjects'),
+    apiCall('adminListChapters'),
+    apiCall('adminListProgrammes')
+  ]);
+  var rq=rs[0];
+  if(!rq.ok)return errorState(rq.error||'Failed to load.');
+  var items=(rq.data&&rq.data.items)||[];
+  var subjects=(rs[1].ok&&rs[1].data&&rs[1].data.subjects)||[];
+  var chapters=(rs[2].ok&&rs[2].data&&rs[2].data.chapters)||[];
+  var programmes=(rs[3].ok&&rs[3].data&&rs[3].data.programmes)||[];
+
+  var html=header('Question Bank','Resource links (PDFs, docs). Not MCQs.');
+  html+='<div class="panel"><div class="ptitle">Add Resource</div><div class="fgrid">'+
+    fg('Title','q_title','text',{required:true})+
+    fg('ViewURL (https)','q_vurl','text',{full:true,required:true,hint:'Opens in browser (files.guidedpathnoida.in)'})+
+    fg('DownloadURL (https)','q_durl','text',{full:true,required:true,hint:'Triggers download (download.guidedpathnoida.in)'})+
+    fg('Subject','q_subject','select',{options:rowsToOpts(subjects,'SubjectID','Name')})+
+    fg('Chapter','q_chapter','select',{options:rowsToOpts(chapters,'ChapterID','Name')})+
+    fg('Programme','q_programme','select',{options:rowsToOpts(programmes,'ProgrammeID','Name')})+
+    fg('Class','q_class','text',{})+
+    fg('Description','q_desc','textarea',{full:true})+
+  '</div><div class="arow mt16"><button class="btn gold" id="q_create">Add Resource</button></div></div>';
+
+  html+='<div class="panel"><div class="ptitle">All Resources ('+items.length+')</div>';
+  if(!items.length) html+=emptyState('No resources yet.');
+  else{
+    html+='<div class="twrap"><table class="tbl"><thead><tr><th>ID</th><th>Title</th><th>Class</th><th>Status</th><th>View</th><th>Download</th></tr></thead><tbody>';
+    items.forEach(function(q){
+      html+='<tr>'+
+        '<td class="mono">'+esc(q.BankID)+'</td>'+
+        '<td>'+esc(q.Title)+'</td>'+
+        '<td>'+esc(q.Class)+'</td>'+
+        '<td>'+badge(q.Status||'')+'</td>'+
+        '<td class="wrap mono" style="max-width:220px;overflow:hidden;text-overflow:ellipsis">'+esc(q.ViewURL||'')+'</td>'+
+        '<td class="wrap mono" style="max-width:220px;overflow:hidden;text-overflow:ellipsis">'+esc(q.DownloadURL||'')+'</td>'+
+      '</tr>';
+    });
+    html+='</tbody></table></div>';
+  }
+  html+='</div>';
+  content.innerHTML=html;
+
+  document.getElementById('q_create').addEventListener('click',async function(){
+    var p={
+      Title:val('q_title'), ViewURL:val('q_vurl'), DownloadURL:val('q_durl'),
+      SubjectID:val('q_subject'), ChapterID:val('q_chapter'), ProgrammeID:val('q_programme'),
+      Class:val('q_class'), Description:val('q_desc'), Status:'ACTIVE'
+    };
+    if(!p.Title||!p.ViewURL||!p.DownloadURL)return toast('Title and both URLs required.','error');
+    var r=await apiCall('adminCreateQuestionBank',p);
+    if(!r.ok)return toast(r.error||'Failed.','error');
+    toast('Added.','ok');render('questionbank');
+  });
+};
+
+/* ========== SCHEDULE ========== */
+VIEWS.schedule=async function(){
+  var rs=await Promise.all([
+    apiCall('adminListSchedule'),
+    apiCall('adminListStudents'),
+    apiCall('adminListProgrammes'),
+    apiCall('adminListTests')
+  ]);
+  var r=rs[0];
+  if(!r.ok)return errorState(r.error||'Failed to load.');
+  var schedule=(r.data&&r.data.schedule)||[];
+  var students=(rs[1].ok&&rs[1].data&&rs[1].data.students)||[];
+  var programmes=(rs[2].ok&&rs[2].data&&rs[2].data.programmes)||[];
+  var tests=(rs[3].ok&&rs[3].data&&rs[3].data.tests)||[];
+  var testMap={}; tests.forEach(function(t){testMap[t.TestID]=t.Title;});
+
+  var html=header('Schedule','Assign dates. Test type requires a TestID.');
+  html+='<div class="panel"><div class="ptitle">Create Entry</div><div class="fgrid">'+
+    fg('Type','sc_type','select',{options:['Study','Practice','Test','Revision','Retest'],value:'Study',required:true})+
+    fg('Date','sc_date','date',{required:true})+
+    fg('Start Time','sc_start','time',{})+
+    fg('End Time','sc_end','time',{})+
+    fg('Student (optional)','sc_student','select',{options:rowsToOpts(students,'StudentID','Name','— Bulk / per-programme —')})+
+    fg('Programme (if no student)','sc_programme','select',{options:rowsToOpts(programmes,'ProgrammeID','Name')})+
+    fg('Test (when Type = Test)','sc_ref','select',{options:[{value:'',label:'— None —'}].concat(tests.map(function(t){return {value:t.TestID,label:t.Title+' ('+t.TestID+')'};}))})+
+    fg('Status','sc_status','select',{options:['ACTIVE','CANCELLED'],value:'ACTIVE'})+
+  '</div><div class="arow mt16"><button class="btn gold" id="sc_create">Create Entry</button></div></div>';
+
+  html+='<div class="panel"><div class="ptitle">All Entries ('+schedule.length+')</div>';
+  if(!schedule.length) html+=emptyState('No schedule entries.');
+  else{
+    html+='<div class="twrap"><table class="tbl"><thead><tr><th>ID</th><th>Date</th><th>Start</th><th>End</th><th>Type</th><th>Student</th><th>Programme</th><th>Test</th><th>Status</th><th></th></tr></thead><tbody>';
+    schedule.forEach(function(s){
+      html+='<tr>'+
+        '<td class="mono">'+esc(s.ScheduleID)+'</td>'+
+        '<td>'+esc(fmtDate(s.Date))+'</td>'+
+        '<td>'+esc(s.StartTime||'—')+'</td>'+
+        '<td>'+esc(s.EndTime||'—')+'</td>'+
+        '<td>'+esc(s.Type)+'</td>'+
+        '<td>'+esc(s.StudentID||'—')+'</td>'+
+        '<td>'+esc(s.ProgrammeID||'—')+'</td>'+
+        '<td>'+esc(s.RefID?(testMap[s.RefID]||s.RefID):'—')+'</td>'+
+        '<td>'+badge(s.Status||'')+'</td>'+
+        '<td><button class="btn ghost" data-cancel="'+esc(s.ScheduleID)+'">Cancel</button> <button class="btn dng" data-del="'+esc(s.ScheduleID)+'">Delete</button></td>'+
+      '</tr>';
+    });
+    html+='</tbody></table></div>';
+  }
+  html+='</div>';
+  content.innerHTML=html;
+
+  document.getElementById('sc_create').addEventListener('click',async function(){
+    var p={
+      Type:val('sc_type'), Date:val('sc_date'),
+      StartTime:val('sc_start'), EndTime:val('sc_end'),
+      StudentID:val('sc_student'), ProgrammeID:val('sc_programme'),
+      RefID:val('sc_ref'), Status:val('sc_status')
+    };
+    if(!p.Date)return toast('Date required.','error');
+    if(!p.StudentID && !p.ProgrammeID)return toast('Student or Programme required.','error');
+    if(p.Type==='Test' && !p.RefID)return toast('Select a Test when Type = Test.','error');
+    var r=await apiCall('adminCreateSchedule',p);
+    if(!r.ok)return toast(r.error||'Failed.','error');
+    toast('Created.','ok');render('schedule');
+  });
+  content.querySelectorAll('button[data-cancel]').forEach(function(b){
+    b.addEventListener('click',async function(){
+      if(!confirm('Cancel this schedule entry?'))return;
+      var r=await apiCall('adminUpdateSchedule',{id:b.getAttribute('data-cancel'),patch:{Status:'CANCELLED'}});
+      if(!r.ok)return toast(r.error||'Failed.','error');
+      toast('Cancelled.','ok');render('schedule');
+    });
+  });
+  content.querySelectorAll('button[data-del]').forEach(function(b){
+    b.addEventListener('click',async function(){
+      if(!confirm('Delete this schedule entry permanently?'))return;
+      var r=await apiCall('adminDeleteSchedule',{id:b.getAttribute('data-del')});
+      if(!r.ok)return toast(r.error||'Failed.','error');
+      toast('Deleted.','ok');render('schedule');
+    });
+  });
+};
+
+/* ========== TESTS ========== */
+VIEWS.tests=async function(){
+  var rs=await Promise.all([
+    apiCall('adminListTests'),
+    apiCall('adminListSubjects'),
+    apiCall('adminListChapters'),
+    apiCall('adminListProgrammes')
+  ]);
+  var rt=rs[0];
+  if(!rt.ok)return errorState(rt.error||'Failed to load.');
+  var tests=(rt.data&&rt.data.tests)||[];
+  var subjects=(rs[1].ok&&rs[1].data&&rs[1].data.subjects)||[];
+  var chapters=(rs[2].ok&&rs[2].data&&rs[2].data.chapters)||[];
+  var programmes=(rs[3].ok&&rs[3].data&&rs[3].data.programmes)||[];
+
+  var html=header('Tests','External Google Forms. Create metadata (DRAFT), link the form, advance lifecycle.');
+  html+='<div class="panel"><div class="ptitle">Create Test (metadata only — starts as DRAFT)</div><div class="fgrid">'+
+    fg('Title','t_title','text',{required:true})+
+    fg('Total Marks','t_marks','number',{required:true,hint:'Must equal form grand total'})+
+    fg('Duration (min)','t_dur','number',{required:true})+
+    fg('Price (₹)','t_price','number',{value:'0',hint:'Deducted from wallet on start'})+
+    fg('Gap Hours','t_gap','number',{value:'3',hint:'Twice-appearing: gap between windows'})+
+    fg('Subject','t_subject','select',{options:rowsToOpts(subjects,'SubjectID','Name')})+
+    fg('Chapter','t_chapter','select',{options:rowsToOpts(chapters,'ChapterID','Name')})+
+    fg('Programme','t_programme','select',{options:rowsToOpts(programmes,'ProgrammeID','Name')})+
+  '</div><div class="arow mt16"><button class="btn gold" id="t_create">Create Test</button></div></div>';
+
+  html+='<div class="panel"><div class="ptitle">All Tests ('+tests.length+')</div>';
+  if(!tests.length) html+=emptyState('No tests yet.');
+  else{
+    html+='<div class="twrap"><table class="tbl"><thead><tr><th>ID</th><th>Title</th><th>Marks</th><th>Price</th><th>Status</th><th>Form</th><th>Att</th><th>Sub</th><th>Eval</th><th>Pub</th><th></th></tr></thead><tbody>';
+    tests.forEach(function(t){
+      html+='<tr>'+
+        '<td class="mono">'+esc(t.TestID)+'</td>'+
+        '<td class="wrap">'+esc(t.Title)+'</td>'+
+        '<td>'+esc(t.TotalMarks)+'</td>'+
+        '<td>₹'+esc(t.Price||0)+'</td>'+
+        '<td>'+badge(t.Status||'')+'</td>'+
+        '<td>'+(t.FormID?badge('Linked','published'):badge('Not linked','draft'))+'</td>'+
+        '<td>'+esc(t.attempts||0)+'</td>'+
+        '<td>'+esc(t.submitted||0)+'</td>'+
+        '<td>'+esc(t.evaluated||0)+'</td>'+
+        '<td>'+esc(t.published||0)+'</td>'+
+        '<td><button class="btn ghost" data-open="'+esc(t.TestID)+'">Open</button></td>'+
+      '</tr>';
+    });
+    html+='</tbody></table></div>';
+  }
+  html+='</div>';
+  content.innerHTML=html;
+
+  document.getElementById('t_create').addEventListener('click',async function(){
+    var p={
+      Title:val('t_title'),
+      TotalMarks:val('t_marks'),
+      Duration:val('t_dur'),
+      Price:val('t_price')||0,
+      GapHours:val('t_gap')||3,
+      SubjectID:val('t_subject'),
+      ChapterID:val('t_chapter'),
+      ProgrammeID:val('t_programme')
+    };
+    if(!p.Title||p.TotalMarks===''||p.Duration==='')return toast('Title, Marks and Duration required.','error');
+    var r=await apiCall('adminCreateTest',p);
+    if(!r.ok)return toast(r.error||'Failed.','error');
+    toast('Created (DRAFT).','ok');
+    openTestEditor(r.data.TestID);
+  });
+  content.querySelectorAll('button[data-open]').forEach(function(b){
+    b.addEventListener('click',function(){openTestEditor(b.getAttribute('data-open'));});
+  });
+};
+
+async function openTestEditor(testId){
+  var r=await apiCall('adminGetTest',{id:testId});
+  if(!r.ok)return toast(r.error||'Failed.','error');
+  var test=r.data.test;
+  var attempts=r.data.attempts||[];
+  var results=r.data.results||[];
+  var status=String(test.Status||'').toUpperCase();
+
+  var html=header('Test — '+test.Title,'ID '+test.TestID+' · Status '+status+' · Marks '+test.TotalMarks+' · Duration '+test.Duration+' min · Price ₹'+(test.Price||0));
+  html+='<div class="arow"><button class="btn ghost" id="te_back">← Back to Tests</button></div>';
+
+  /* Google Form section */
+  html+='<div class="panel"><div class="ptitle">Google Form</div>';
+  if(test.FormID){
+    html+='<div class="quiet" style="margin-bottom:8px">Form linked. To change, attempts must not exist.</div>'+
+      '<div class="fgrid">'+
+      '<div><div class="quiet" style="font-size:.68rem;text-transform:uppercase">Form ID</div><div class="mono wrap">'+esc(test.FormID)+'</div></div>'+
+      '<div><div class="quiet" style="font-size:.68rem;text-transform:uppercase">Responder URL</div><div class="mono wrap" style="word-break:break-all;font-size:.72rem">'+esc(test.FormURL||'')+'</div></div>'+
+      '</div>';
+  } else {
+    html+='<div class="fgrid">'+
+      fg('Form URL (responder)','te_formUrl','text',{full:true,placeholder:'https://docs.google.com/forms/d/e/…/viewform'})+
+      fg('Form ID or Edit URL','te_formId','text',{full:true,placeholder:'raw ID or https://docs.google.com/forms/d/<ID>/edit',hint:'Backend stores only the raw Form ID.'})+
+    '</div>'+
+    '<div class="arow mt16">'+
+      '<button class="btn gold" id="te_link">Link Form</button>'+
+      '<button class="btn" id="te_build">Create New Form from Questions</button>'+
+    '</div>';
+  }
+  html+='</div>';
+
+  /* Lifecycle */
+  var allowedNext=[];
+  if(status==='DRAFT')allowedNext=['AVAILABLE'];
+  else if(status==='AVAILABLE')allowedNext=['CLOSED'];
+  var tbtns=allowedNext.map(function(n){return '<button class="btn" data-status="'+n+'">Move → '+n+'</button>';}).join('')||'<span class="quiet">No manual transitions available at this stage.</span>';
+  html+='<div class="panel"><div class="ptitle">Lifecycle</div><div class="arow">'+tbtns+'</div>'+
+    '<div class="quiet">DRAFT → AVAILABLE → CLOSED → EVALUATED (automatic) → PUBLISHED (per result).</div></div>';
+
+  /* Sync & Publish */
+  html+='<div class="panel"><div class="ptitle">Sync &amp; Publish</div><div class="arow">'+
+    '<button class="btn" id="te_sync">Sync Form Responses</button>'+
+    '<button class="btn gold" id="te_publish">Publish All Evaluated</button>'+
+  '</div></div>';
+
+  /* Attempts */
+  html+='<div class="panel"><div class="ptitle">Attempts ('+attempts.length+')</div>';
+  if(!attempts.length) html+=emptyState('No attempts yet.');
+  else{
+    html+='<div class="twrap"><table class="tbl"><thead><tr><th>Attempt</th><th>Student</th><th>Token</th><th>Status</th><th>Cost</th><th>Submitted</th></tr></thead><tbody>';
+    attempts.forEach(function(a){
+      html+='<tr>'+
+        '<td class="mono">'+esc(a.AttemptID)+'</td>'+
+        '<td>'+esc(a.StudentID)+'</td>'+
+        '<td class="mono">'+esc(a.Token)+'</td>'+
+        '<td>'+badge(a.Status||'')+'</td>'+
+        '<td>₹'+esc(a.CostCharged||0)+'</td>'+
+        '<td>'+esc(fmtDateTime(a.SubmittedAt))+'</td>'+
+      '</tr>';
+    });
+    html+='</tbody></table></div>';
+  }
+  html+='</div>';
+
+  /* Results */
+  html+='<div class="panel"><div class="ptitle">Results ('+results.length+')</div>';
+  if(!results.length) html+=emptyState('No results yet.');
+  else{
+    html+='<div class="twrap"><table class="tbl"><thead><tr><th>Result</th><th>Student</th><th>Obtained</th><th>Max</th><th>%</th><th>Publication</th></tr></thead><tbody>';
+    results.forEach(function(x){
+      html+='<tr>'+
+        '<td class="mono">'+esc(x.ResultID)+'</td>'+
+        '<td>'+esc(x.StudentID)+'</td>'+
+        '<td>'+esc(x.MarksObtained)+'</td>'+
+        '<td>'+esc(x.MaxMarks)+'</td>'+
+        '<td>'+esc(x.Percentage)+'</td>'+
+        '<td>'+badge(x.PublicationStatus||'')+'</td>'+
+      '</tr>';
+    });
+    html+='</tbody></table></div>';
+  }
+  html+='</div>';
+
+  content.innerHTML=html;
+
+  document.getElementById('te_back').addEventListener('click',function(){render('tests');});
+
+  var linkBtn=document.getElementById('te_link');
+  if(linkBtn){
+    linkBtn.addEventListener('click',async function(){
+      var url=val('te_formUrl'), fid=val('te_formId');
+      if(!url||!fid)return toast('Form URL and Form ID required.','error');
+      var r2=await apiCall('adminSetTestForm',{testId:testId,formUrl:url,formId:fid});
+      if(!r2.ok)return toast(r2.error||'Failed.','error');
+      toast('Linked. Auto marks: '+((r2.data||{}).autoMax||0)+' · Manual: '+((r2.data||{}).manualMax||0),'ok');
+      openTestEditor(testId);
+    });
+  }
+  var buildBtn=document.getElementById('te_build');
+  if(buildBtn){
+    buildBtn.addEventListener('click',function(){openFormCreator(testId, test.Title);});
+  }
+
+  content.querySelectorAll('button[data-status]').forEach(function(b){
+    b.addEventListener('click',async function(){
+      var st=b.getAttribute('data-status');
+      if(!confirm('Move test to '+st+'?'))return;
+      var r2=await apiCall('adminSetTestStatus',{testId:testId,status:st});
+      if(!r2.ok)return toast(r2.error||'Failed.','error');
+      toast('Status → '+st,'ok');openTestEditor(testId);
+    });
+  });
+  document.getElementById('te_sync').addEventListener('click',async function(){
+    if(!confirm('Sync Google Form responses?'))return;
+    var r2=await apiCall('adminSyncSubmissions',{testId:testId});
+    if(!r2.ok)return toast(r2.error||'Sync failed.','error');
+    toast('Synced. Processed: '+((r2.data||{}).processed||0)+', Rejected: '+((r2.data||{}).rejected||0),'ok');
+    openTestEditor(testId);
+  });
+  document.getElementById('te_publish').addEventListener('click',async function(){
+    if(!confirm('Publish all evaluated attempts?'))return;
+    var r2=await apiCall('adminPublishResult',{testId:testId});
+    if(!r2.ok)return toast(r2.error||'Publish failed.','error');
+    toast('Published: '+((r2.data||{}).published||0),'ok');
+    openTestEditor(testId);
+  });
+}
+
+function openFormCreator(testId, title){
+  var html=header('Create Google Form — '+title,'Paste your questions below. The form is created and auto-linked.');
+  html+='<div class="arow"><button class="btn ghost" id="fc_back">← Back to Test</button></div>';
+
+  html+='<div class="panel"><div class="ptitle">Question Block</div>'+
+    '<div class="hint" style="margin-bottom:10px">'+
+      'Format (one per line, comments with #):<br>'+
+      '<b>MCQ</b> | question | option A; option B; option C; option D | correctIndex(0-based) | points(optional)<br>'+
+      '<b>CHECK</b> | question | opt1; opt2; opt3; opt4 | correctIdx1,correctIdx2 | points<br>'+
+      '<b>TF</b> | question | true/false | points<br>'+
+      '<b>ONE</b> | question | expected answer | points (teacher-evaluated)<br>'+
+      '<b>SHORT</b> | question | points (teacher-evaluated)<br>'+
+      '<b>LONG</b> | question | points (teacher-evaluated)'+
+    '</div>'+
+    '<div class="fg full" style="margin-top:10px"><label for="fc_block">Questions</label>'+
+      '<textarea id="fc_block" style="min-height:220px" placeholder="# Sample\nMCQ | Which word is a noun? | Run; Quickly; Elephant; Beautiful | 2 | 1\nTF | The sun rises in the east. | true | 1\nONE | Capital of India? | New Delhi | 1\nSHORT | Why did the author write this passage? | 3"></textarea>'+
+    '</div>'+
+    '<div class="arow mt16"><button class="btn gold" id="fc_create">Create &amp; Link Form</button></div>'+
+  '</div>';
+
+  html+='<div class="panel"><div class="ptitle">Notes</div>'+
+    '<div class="quiet">The generated form automatically includes the three identity fields (Student Name, Student ID, Submission Code) before your questions. One-word, short and long answers are teacher-evaluated. MCQ, checkbox and true/false are auto-scored by Google Forms.</div>'+
+  '</div>';
+  content.innerHTML=html;
+
+  document.getElementById('fc_back').addEventListener('click',function(){openTestEditor(testId);});
+  document.getElementById('fc_create').addEventListener('click',async function(){
+    var block=val('fc_block');
+    if(!block)return toast('Paste your questions first.','error');
+    var btn=this; btn.disabled=true; btn.textContent='Creating…';
+    var r=await apiCall('adminCreateTestForm',{testId:testId,questionsBlock:block});
+    btn.disabled=false; btn.textContent='Create & Link Form';
+    if(!r.ok){
+      if(r.code==='ORPHAN_FORM'){
+        toast('Form created but NOT linked. Check the Apps Script log for the Form ID and reason.','error');
+        return;
+      }
+      return toast(r.error||'Failed.','error');
+    }
+    var d=r.data||{};
+    toast('Form created & linked. Auto: '+d.autoMax+' · Manual: '+d.manualMax+' · Total: '+d.grandMax,'ok');
+    if(d.warnings && d.warnings.length){
+      setTimeout(function(){alert('Warnings from your question block:\n\n'+d.warnings.join('\n'));},400);
+    }
+    openTestEditor(testId);
+  });
+}
+
+/* ========== EVALUATIONS ========== */
+VIEWS.evaluations=async function(){
+  var r=await apiCall('adminListPendingEvaluations');
+  if(!r.ok)return errorState(r.error||'Failed to load.');
+  var items=(r.data&&r.data.items)||[];
+  var html=header('Pending Evaluations','Attempts awaiting manual marking.');
+  if(!items.length){content.innerHTML=html+emptyState('All caught up — no pending evaluations.');return;}
+  html+='<div class="twrap"><table class="tbl"><thead><tr><th>Student</th><th>Test</th><th>Auto</th><th>Pending</th><th>Total Marks</th><th>Submitted</th><th></th></tr></thead><tbody>';
+  items.forEach(function(it){
+    html+='<tr>'+
+      '<td>'+esc(it.StudentName||it.StudentID)+'</td>'+
+      '<td>'+esc(it.TestTitle||it.TestID)+'</td>'+
+      '<td>'+esc(it.AutoScore||0)+'</td>'+
+      '<td>'+esc(it.ManualPending||0)+' items</td>'+
+      '<td>'+esc(it.TotalMarks||0)+'</td>'+
+      '<td>'+esc(fmtDateTime(it.SubmittedAt))+'</td>'+
+      '<td><button class="btn gold" data-eval="'+esc(it.AttemptID)+'">Evaluate</button></td>'+
+    '</tr>';
+  });
+  html+='</tbody></table></div>';
+  content.innerHTML=html;
+
+  content.querySelectorAll('button[data-eval]').forEach(function(b){
+    b.addEventListener('click',function(){openEvaluation(b.getAttribute('data-eval'));});
+  });
+};
+
+async function openEvaluation(attemptId){
+  loading();
+  var r=await apiCall('adminGetAttemptForEvaluation',{attemptId:attemptId});
+  if(!r.ok)return errorState(r.error||'Failed to load.');
+  var d=r.data||{};
+  var att=d.attempt||{};
+  var autoRows=d.autoRows||[];
+  var manualRows=d.manualRows||[];
+
+  var html=header('Evaluate — '+(att.StudentName||att.StudentID),att.TestTitle+' · Auto: '+d.autoScore+' / '+(d.grandMax-d.manualMax)+' · Manual max: '+d.manualMax);
+  html+='<div class="arow"><button class="btn ghost" id="ev_back">← Back</button></div>';
+
+  /* Auto rows */
+  html+='<div class="panel"><div class="ptitle">Auto-Scored (read-only)</div>';
+  if(!autoRows.length) html+=emptyState('No auto-scored items.');
+  else{
+    autoRows.forEach(function(a){
+      html+='<div style="border-bottom:1px solid rgba(255,255,255,.05);padding:10px 0">'+
+        '<div style="font-size:.85rem;color:var(--cy);margin-bottom:4px">'+esc(a.QuestionTitle)+'</div>'+
+        '<div class="quiet">Answer: '+esc(a.StudentAnswer||'—')+'</div>'+
+        '<div style="color:var(--gold);font-weight:700">Score: '+esc(a.AutoMarks)+'</div>'+
+      '</div>';
+    });
+  }
+  html+='</div>';
+
+  /* Manual rows */
+  html+='<div class="panel"><div class="ptitle">Manual Evaluation ('+manualRows.length+' items)</div>';
+  if(!manualRows.length) html+=emptyState('No manual items.');
+  else{
+    manualRows.forEach(function(m,i){
+      var currentMarks=(m.ManualMarks===''||m.ManualMarks==null)?'':m.ManualMarks;
+      html+='<div style="border:1px solid var(--l2);border-radius:8px;padding:12px;margin-bottom:12px">'+
+        '<div style="font-size:.85rem;color:var(--cy);margin-bottom:6px">'+esc(m.QuestionTitle)+'</div>'+
+        '<div class="quiet" style="font-size:.72rem;margin-bottom:6px">Max: '+esc(m.MaxPoints)+'</div>'+
+        '<div style="background:rgba(0,0,0,.25);border-radius:6px;padding:10px;font-size:.85rem;white-space:pre-wrap;margin-bottom:10px">'+esc(m.StudentAnswer||'(blank)')+'</div>'+
+        '<div class="fgrid">'+
+          '<div class="fg"><label for="ev_m_'+i+'">Marks (0–'+esc(m.MaxPoints)+')</label><input id="ev_m_'+i+'" type="number" min="0" max="'+esc(m.MaxPoints)+'" value="'+esc(currentMarks)+'" data-answer="'+esc(m.AnswerID)+'"></div>'+
+          '<div class="fg"><label for="ev_r_'+i+'">Remark (optional)</label><input id="ev_r_'+i+'" type="text" value="'+esc(m.EvaluatorRemark||'')+'" data-remark="'+esc(m.AnswerID)+'"></div>'+
+        '</div>'+
+      '</div>';
+    });
+  }
+  html+='</div>';
+
+  html+='<div class="arow"><button class="btn gold" id="ev_submit">Save Evaluation</button><button class="btn ghost" id="ev_cancel">Cancel</button></div>';
+  content.innerHTML=html;
+
+  document.getElementById('ev_back').addEventListener('click',function(){render('evaluations');});
+  document.getElementById('ev_cancel').addEventListener('click',function(){render('evaluations');});
+  document.getElementById('ev_submit').addEventListener('click',async function(){
+    var evals=[];
+    manualRows.forEach(function(m,i){
+      var mEl=document.getElementById('ev_m_'+i);
+      var rEl=document.getElementById('ev_r_'+i);
+      var mk=mEl?mEl.value.trim():'';
+      if(mk==='')return; /* skip unanswered (partial save) */
+      evals.push({ answerId:m.AnswerID, marks:Number(mk), remark:rEl?rEl.value.trim():'' });
+    });
+    if(!evals.length)return toast('Enter at least one mark.','error');
+    if(!confirm('Save '+evals.length+' evaluation(s)?'))return;
+    var btn=this; btn.disabled=true; btn.textContent='Saving…';
+    var r2=await apiCall('adminSubmitEvaluation',{attemptId:attemptId,evaluations:evals});
+    btn.disabled=false; btn.textContent='Save Evaluation';
+    if(!r2.ok)return toast(r2.error||'Failed.','error');
+    var dd=r2.data||{};
+    if(dd.status==='PARTIAL'){
+      toast('Partial save. '+dd.pendingRemaining+' item(s) still pending.','ok');
+      openEvaluation(attemptId);
+    } else {
+      toast('Complete. Total: '+dd.totalObtained+' / '+dd.grandMax+' ('+dd.percentage+'%)','ok');
+      render('evaluations');
+    }
+  });
+}
+
+/* ========== RESULTS ========== */
+VIEWS.results=async function(){
+  var r=await apiCall('adminListResults');
+  if(!r.ok)return errorState(r.error||'Failed to load.');
+  var rows=(r.data&&r.data.results)||[];
+  var html=header('Results','All results across tests.');
+  if(!rows.length){content.innerHTML=html+emptyState('No results yet.');return;}
+  html+='<div class="twrap"><table class="tbl"><thead><tr><th>Result</th><th>Student</th><th>Test</th><th>Obtained</th><th>Max</th><th>%</th><th>Mode</th><th>Publication</th><th></th></tr></thead><tbody>';
+  rows.forEach(function(x){
+    html+='<tr>'+
+      '<td class="mono">'+esc(x.ResultID)+'</td>'+
+      '<td>'+esc(x.StudentID)+'</td>'+
+      '<td>'+esc(x.TestID)+'</td>'+
+      '<td>'+esc(x.MarksObtained)+'</td>'+
+      '<td>'+esc(x.MaxMarks)+'</td>'+
+      '<td>'+esc(x.Percentage)+'</td>'+
+      '<td>'+esc(x.EvaluationMode||'')+'</td>'+
+      '<td>'+badge(x.PublicationStatus||'')+'</td>'+
+      '<td>'+(String(x.PublicationStatus)==='DRAFT'?'<button class="btn ghost" data-pub="'+esc(x.AttemptID)+'">Publish</button>':'')+'</td>'+
+    '</tr>';
+  });
+  html+='</tbody></table></div>';
+  content.innerHTML=html;
+
+  content.querySelectorAll('button[data-pub]').forEach(function(b){
+    b.addEventListener('click',async function(){
+      if(!confirm('Publish this result?'))return;
+      var r2=await apiCall('adminPublishResult',{attemptId:b.getAttribute('data-pub')});
+      if(!r2.ok)return toast(r2.error||'Failed.','error');
+      toast('Published.','ok');render('results');
+    });
+  });
+};
+
+/* ========== REMARKS ========== */
+VIEWS.remarks=async function(){
+  var rs=await apiCall('adminListStudents');
+  var students=(rs.ok&&rs.data&&rs.data.students)||[];
+  var html=header('Remarks','Write remarks for a student.');
+  html+='<div class="panel"><div class="ptitle">Add Remark</div><div class="fgrid">'+
+    fg('Student','rm_student','select',{options:rowsToOpts(students,'StudentID','Name','— Select —'),required:true})+
+    fg('Test ID (optional)','rm_test','text',{})+
+    fg('Subject ID (optional)','rm_subject','text',{})+
+    fg('Chapter ID (optional)','rm_chapter','text',{})+
+    fg('Remark','rm_text','textarea',{full:true,required:true})+
+  '</div><div class="arow mt16"><button class="btn gold" id="rm_create">Save Remark</button></div></div>';
+  content.innerHTML=html;
+  document.getElementById('rm_create').addEventListener('click',async function(){
+    var p={StudentID:val('rm_student'),TestID:val('rm_test'),SubjectID:val('rm_subject'),ChapterID:val('rm_chapter'),Text:val('rm_text')};
+    if(!p.StudentID||!p.Text)return toast('Student and text required.','error');
+    var r=await apiCall('adminAddRemark',p);
+    if(!r.ok)return toast(r.error||'Failed.','error');
+    toast('Saved.','ok');render('remarks');
+  });
+};
+
+/* ========== ANNOUNCEMENTS ========== */
+VIEWS.announcements=async function(){
+  var r=await apiCall('adminGetAnnouncement');
+  if(!r.ok)return errorState(r.error||'Failed to load.');
+  var d=r.data||{};
+  var html=header('Announcements','Paste HTML. Shows on student dashboard.');
+  html+='<div class="panel"><div class="fgrid">'+
+    fg('Title','an_title','text',{value:d.title||'Latest from GPN'})+
+    fg('Active','an_active','select',{options:[{value:'true',label:'Yes — show to students'},{value:'false',label:'No — hidden'}],value:d.active?'true':'false'})+
+    fg('HTML','an_html','textarea',{full:true,value:d.html||'',hint:'Raw HTML — marquee, images, links, YouTube embeds all work.'})+
+  '</div><div class="arow mt16">'+
+    '<button class="btn gold" id="an_save">Save</button>'+
+    '<button class="btn ghost" id="an_clear">Clear HTML</button>'+
+  '</div>'+
+  '<div class="quiet" style="margin-top:8px">Last updated: '+esc(fmtDateTime(d.updated))+'</div>'+
+  '</div>';
+
+  html+='<div class="panel"><div class="ptitle">Preview</div>'+
+    '<div style="background:linear-gradient(135deg,#0a192f 0%,#102844 100%);border:1px solid rgba(0,184,212,.35);border-left:4px solid var(--cy);border-radius:10px;padding:16px 18px">'+
+      '<div style="font-size:.85rem;color:var(--gold);font-weight:700;margin-bottom:8px">'+esc(d.title||'Latest from GPN')+'</div>'+
+      '<div id="an_preview">'+(d.html||'<span class="quiet">(empty)</span>')+'</div>'+
+    '</div>'+
+  '</div>';
+  content.innerHTML=html;
+
+  var ta=document.getElementById('an_html');
+  ta.addEventListener('input',function(){
+    var pv=document.getElementById('an_preview');
+    if(ta.value.trim()) pv.innerHTML=ta.value;
+    else pv.innerHTML='<span class="quiet">(empty)</span>';
+  });
+  document.getElementById('an_clear').addEventListener('click',function(){
+    ta.value='';
+    document.getElementById('an_preview').innerHTML='<span class="quiet">(empty)</span>';
+  });
+  document.getElementById('an_save').addEventListener('click',async function(){
+    var p={title:val('an_title'),html:val('an_html'),active:val('an_active')==='true'};
+    var r2=await apiCall('adminSetAnnouncement',p);
+    if(!r2.ok)return toast(r2.error||'Failed.','error');
+    toast('Saved.','ok');
+  });
+};
+
+/* ========== COUNTERS ========== */
+VIEWS.counters=async function(){
+  var r=await apiCall('adminListCounters');
+  if(!r.ok)return errorState(r.error||'Failed to load.');
+  var counters=(r.data&&r.data.counters)||[];
+  if(!counters.length){
+    counters=[
+      {icon:'🎓',label:'Students Taught',value:'600',active:true},
+      {icon:'📝',label:'Tests Delivered',value:'3000',active:true},
+      {icon:'⭐',label:'Years Teaching',value:'13',active:true}
+    ];
+  }
+  var html=header('Counters','Numbers shown on student dashboard.');
+  html+='<div class="panel"><div class="ptitle">Edit Counters</div>';
+  html+='<div id="ct_list"></div>'+
+    '<div class="arow mt16">'+
+      '<button class="btn" id="ct_add">+ Add Counter</button>'+
+      '<button class="btn gold" id="ct_save">Save All</button>'+
+    '</div>'+
+    '<div class="hint" style="margin-top:10px">Maximum 6. Only active counters display.</div>'+
+  '</div>';
+  content.innerHTML=html;
+
+  function renderRows(){
+    var wrap=document.getElementById('ct_list');
+    wrap.innerHTML='';
+    counters.forEach(function(c,i){
+      var row=document.createElement('div');
+      row.style.cssText='display:grid;grid-template-columns:60px 1fr 1fr 60px 40px;gap:8px;align-items:end;margin-bottom:8px';
+      row.innerHTML=
+        '<div class="fg"><label>Icon</label><input type="text" value="'+esc(c.icon||'')+'" data-k="icon" data-i="'+i+'" maxlength="4"></div>'+
+        '<div class="fg"><label>Label</label><input type="text" value="'+esc(c.label||'')+'" data-k="label" data-i="'+i+'" maxlength="60"></div>'+
+        '<div class="fg"><label>Value</label><input type="text" value="'+esc(c.value||'')+'" data-k="value" data-i="'+i+'" maxlength="20"></div>'+
+        '<div class="fg"><label>Active</label><select data-k="active" data-i="'+i+'"><option value="true"'+(c.active?' selected':'')+'>Yes</option><option value="false"'+(!c.active?' selected':'')+'>No</option></select></div>'+
+        '<div class="fg"><label>&nbsp;</label><button class="btn dng" data-remove="'+i+'">×</button></div>';
+      wrap.appendChild(row);
+    });
+    wrap.querySelectorAll('input,select').forEach(function(el){
+      el.addEventListener('input',function(){
+        var i=Number(el.getAttribute('data-i')), k=el.getAttribute('data-k');
+        counters[i][k]=el.value;
+      });
+      el.addEventListener('change',function(){
+        var i=Number(el.getAttribute('data-i')), k=el.getAttribute('data-k');
+        counters[i][k]=el.value;
+      });
+    });
+    wrap.querySelectorAll('button[data-remove]').forEach(function(b){
+      b.addEventListener('click',function(){
+        counters.splice(Number(b.getAttribute('data-remove')),1);
+        renderRows();
+      });
+    });
+  }
+  renderRows();
+
+  document.getElementById('ct_add').addEventListener('click',function(){
+    if(counters.length>=6)return toast('Max 6 counters.','error');
+    counters.push({icon:'',label:'',value:'',active:true});
+    renderRows();
+  });
+  document.getElementById('ct_save').addEventListener('click',async function(){
+    var r2=await apiCall('adminSaveCounters',{counters:counters});
+    if(!r2.ok)return toast(r2.error||'Failed.','error');
+    toast('Saved '+((r2.data||{}).count||0)+' counters.','ok');
+  });
+};
+
+/* ========== PASSWORD ========== */
+VIEWS.password=async function(){
+  var html=header('Change Password','You will be signed out after changing.');
+  html+='<div class="panel"><div class="fgrid">'+
+    fg('New Password','ap_new','password',{required:true,minlength:6,hint:'Minimum 6 characters.'})+
+    fg('Confirm New Password','ap_conf','password',{required:true,minlength:6})+
+  '</div><div class="arow mt16"><button class="btn gold" id="ap_go">Change Password</button></div></div>';
+  content.innerHTML=html;
+  document.getElementById('ap_go').addEventListener('click',async function(){
+    var a=val('ap_new'),b=val('ap_conf');
+    if(a.length<6)return toast('Password must be at least 6 characters.','error');
+    if(a!==b)return toast('Passwords do not match.','error');
+    var r=await apiCall('adminPasswordChange',{newPassword:a});
+    if(!r.ok)return toast(r.error||'Failed.','error');
+    toast('Password changed. Please log in again.','ok');
+    clearSession();
+    setTimeout(function(){window.location.href='login.html';},1200);
+  });
+};
+
+render('dashboard');
+})();
+</script>
+</body>
+</html>

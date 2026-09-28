@@ -18,7 +18,11 @@ a:hover{color:var(--cy)}
 .user{font-size:.8rem;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:45vw}
 .burger{display:none;background:transparent;border:1px solid var(--line);color:var(--cy);font-size:1.2rem;border-radius:6px;width:40px;height:40px;cursor:pointer}
 .layout{display:grid;grid-template-columns:220px 1fr;gap:20px;max-width:1280px;margin:0 auto;padding:20px 16px 60px}
-.sidebar{position:sticky;top:72px;align-self:start;background:var(--bg2);border:1px solid var(--l2);border-radius:10px;padding:12px;max-height:calc(100vh - 96px);overflow-y:auto}
+.sidebar{position:sticky;top:72px;align-self:start;background:var(--bg2);border:1px solid var(--l2);border-radius:10px;padding:12px;max-height:calc(100vh - 90px);max-height:calc(100dvh - 90px);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:var(--cy) transparent}
+.sidebar::-webkit-scrollbar{width:6px}
+.sidebar::-webkit-scrollbar-track{background:transparent}
+.sidebar::-webkit-scrollbar-thumb{background:rgba(0,184,212,.35);border-radius:3px}
+.sidebar::-webkit-scrollbar-thumb:hover{background:rgba(0,184,212,.6)}
 .sidebar h4{margin:12px 8px 6px;font-size:.68rem;letter-spacing:.14em;color:var(--mu);text-transform:uppercase}
 .navbtn{display:block;width:100%;text-align:left;background:transparent;border:1px solid transparent;color:var(--tx);font-family:inherit;font-size:.85rem;padding:9px 12px;border-radius:6px;cursor:pointer;margin-bottom:2px;transition:.15s}
 .navbtn:hover{background:rgba(0,184,212,.06);color:var(--cy)}
@@ -252,6 +256,23 @@ document.getElementById('logoutBtn').addEventListener('click',async function(){
   await apiCall('logout');clearSession();window.location.href='login.html';
 });
 
+/* V17.1: sidebar height safety net for iframe environments */
+function gpnFitSidebar() {
+  try {
+    var sb = document.querySelector('.sidebar');
+    if (!sb) return;
+    var topOffset = 72;
+    var bottomBuffer = 24;
+    var available = (window.innerHeight || document.documentElement.clientHeight || 700) - topOffset - bottomBuffer;
+    if (available > 200 && available < 2000) {
+      sb.style.maxHeight = available + 'px';
+    }
+  } catch (e) {}
+}
+window.addEventListener('load', gpnFitSidebar);
+window.addEventListener('resize', gpnFitSidebar);
+setInterval(gpnFitSidebar, 1500);
+
 setInterval(function(){
   document.querySelectorAll('[data-expires]').forEach(function(el){
     var exp=el.getAttribute('data-expires');
@@ -388,7 +409,6 @@ VIEWS.dashboard=async function(){
     '<div class="help-box">Reach us on WhatsApp for any issue — questions, payments, tests, or account problems.<br><br>'+
     '<a href="https://wa.me/guidedpathnoida" target="_blank" rel="noopener">💬 Contact us on WhatsApp (AI enabled)</a></div></div>';
 
-  /* Socials section */
   if(soc.ok && soc.data){
     var sd=soc.data||{};
     var links=sd.links||[];
@@ -466,7 +486,7 @@ VIEWS.profile=async function(){
   content.innerHTML=html;
 };
 
-/* ========== MATERIALS (V16: real links, no popup blocker) ========== */
+/* ========== MATERIALS ========== */
 var _matState={type:'ALL',search:''};
 VIEWS.materials=async function(){
   var r=await apiCall('studentMaterials');
@@ -588,7 +608,7 @@ VIEWS.schedule=async function(){
   content.innerHTML=html;
 };
 
-/* ========== TESTS (V16: real links, no popup blocker) ========== */
+/* ========== TESTS ========== */
 VIEWS.tests=async function(){
   var r=await apiCall('studentTests');
   if(!r.ok)return errorState(r.error||'Failed to load.');

@@ -18,7 +18,11 @@ a:hover{color:var(--cy)}
 .user{font-size:.8rem;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:45vw}
 .burger{display:none;background:transparent;border:1px solid var(--line);color:var(--cy);font-size:1.2rem;border-radius:6px;width:40px;height:40px;cursor:pointer}
 .layout{display:grid;grid-template-columns:230px 1fr;gap:20px;max-width:1400px;margin:0 auto;padding:20px 16px 60px}
-.sidebar{position:sticky;top:72px;align-self:start;background:var(--bg2);border:1px solid var(--l2);border-radius:10px;padding:12px;max-height:calc(100vh - 96px);overflow-y:auto}
+.sidebar{position:sticky;top:72px;align-self:start;background:var(--bg2);border:1px solid var(--l2);border-radius:10px;padding:12px;max-height:calc(100vh - 90px);max-height:calc(100dvh - 90px);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:var(--cy) transparent}
+.sidebar::-webkit-scrollbar{width:6px}
+.sidebar::-webkit-scrollbar-track{background:transparent}
+.sidebar::-webkit-scrollbar-thumb{background:rgba(0,184,212,.35);border-radius:3px}
+.sidebar::-webkit-scrollbar-thumb:hover{background:rgba(0,184,212,.6)}
 .sidebar h4{margin:12px 8px 6px;font-size:.68rem;letter-spacing:.14em;color:var(--mu);text-transform:uppercase}
 .navbtn{display:block;width:100%;text-align:left;background:transparent;border:1px solid transparent;color:var(--tx);font-family:inherit;font-size:.83rem;padding:9px 12px;border-radius:6px;cursor:pointer;margin-bottom:2px;transition:.15s}
 .navbtn:hover{background:rgba(0,184,212,.06);color:var(--cy)}
@@ -222,6 +226,23 @@ document.querySelectorAll('.navbtn[data-view]').forEach(function(b){
 document.getElementById('logoutBtn').addEventListener('click',async function(){
   await apiCall('logout');clearSession();window.location.href='login.html';
 });
+
+/* V17.1: sidebar height safety net for iframe environments */
+function gpnFitSidebar() {
+  try {
+    var sb = document.querySelector('.sidebar');
+    if (!sb) return;
+    var topOffset = 72;
+    var bottomBuffer = 24;
+    var available = (window.innerHeight || document.documentElement.clientHeight || 700) - topOffset - bottomBuffer;
+    if (available > 200 && available < 2000) {
+      sb.style.maxHeight = available + 'px';
+    }
+  } catch (e) {}
+}
+window.addEventListener('load', gpnFitSidebar);
+window.addEventListener('resize', gpnFitSidebar);
+setInterval(gpnFitSidebar, 1500);
 
 function loading(){content.innerHTML='<div class="load"><span class="spin"></span>Loading…</div>';}
 function errorState(m){content.innerHTML='<div class="err">'+esc(m)+'</div>';}
@@ -506,13 +527,13 @@ VIEWS.chapters=async function(){
   html+='<div class="panel"><div class="ptitle">Create Chapter</div><div class="fgrid">'+
     fg('Subject','c_subject','select',{options:rowsToOpts(subjects,'SubjectID','Name','— Select —'),required:true})+
     fg('Name','c_name','text',{required:true})+
-    fg('Number','c_number','text',{})+
+    fg('Chapter No.','c_number','text',{hint:'Optional — for ordering, e.g. "5" or "Unit 3"'})+
     fg('Description','c_desc','textarea',{full:true})+
   '</div><div class="arow mt16"><button class="btn gold" id="c_create">Create Chapter</button></div></div>';
   html+='<div class="panel"><div class="ptitle">All Chapters ('+chapters.length+')</div>';
   if(!chapters.length)html+=emptyState('No chapters yet.');
   else{
-    html+='<div class="twrap"><table class="tbl"><thead><tr><th>ID</th><th>Subject</th><th>Name</th><th>#</th><th>Status</th></tr></thead><tbody>';
+    html+='<div class="twrap"><table class="tbl"><thead><tr><th>ID</th><th>Subject</th><th>Name</th><th>Ch. No.</th><th>Status</th></tr></thead><tbody>';
     chapters.forEach(function(c){
       html+='<tr><td class="mono">'+esc(c.ChapterID)+'</td><td>'+esc(subMap[c.SubjectID]||c.SubjectID)+'</td><td>'+esc(c.Name)+'</td><td>'+esc(c.Number)+'</td><td>'+badge(c.Status||'')+'</td></tr>';
     });
@@ -1084,7 +1105,7 @@ async function openTestEditor(testId){
   html+='<div class="arow"><button class="btn ghost sm" id="te_back">← Back to Tests</button></div>';
   html+='<div class="panel"><div class="ptitle">Google Form</div>';
   if(test.FormID){
-    html+='<div class="quiet" style="margin-bottom:8px">Form linked. Saved in '+esc('GPN-TESTS-DB')+' folder.</div>'+
+    html+='<div class="quiet" style="margin-bottom:8px">Form linked. Saved in GPN-TESTS-DB folder.</div>'+
       '<div class="fgrid">'+
       '<div><div class="quiet" style="font-size:.68rem;text-transform:uppercase">Form ID</div><div class="mono wrap">'+esc(test.FormID)+'</div></div>'+
       '</div>'+
@@ -1377,7 +1398,7 @@ VIEWS.remarks=async function(){
   });
 };
 
-/* ========== SOCIALS (V16) ========== */
+/* ========== SOCIALS ========== */
 var SOCIAL_SLOTS = [
   {key:'fb_page',   icon:'📘', label:'Facebook Page',              group:'connect'},
   {key:'fb_group',  icon:'👥', label:'Facebook Group',             group:'connect'},
@@ -1398,8 +1419,6 @@ VIEWS.socials=async function(){
   if(!r.ok)return errorState(r.error||'Failed to load.');
   var saved=r.data.links||[];
   var gbp=r.data.gbp||'';
-  var byLabel={};
-  saved.forEach(function(l){ byLabel[l.label.toLowerCase()] = l; });
 
   var html=header('Social Links','Links shown on the student dashboard. Fill any URL to enable. Empty = hidden.');
 

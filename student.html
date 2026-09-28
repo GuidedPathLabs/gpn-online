@@ -43,7 +43,7 @@ a:hover{color:var(--cy)}
 .btn.ghost:hover{border-color:var(--cy);color:var(--cy)}
 .btn.block{width:100%}
 .btn:disabled{opacity:.5;cursor:not-allowed}
-.btn.sm{padding:6px 12px;font-size:.75rem;min-height:32px}
+.btn.sm{padding:8px 14px;font-size:.75rem;min-height:36px}
 .arow{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px;align-items:center}
 .fgrid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
 .fg{display:flex;flex-direction:column;gap:4px;min-width:0}
@@ -93,27 +93,26 @@ table.tbl{width:100%;min-width:560px;border-collapse:collapse;font-size:.82rem}
 .counter .num{font-size:1.3rem;font-weight:700;color:var(--gold);margin:4px 0 2px;line-height:1.1}
 .counter .lbl{font-size:.65rem;color:var(--mu);letter-spacing:.05em;text-transform:uppercase;line-height:1.3}
 .help-box{background:rgba(0,184,212,.06);border:1px solid rgba(0,184,212,.2);border-left:3px solid var(--cy);border-radius:0 6px 6px 0;padding:12px 14px;margin-top:16px;font-size:.85rem}
-.help-box b{color:var(--gold)}
 .help-box a{color:var(--cy);font-weight:600}
 .test-card{background:var(--bg2);border:1px solid var(--l2);border-radius:10px;padding:16px;margin-bottom:14px}
 .test-card .tname{font-size:1rem;color:var(--cy);font-weight:700;margin-bottom:4px}
 .test-card .tmeta{font-size:.8rem;color:var(--mu);margin-bottom:10px}
 .test-card .tactions{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px}
 .mat-toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;align-items:center}
-.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--l2);border-radius:20px;background:transparent;color:var(--mu);font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;transition:.15s;letter-spacing:.03em}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border:1px solid var(--l2);border-radius:20px;background:transparent;color:var(--mu);font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;transition:.15s;letter-spacing:.03em;min-height:36px}
 .chip:hover{border-color:var(--cy);color:var(--cy)}
 .chip.active{background:rgba(0,184,212,.1);border-color:var(--cy);color:var(--gold)}
-.search-input{flex:1;min-width:180px;padding:9px 14px;background:rgba(0,0,0,.35);border:1px solid var(--l2);border-radius:20px;color:var(--tx);font-family:inherit;font-size:.85rem}
+.search-input{flex:1;min-width:180px;padding:10px 14px;background:rgba(0,0,0,.35);border:1px solid var(--l2);border-radius:20px;color:var(--tx);font-family:inherit;font-size:.85rem;min-height:40px}
 .search-input:focus{outline:none;border-color:var(--cy);box-shadow:0 0 0 2px rgba(0,229,255,.12)}
 .mat-group{margin-bottom:22px}
 .mat-group-hd{display:flex;align-items:center;gap:10px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--l2)}
 .mat-group-hd .sg-title{font-size:.95rem;color:var(--gold);font-weight:700;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mat-group-hd .sg-count{font-size:.7rem;color:var(--mu);background:rgba(0,184,212,.06);border:1px solid var(--l2);border-radius:10px;padding:2px 10px}
 .mat-card{background:var(--bg2);border:1px solid var(--l2);border-radius:8px;padding:12px 14px;margin-bottom:8px;display:grid;gap:10px;grid-template-columns:1fr auto;align-items:center}
-@media(max-width:600px){.mat-card{grid-template-columns:1fr}}
 .mat-card .mt-title{font-size:.9rem;color:var(--tx);font-weight:600;margin-bottom:4px;line-height:1.3}
 .mat-card .mt-meta{font-size:.72rem;color:var(--mu);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.mat-card .mt-actions{display:flex;gap:6px;flex-wrap:wrap}
+.mat-card .mt-actions{display:flex;gap:8px;flex-wrap:wrap}
+@media(max-width:600px){.mat-card{grid-template-columns:1fr}.mat-card .mt-actions{width:100%}.mat-card .mt-actions .btn{flex:1}}
 .code-panel{background:linear-gradient(135deg,rgba(0,184,212,.08),rgba(255,213,79,.06));border:1px solid rgba(0,229,255,.4);border-radius:8px;padding:14px 16px;margin-top:12px}
 .code-panel .cp-label{font-size:.7rem;color:var(--mu);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
 .code-panel .cp-code{font-family:'Courier New',monospace;font-size:1.6rem;font-weight:700;color:var(--gold);letter-spacing:.15em;margin-bottom:10px;user-select:all;word-break:break-all}
@@ -121,6 +120,18 @@ table.tbl{width:100%;min-width:560px;border-collapse:collapse;font-size:.82rem}
 .code-panel .cp-expiry{font-size:.72rem;color:var(--wn)}
 .code-panel .cp-expiry.warn{color:var(--dng)}
 .reschedule-badge{display:inline-block;padding:2px 8px;background:rgba(255,179,0,.12);border:1px solid rgba(255,179,0,.4);border-radius:10px;font-size:.7rem;color:var(--wn);font-weight:600;letter-spacing:.03em;margin-left:6px}
+.social-wrap{display:flex;flex-direction:column;gap:18px}
+.social-group-title{font-size:.7rem;color:var(--mu);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;font-weight:600}
+.social-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+.social-link{display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(0,184,212,.05);border:1px solid var(--l2);border-radius:8px;color:var(--tx);text-decoration:none;font-size:.82rem;font-weight:600;transition:.15s;min-height:44px;line-height:1.2}
+.social-link:hover{background:rgba(0,184,212,.14);border-color:var(--cy);color:var(--cy);text-decoration:none}
+.social-link .si{font-size:1.1rem;line-height:1;flex-shrink:0}
+.social-link .sl{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.social-gbp{display:flex;align-items:center;gap:10px;padding:14px 16px;background:linear-gradient(135deg,rgba(255,213,79,.08),rgba(0,184,212,.05));border:1px solid rgba(255,213,79,.4);border-radius:8px;color:var(--gold);font-weight:700;font-size:.88rem;text-decoration:none;min-height:48px}
+.social-gbp:hover{background:rgba(255,213,79,.16);border-color:var(--gold);color:#fff;text-decoration:none}
+.social-gbp .si{font-size:1.3rem}
+@media(max-width:480px){.social-grid{grid-template-columns:1fr 1fr}.social-link{padding:9px 10px;font-size:.76rem}.social-link .si{font-size:1rem}}
+@media(max-width:360px){.social-grid{grid-template-columns:1fr}}
 @media(max-width:900px){
   .layout{grid-template-columns:1fr;padding:16px 12px 60px}
   .sidebar{position:fixed;top:56px;left:0;right:0;bottom:0;z-index:40;border-radius:0;max-height:none;transform:translateX(-100%);transition:transform .22s ease;background:var(--bg2)}
@@ -208,6 +219,14 @@ async function apiCall(action,payload){
   }catch(e){return {ok:false,error:'Network error.',code:'NETWORK'};}
 }
 
+/* Fire-and-forget tracking — never blocks user navigation */
+function trackOpen(action,payload){
+  try{
+    fetch(GPN_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify({action:action,token:getToken(),payload:payload||{}}),keepalive:true}).catch(function(){});
+  }catch(e){}
+}
+
 (function guard(){
   if(!getToken()){window.location.href='login.html';return;}
   if(String(getRole()).toUpperCase()!=='STUDENT'){window.location.href='admin.html';return;}
@@ -233,23 +252,17 @@ document.getElementById('logoutBtn').addEventListener('click',async function(){
   await apiCall('logout');clearSession();window.location.href='login.html';
 });
 
-/* Global countdown ticker — updates all [data-expires] elements */
 setInterval(function(){
   document.querySelectorAll('[data-expires]').forEach(function(el){
     var exp=el.getAttribute('data-expires');
     var t=Date.parse(exp);
     if(isNaN(t))return;
     var d=t-Date.now();
-    var wrap=el.closest('.code-panel');
-    if(d<=0){
-      el.textContent='Expired';
-      el.classList.add('warn');
-      return;
-    }
+    if(d<=0){el.textContent='Expired';el.classList.add('warn');return;}
     var mins=Math.floor(d/60000);
     var secs=Math.floor((d%60000)/1000);
     if(mins>=60){
-      var h=Math.floor(mins/60);var m=mins%60;
+      var h=Math.floor(mins/60),m=mins%60;
       el.textContent='Expires in '+h+'h '+m+'m';
     } else if(mins>=5){
       el.textContent='Expires in '+mins+'m '+secs+'s';
@@ -300,13 +313,12 @@ var VIEWS={};
 
 /* ========== DASHBOARD ========== */
 VIEWS.dashboard=async function(){
-  var rs=await Promise.all([apiCall('studentDashboard'),apiCall('studentAnnouncement'),apiCall('studentCounters')]);
-  var r=rs[0],ann=rs[1],ctr=rs[2];
+  var rs=await Promise.all([apiCall('studentDashboard'),apiCall('studentAnnouncement'),apiCall('studentCounters'),apiCall('studentSocials')]);
+  var r=rs[0],ann=rs[1],ctr=rs[2],soc=rs[3];
   if(!r.ok)return errorState(r.error||'Failed to load.');
   var d=r.data||{};
   var html='';
 
-  /* Announcement */
   if(ann.ok && ann.data && ann.data.active && ann.data.html){
     var key='gpn_announce_seen_'+String(ann.data.updated||'');
     if(localStorage.getItem(key)!=='1'){
@@ -316,7 +328,6 @@ VIEWS.dashboard=async function(){
     }
   }
 
-  /* Counters */
   if(ctr.ok && ctr.data && ctr.data.counters && ctr.data.counters.length){
     html+='<div class="counter-row">';
     ctr.data.counters.forEach(function(c){
@@ -325,7 +336,6 @@ VIEWS.dashboard=async function(){
     html+='</div>';
   }
 
-  /* Reschedule banner */
   if(d.recentReschedules && d.recentReschedules.length){
     html+='<div class="panel" style="border-color:rgba(255,179,0,.5);background:rgba(255,179,0,.04)">'+
       '<div class="ptitle" style="color:var(--wn)">🔄 Your schedule was updated</div>';
@@ -376,7 +386,44 @@ VIEWS.dashboard=async function(){
 
   html+='<div class="panel"><div class="ptitle">Need Help?</div>'+
     '<div class="help-box">Reach us on WhatsApp for any issue — questions, payments, tests, or account problems.<br><br>'+
-    '<a href="https://wa.me/guidedpathnoida" target="_blank" rel="noopener">💬 Chat with GPN (AI enabled)</a></div></div>';
+    '<a href="https://wa.me/guidedpathnoida" target="_blank" rel="noopener">💬 Contact us on WhatsApp (AI enabled)</a></div></div>';
+
+  /* Socials section */
+  if(soc.ok && soc.data){
+    var sd=soc.data||{};
+    var links=sd.links||[];
+    var gbp=sd.gbp||'';
+    if(links.length||gbp){
+      html+='<div class="panel"><div class="ptitle">Connect with GPN</div><div class="social-wrap">';
+      var groups={connect:[],watch:[],chat:[],more:[]};
+      links.forEach(function(l){
+        var g=String(l.group||'more').toLowerCase();
+        if(!groups[g])groups[g]=[];
+        groups[g].push(l);
+      });
+      function renderGroup(title,arr){
+        if(!arr.length)return '';
+        var h='<div><div class="social-group-title">'+esc(title)+'</div><div class="social-grid">';
+        arr.forEach(function(l){
+          h+='<a class="social-link" href="'+esc(l.url)+'" target="_blank" rel="noopener">'+
+             '<span class="si">'+esc(l.icon||'🔗')+'</span>'+
+             '<span class="sl">'+esc(l.label)+'</span></a>';
+        });
+        h+='</div></div>';
+        return h;
+      }
+      html+=renderGroup('Connect',groups.connect);
+      html+=renderGroup('Watch',groups.watch);
+      html+=renderGroup('Chat with us',groups.chat);
+      if(gbp){
+        html+='<div><div class="social-group-title">Reviews &amp; Ratings</div>'+
+          '<a class="social-gbp" href="'+esc(gbp)+'" target="_blank" rel="noopener">'+
+          '<span class="si">⭐</span><span>Rate us on Google Business</span></a></div>';
+      }
+      html+=renderGroup('More',groups.more);
+      html+='</div></div>';
+    }
+  }
 
   content.innerHTML=html;
 
@@ -394,7 +441,7 @@ VIEWS.profile=async function(){
   var s=r.data.student||{},progs=r.data.programmes||[];
   var html=header('Profile','Your account and programmes.');
   html+='<div class="panel"><div class="ptitle">Account</div><div class="fgrid">';
-  [['Student ID',s.StudentID],['Name',s.Name],['Email',s.Email],['Class',s.Class],['Board',s.Board],['School',s.School],['Parent',s.ParentName],['Phone',s.Phone],['Status',s.Status]].forEach(function(x){
+  [['Student ID',s.StudentID],['Name',s.Name],['Email',s.Email],['Class',s.Class],['Board',s.Board],['School',s.School],['Location',s.Location],['Parent',s.ParentName],['Phone',s.Phone],['WhatsApp',s.WhatsApp],['Status',s.Status]].forEach(function(x){
     html+='<div><div class="quiet" style="font-size:.68rem;text-transform:uppercase;letter-spacing:.08em">'+esc(x[0])+'</div><div>'+esc(x[1]||'—')+'</div></div>';
   });
   html+='</div></div>';
@@ -419,7 +466,7 @@ VIEWS.profile=async function(){
   content.innerHTML=html;
 };
 
-/* ========== MATERIALS (V14.2 redesign) ========== */
+/* ========== MATERIALS (V16: real links, no popup blocker) ========== */
 var _matState={type:'ALL',search:''};
 VIEWS.materials=async function(){
   var r=await apiCall('studentMaterials');
@@ -430,7 +477,6 @@ VIEWS.materials=async function(){
     return;
   }
   var html=header('Study Materials','Notes, solutions, worksheets and videos assigned to you.');
-  /* Toolbar */
   html+='<div class="mat-toolbar">'+
     '<input type="text" class="search-input" id="matSearch" placeholder="🔍 Search by title or chapter…" value="'+esc(_matState.search)+'">'+
   '</div>';
@@ -438,7 +484,6 @@ VIEWS.materials=async function(){
   html+='<div id="matList"></div>';
   content.innerHTML=html;
 
-  /* Type chips */
   var types=['ALL','NOTES','SOLUTION','WORKSHEET','VIDEO','OTHER'];
   var chipsEl=document.getElementById('matChips');
   chipsEl.innerHTML=types.map(function(t){
@@ -474,7 +519,6 @@ function renderMatList(mats){
     list.innerHTML='<div class="empty">No materials match your filter.</div>';
     return;
   }
-  /* Group by Subject → Chapter */
   var groups={};
   filtered.forEach(function(m){
     var skey=m.SubjectName||m.SubjectID||'Other Subjects';
@@ -495,34 +539,29 @@ function renderMatList(mats){
       var items=chapters[chap];
       html+='<div style="font-size:.78rem;color:var(--cy);margin:10px 0 6px;letter-spacing:.05em">▸ '+esc(chap)+'</div>';
       items.forEach(function(m){
+        var viewBtn = m.ViewURL
+          ? '<a class="btn ghost sm" href="'+esc(m.ViewURL)+'" target="_blank" rel="noopener" data-mat-view="'+esc(m.MaterialID)+'">👁 View</a>'
+          : '';
+        var dlBtn = m.DownloadURL
+          ? '<a class="btn gold sm" href="'+esc(m.DownloadURL)+'" target="_blank" rel="noopener" data-mat-dl="'+esc(m.MaterialID)+'">⬇ Download</a>'
+          : '';
         html+='<div class="mat-card">'+
           '<div>'+
             '<div class="mt-title">'+esc(m.Title)+'</div>'+
             '<div class="mt-meta">'+badge(m.Type||'OTHER',String(m.Type||'other').toLowerCase())+(m.Description?' · '+esc(m.Description):'')+'</div>'+
           '</div>'+
-          '<div class="mt-actions">'+
-            '<button class="btn ghost sm" data-view="'+esc(m.MaterialID)+'">👁 View</button>'+
-            '<button class="btn gold sm" data-dl="'+esc(m.MaterialID)+'">⬇ Download</button>'+
-          '</div>'+
+          '<div class="mt-actions">'+viewBtn+dlBtn+'</div>'+
         '</div>';
       });
     });
     html+='</div>';
   });
   list.innerHTML=html;
-  list.querySelectorAll('button[data-view]').forEach(function(b){
-    b.addEventListener('click',async function(){
-      var r2=await apiCall('studentOpenMaterial',{materialId:b.getAttribute('data-view')});
-      if(!r2.ok)return toast(r2.error||'Cannot open.','error');
-      window.open(r2.data.viewUrl,'_blank','noopener');
-    });
+  list.querySelectorAll('a[data-mat-view]').forEach(function(a){
+    a.addEventListener('click',function(){ trackOpen('studentOpenMaterial',{materialId:a.getAttribute('data-mat-view')}); });
   });
-  list.querySelectorAll('button[data-dl]').forEach(function(b){
-    b.addEventListener('click',async function(){
-      var r2=await apiCall('studentOpenMaterial',{materialId:b.getAttribute('data-dl')});
-      if(!r2.ok)return toast(r2.error||'Cannot open.','error');
-      window.open(r2.data.downloadUrl,'_blank','noopener');
-    });
+  list.querySelectorAll('a[data-mat-dl]').forEach(function(a){
+    a.addEventListener('click',function(){ trackOpen('studentOpenMaterial',{materialId:a.getAttribute('data-mat-dl')}); });
   });
 }
 
@@ -549,7 +588,7 @@ VIEWS.schedule=async function(){
   content.innerHTML=html;
 };
 
-/* ========== TESTS (V14.2 — persistent code panel) ========== */
+/* ========== TESTS (V16: real links, no popup blocker) ========== */
 VIEWS.tests=async function(){
   var r=await apiCall('studentTests');
   if(!r.ok)return errorState(r.error||'Failed to load.');
@@ -564,6 +603,7 @@ VIEWS.tests=async function(){
     var status=String(t.Status||'').toUpperCase();
     var price=Number(t.Price||0);
     var activeAttempt=a && String(a.Status)==='ISSUED' && a.Code && a.ExpiresAt;
+    var formUrl = t.FormURL || '';
 
     html+='<div class="test-card">'+
       '<div class="tname">'+esc(t.Title)+' '+badge(status)+(s&&String(s.UpdateReason)==='Rescheduled'?'<span class="reschedule-badge">🔄 Rescheduled</span>':'')+'</div>'+
@@ -573,13 +613,12 @@ VIEWS.tests=async function(){
     if(res){
       html+='<div>Result: <b style="color:var(--cy)">'+esc(res.MarksObtained)+' / '+esc(res.MaxMarks)+' ('+esc(res.Percentage)+'%)</b></div>';
     } else if(activeAttempt){
-      /* Persistent code panel */
       html+='<div class="code-panel">'+
         '<div class="cp-label">Your Submission Code</div>'+
         '<div class="cp-code" id="code_'+esc(a.AttemptID)+'">'+esc(a.Code)+'</div>'+
         '<div class="cp-actions">'+
           '<button class="btn gold sm" data-copy="'+esc(a.Code)+'">📋 Copy Code</button>'+
-          '<button class="btn sm" data-open-form="'+esc(t.TestID)+'">🔗 Open Google Form</button>'+
+          (formUrl?'<a class="btn sm" href="'+esc(formUrl)+'" target="_blank" rel="noopener">🔗 Open Google Form</a>':'')+
         '</div>'+
         '<div class="cp-expiry" data-expires="'+esc(a.ExpiresAt)+'">Calculating…</div>'+
         '<div class="hint" style="margin-top:6px">Copy the code, open the form, paste it into the "Submission Code" field, then answer the questions and submit.</div>'+
@@ -611,16 +650,6 @@ VIEWS.tests=async function(){
 
   content.querySelectorAll('button[data-copy]').forEach(function(b){
     b.addEventListener('click',function(){copyToClipboard(b.getAttribute('data-copy'));});
-  });
-
-  content.querySelectorAll('button[data-open-form]').forEach(function(b){
-    b.addEventListener('click',async function(){
-      var tid=b.getAttribute('data-open-form');
-      /* Resume existing attempt to get fresh form URL */
-      var r2=await apiCall('studentStartTest',{testId:tid});
-      if(!r2.ok)return toast(r2.error||'Cannot open.','error');
-      window.open(r2.data.formUrl,'_blank','noopener');
-    });
   });
 
   content.querySelectorAll('button[data-start]').forEach(function(b){
@@ -691,7 +720,7 @@ VIEWS.wallet=async function(){
   html+='<div class="panel"><div class="ptitle">How to add money</div>'+
     '<div class="quiet" style="margin-bottom:10px">Send payment via UPI to the GPN account, then message us the screenshot on WhatsApp. Your wallet will be credited after verification.</div>'+
     '<a class="btn gold" href="https://www.guidedpathnoida.in/fees" target="_blank" rel="noopener">Open Payment Page</a> '+
-    '<a class="btn" href="https://wa.me/guidedpathnoida" target="_blank" rel="noopener">WhatsApp Us</a>'+
+    '<a class="btn" href="https://wa.me/guidedpathnoida" target="_blank" rel="noopener">Contact on WhatsApp</a>'+
   '</div>';
   html+='<div class="panel"><div class="ptitle">Transaction History</div>';
   if(!hist.length)html+=emptyState('No transactions yet.');

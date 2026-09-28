@@ -31,11 +31,11 @@ a:hover{color:var(--cy)}
 .ptitle{font-size:.95rem;color:var(--gold);margin:0 0 12px;font-weight:700}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px}
 .stat{background:var(--bg3);border:1px solid var(--l2);border-radius:8px;padding:14px 16px}
-.stat .lbl{display:block;font-size:.7rem;color:var(--mu);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
-.stat .val{display:block;font-size:1.6rem;font-weight:700;color:var(--cy);line-height:1.1}
+.stat .lbl{display:block;font-size:.68rem;color:var(--mu);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.stat .val{display:block;font-size:1.5rem;font-weight:700;color:var(--cy);line-height:1.1}
 .stat .val.gold{color:var(--gold)}
 .stat .val.dng{color:var(--dng)}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 18px;font-family:inherit;font-size:.85rem;font-weight:700;letter-spacing:.04em;border-radius:6px;cursor:pointer;border:1px solid var(--line);background:rgba(0,184,212,.08);color:var(--cy);min-height:40px;text-decoration:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 16px;font-family:inherit;font-size:.83rem;font-weight:700;letter-spacing:.03em;border-radius:6px;cursor:pointer;border:1px solid var(--line);background:rgba(0,184,212,.08);color:var(--cy);min-height:38px;text-decoration:none}
 .btn:hover{background:rgba(0,184,212,.16);border-color:var(--cy)}
 .btn.gold{border-color:rgba(255,213,79,.45);color:var(--gold);background:rgba(255,213,79,.06)}
 .btn.gold:hover{background:rgba(255,213,79,.14);border-color:var(--gold)}
@@ -43,29 +43,35 @@ a:hover{color:var(--cy)}
 .btn.ghost:hover{border-color:var(--cy);color:var(--cy)}
 .btn.block{width:100%}
 .btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.sm{padding:6px 12px;font-size:.75rem;min-height:32px}
 .arow{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px;align-items:center}
 .fgrid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
 .fg{display:flex;flex-direction:column;gap:4px;min-width:0}
-.fg label{font-size:.7rem;color:var(--mu);letter-spacing:.08em;text-transform:uppercase}
+.fg label{font-size:.68rem;color:var(--mu);letter-spacing:.08em;text-transform:uppercase}
 .fg input,.fg select,.fg textarea{width:100%;padding:10px 12px;background:rgba(0,0,0,.35);border:1px solid var(--l2);border-radius:6px;color:var(--tx);font-family:inherit;font-size:.9rem;min-height:40px}
-.fg textarea{min-height:90px;resize:vertical}
 .fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--cy);box-shadow:0 0 0 2px rgba(0,229,255,.12)}
 .hint{font-size:.72rem;color:var(--mu)}
 .twrap{width:100%;overflow-x:auto;border:1px solid var(--l2);border-radius:8px;background:var(--bg2);-webkit-overflow-scrolling:touch}
 table.tbl{width:100%;min-width:560px;border-collapse:collapse;font-size:.82rem}
-.tbl th,.tbl td{padding:10px 12px;text-align:left;border-bottom:1px solid rgba(255,255,255,.04);white-space:nowrap}
-.tbl th{font-size:.68rem;color:var(--mu);letter-spacing:.1em;text-transform:uppercase;background:rgba(0,184,212,.04);position:sticky;top:0;z-index:1}
+.tbl th,.tbl td{padding:9px 11px;text-align:left;border-bottom:1px solid rgba(255,255,255,.04);white-space:nowrap}
+.tbl th{font-size:.66rem;color:var(--mu);letter-spacing:.08em;text-transform:uppercase;background:rgba(0,184,212,.04);position:sticky;top:0;z-index:1}
 .tbl td.wrap{white-space:normal;word-break:break-word}
 .tbl tr:hover td{background:rgba(0,184,212,.03)}
-.bdg{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.68rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;border:1px solid transparent}
+.bdg{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.66rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;border:1px solid transparent}
 .bdg.draft{color:#8a9bb0;border-color:rgba(138,155,176,.4)}
 .bdg.available{color:var(--cy);border-color:rgba(0,229,255,.5);background:rgba(0,229,255,.08)}
 .bdg.closed{color:var(--wn);border-color:rgba(255,179,0,.5);background:rgba(255,179,0,.08)}
 .bdg.evaluated{color:var(--gold);border-color:rgba(255,213,79,.5);background:rgba(255,213,79,.08)}
 .bdg.published{color:var(--ok);border-color:rgba(76,175,80,.5);background:rgba(76,175,80,.08)}
 .bdg.active{color:var(--ok);border-color:rgba(76,175,80,.4)}
-.bdg.inactive{color:var(--mu);border-color:rgba(138,155,176,.3)}
-.bdg.dng{color:var(--dng);border-color:rgba(255,107,107,.4)}
+.bdg.none{color:var(--mu);border-color:rgba(138,155,176,.3)}
+.bdg.expired{color:var(--dng);border-color:rgba(255,107,107,.4)}
+.bdg.expiring{color:var(--wn);border-color:rgba(255,179,0,.4)}
+.bdg.notes{color:var(--cy);border-color:rgba(0,229,255,.4)}
+.bdg.solution{color:var(--ok);border-color:rgba(76,175,80,.4)}
+.bdg.worksheet{color:var(--gold);border-color:rgba(255,213,79,.4)}
+.bdg.video{color:var(--dng);border-color:rgba(255,107,107,.4)}
+.bdg.other{color:var(--mu);border-color:rgba(138,155,176,.4)}
 .load{padding:28px 20px;text-align:center;border-radius:8px;font-size:.9rem;color:var(--cy);background:rgba(0,184,212,.04)}
 .empty{padding:28px 20px;text-align:center;border-radius:8px;font-size:.9rem;color:var(--mu);background:rgba(255,255,255,.02);border:1px dashed var(--l2)}
 .err{padding:28px 20px;text-align:center;border-radius:8px;font-size:.9rem;color:var(--dng);background:rgba(255,107,107,.06);border:1px solid rgba(255,107,107,.3)}
@@ -92,8 +98,30 @@ table.tbl{width:100%;min-width:560px;border-collapse:collapse;font-size:.82rem}
 .test-card{background:var(--bg2);border:1px solid var(--l2);border-radius:10px;padding:16px;margin-bottom:14px}
 .test-card .tname{font-size:1rem;color:var(--cy);font-weight:700;margin-bottom:4px}
 .test-card .tmeta{font-size:.8rem;color:var(--mu);margin-bottom:10px}
-.test-card .tactions{margin-top:12px}
-@media (max-width:900px){
+.test-card .tactions{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px}
+.mat-toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--l2);border-radius:20px;background:transparent;color:var(--mu);font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;transition:.15s;letter-spacing:.03em}
+.chip:hover{border-color:var(--cy);color:var(--cy)}
+.chip.active{background:rgba(0,184,212,.1);border-color:var(--cy);color:var(--gold)}
+.search-input{flex:1;min-width:180px;padding:9px 14px;background:rgba(0,0,0,.35);border:1px solid var(--l2);border-radius:20px;color:var(--tx);font-family:inherit;font-size:.85rem}
+.search-input:focus{outline:none;border-color:var(--cy);box-shadow:0 0 0 2px rgba(0,229,255,.12)}
+.mat-group{margin-bottom:22px}
+.mat-group-hd{display:flex;align-items:center;gap:10px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--l2)}
+.mat-group-hd .sg-title{font-size:.95rem;color:var(--gold);font-weight:700;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat-group-hd .sg-count{font-size:.7rem;color:var(--mu);background:rgba(0,184,212,.06);border:1px solid var(--l2);border-radius:10px;padding:2px 10px}
+.mat-card{background:var(--bg2);border:1px solid var(--l2);border-radius:8px;padding:12px 14px;margin-bottom:8px;display:grid;gap:10px;grid-template-columns:1fr auto;align-items:center}
+@media(max-width:600px){.mat-card{grid-template-columns:1fr}}
+.mat-card .mt-title{font-size:.9rem;color:var(--tx);font-weight:600;margin-bottom:4px;line-height:1.3}
+.mat-card .mt-meta{font-size:.72rem;color:var(--mu);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.mat-card .mt-actions{display:flex;gap:6px;flex-wrap:wrap}
+.code-panel{background:linear-gradient(135deg,rgba(0,184,212,.08),rgba(255,213,79,.06));border:1px solid rgba(0,229,255,.4);border-radius:8px;padding:14px 16px;margin-top:12px}
+.code-panel .cp-label{font-size:.7rem;color:var(--mu);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.code-panel .cp-code{font-family:'Courier New',monospace;font-size:1.6rem;font-weight:700;color:var(--gold);letter-spacing:.15em;margin-bottom:10px;user-select:all;word-break:break-all}
+.code-panel .cp-actions{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.code-panel .cp-expiry{font-size:.72rem;color:var(--wn)}
+.code-panel .cp-expiry.warn{color:var(--dng)}
+.reschedule-badge{display:inline-block;padding:2px 8px;background:rgba(255,179,0,.12);border:1px solid rgba(255,179,0,.4);border-radius:10px;font-size:.7rem;color:var(--wn);font-weight:600;letter-spacing:.03em;margin-left:6px}
+@media(max-width:900px){
   .layout{grid-template-columns:1fr;padding:16px 12px 60px}
   .sidebar{position:fixed;top:56px;left:0;right:0;bottom:0;z-index:40;border-radius:0;max-height:none;transform:translateX(-100%);transition:transform .22s ease;background:var(--bg2)}
   .sidebar.open{transform:translateX(0)}
@@ -117,7 +145,6 @@ table.tbl{width:100%;min-width:560px;border-collapse:collapse;font-size:.82rem}
       <button class="navbtn" data-view="profile">Profile</button>
       <h4>Study</h4>
       <button class="navbtn" data-view="materials">Study Materials</button>
-      <button class="navbtn" data-view="questionbank">Question Bank</button>
       <button class="navbtn" data-view="schedule">Schedule</button>
       <h4>Assessment</h4>
       <button class="navbtn" data-view="tests">Tests</button>
@@ -127,7 +154,6 @@ table.tbl{width:100%;min-width:560px;border-collapse:collapse;font-size:.82rem}
       <button class="navbtn" data-view="password">Change Password</button>
       <button class="navbtn danger" id="logoutBtn">Sign out</button>
     </aside>
-
     <main class="content" id="content">
       <div class="load"><span class="spin"></span>Loading…</div>
     </main>
@@ -154,22 +180,28 @@ function toast(msg,kind){
   el.className='tt '+(kind||'');
   el.textContent=msg;
   w.appendChild(el);
-  setTimeout(function(){el.remove();},4000);
+  setTimeout(function(){el.remove();},4500);
 }
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+function copyToClipboard(text){
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){toast('Copied','ok');}).catch(function(){fallbackCopy(text);});
+  } else fallbackCopy(text);
+}
+function fallbackCopy(text){
+  var ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
+  document.body.appendChild(ta);ta.select();
+  try{document.execCommand('copy');toast('Copied','ok');}catch(e){toast('Copy failed','error');}
+  document.body.removeChild(ta);
+}
 
 async function apiCall(action,payload){
   try{
-    var res=await fetch(GPN_API_URL,{
-      method:'POST',
-      headers:{'Content-Type':'text/plain;charset=utf-8'},
-      body:JSON.stringify({action:action,token:getToken(),payload:payload||{}}),
-      redirect:'follow'
-    });
+    var res=await fetch(GPN_API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify({action:action,token:getToken(),payload:payload||{}}),redirect:'follow'});
     var j=await res.json();
     if(j&&j.ok===false&&['SESSION_EXPIRED','SESSION_REVOKED','ACCOUNT_INACTIVE'].indexOf(j.code)>=0){
-      clearSession();
-      toast('Session expired. Redirecting…','error');
+      clearSession();toast('Session expired. Redirecting…','error');
       setTimeout(function(){window.location.href='login.html';},1200);
     }
     return j;
@@ -198,10 +230,35 @@ document.querySelectorAll('.navbtn[data-view]').forEach(function(b){
   });
 });
 document.getElementById('logoutBtn').addEventListener('click',async function(){
-  await apiCall('logout');
-  clearSession();
-  window.location.href='login.html';
+  await apiCall('logout');clearSession();window.location.href='login.html';
 });
+
+/* Global countdown ticker — updates all [data-expires] elements */
+setInterval(function(){
+  document.querySelectorAll('[data-expires]').forEach(function(el){
+    var exp=el.getAttribute('data-expires');
+    var t=Date.parse(exp);
+    if(isNaN(t))return;
+    var d=t-Date.now();
+    var wrap=el.closest('.code-panel');
+    if(d<=0){
+      el.textContent='Expired';
+      el.classList.add('warn');
+      return;
+    }
+    var mins=Math.floor(d/60000);
+    var secs=Math.floor((d%60000)/1000);
+    if(mins>=60){
+      var h=Math.floor(mins/60);var m=mins%60;
+      el.textContent='Expires in '+h+'h '+m+'m';
+    } else if(mins>=5){
+      el.textContent='Expires in '+mins+'m '+secs+'s';
+    } else {
+      el.textContent='Expires in '+mins+'m '+secs+'s — hurry!';
+      el.classList.add('warn');
+    }
+  });
+},1000);
 
 function loading(){content.innerHTML='<div class="load"><span class="spin"></span>Loading…</div>';}
 function errorState(m){content.innerHTML='<div class="err">'+esc(m)+'</div>';}
@@ -209,8 +266,8 @@ function emptyState(m){return '<div class="empty">'+esc(m||'Nothing here yet.')+
 function header(t,s){return '<h2 class="stitle">'+esc(t)+'</h2>'+(s?'<p class="ssub">'+esc(s)+'</p>':'');}
 function badge(t,cls){var c=cls||String(t||'').toLowerCase();return '<span class="bdg '+esc(c)+'">'+esc(t)+'</span>';}
 function stat(l,v,cls){return '<div class="stat"><span class="lbl">'+esc(l)+'</span><span class="val '+(cls||'')+'">'+esc(v)+'</span></div>';}
-function fmtDate(d){ if(!d) return '—'; return String(d).split('T')[0]; }
-function fmtDateTime(d){ if(!d) return '—'; var s=String(d).replace('T',' '); return s.substring(0,19); }
+function fmtDate(d){if(!d) return '—';return String(d).split('T')[0];}
+function fmtDateTime(d){if(!d) return '—';return String(d).replace('T',' ').substring(0,19);}
 function fg(label,id,type,opts){
   opts=opts||{};
   var a='';
@@ -241,24 +298,18 @@ function render(v){
 }
 var VIEWS={};
 
-/* ---------- DASHBOARD ---------- */
+/* ========== DASHBOARD ========== */
 VIEWS.dashboard=async function(){
-  var rs=await Promise.all([
-    apiCall('studentDashboard'),
-    apiCall('studentAnnouncement'),
-    apiCall('studentCounters')
-  ]);
-  var r=rs[0], ann=rs[1], ctr=rs[2];
+  var rs=await Promise.all([apiCall('studentDashboard'),apiCall('studentAnnouncement'),apiCall('studentCounters')]);
+  var r=rs[0],ann=rs[1],ctr=rs[2];
   if(!r.ok)return errorState(r.error||'Failed to load.');
   var d=r.data||{};
-
   var html='';
 
   /* Announcement */
   if(ann.ok && ann.data && ann.data.active && ann.data.html){
-    var dismissKey='gpn_announce_seen_'+String(ann.data.updated||'');
-    var seen=localStorage.getItem(dismissKey)==='1';
-    if(!seen){
+    var key='gpn_announce_seen_'+String(ann.data.updated||'');
+    if(localStorage.getItem(key)!=='1'){
       html+='<div class="announce" id="annBox"><button class="aclose" id="annClose" aria-label="Dismiss">×</button>'+
         '<div class="atitle">'+esc(ann.data.title||'Latest from GPN')+'</div>'+
         '<div>'+ann.data.html+'</div></div>';
@@ -274,19 +325,29 @@ VIEWS.dashboard=async function(){
     html+='</div>';
   }
 
+  /* Reschedule banner */
+  if(d.recentReschedules && d.recentReschedules.length){
+    html+='<div class="panel" style="border-color:rgba(255,179,0,.5);background:rgba(255,179,0,.04)">'+
+      '<div class="ptitle" style="color:var(--wn)">🔄 Your schedule was updated</div>';
+    d.recentReschedules.forEach(function(s){
+      html+='<div class="quiet" style="color:var(--tx)">'+esc(s.Type)+' on '+esc(fmtDate(s.Date))+' at '+esc(s.StartTime)+' — please check the new time.</div>';
+    });
+    html+='</div>';
+  }
+
   html+=header('Dashboard','Your GPN at a glance.');
   html+='<div class="stats">'+
-    stat('Wallet', '₹'+(d.walletBalance||0), 'gold')+
-    stat('Access', d.access||'—')+
-    stat('Avg %', (d.summary&&d.summary.avg)||0)+
-    stat('Tests Taken', (d.summary&&d.summary.tests)||0)+
+    stat('Wallet','₹'+(d.walletBalance||0),'gold')+
+    stat('Access',d.access||'—')+
+    stat('Avg %',(d.summary&&d.summary.avg)||0)+
+    stat('Tests Taken',(d.summary&&d.summary.tests)||0)+
   '</div>';
 
   html+='<div class="panel"><div class="ptitle">Today\'s Tasks</div>';
   if(d.todayTasks&&d.todayTasks.length){
     html+='<div class="twrap"><table class="tbl"><thead><tr><th>Time</th><th>Type</th><th>Subject</th><th>Status</th></tr></thead><tbody>';
     d.todayTasks.forEach(function(t){
-      html+='<tr><td>'+(esc(t.StartTime)||'—')+'</td><td>'+esc(t.Type)+'</td><td>'+esc(t.SubjectID||'—')+'</td><td>'+badge(t.Status||'')+'</td></tr>';
+      html+='<tr><td>'+esc(t.StartTime||'—')+'</td><td>'+esc(t.Type)+'</td><td>'+esc(t.SubjectID||'—')+'</td><td>'+badge(t.Status||'')+'</td></tr>';
     });
     html+='</tbody></table></div>';
   } else html+=emptyState('No tasks scheduled for today.');
@@ -294,7 +355,7 @@ VIEWS.dashboard=async function(){
 
   html+='<div class="panel"><div class="ptitle">Next Test</div>';
   if(d.nextTest){
-    html+='<div class="quiet">'+esc(d.nextTest.Date)+' · '+esc(d.nextTest.Type)+' · '+(esc(d.nextTest.StartTime)||'—')+'</div>';
+    html+='<div class="quiet">'+esc(fmtDate(d.nextTest.Date))+' · '+esc(d.nextTest.Type)+' · '+(esc(d.nextTest.StartTime)||'—')+'</div>';
   } else html+=emptyState('No upcoming tests.');
   html+='</div>';
 
@@ -314,42 +375,35 @@ VIEWS.dashboard=async function(){
   }
 
   html+='<div class="panel"><div class="ptitle">Need Help?</div>'+
-    '<div class="help-box">'+
-      'Reach us on WhatsApp for any issue — questions, payments, tests, or account problems.<br><br>'+
-      '<a href="https://wa.me/guidedpathnoida" target="_blank" rel="noopener">💬 Chat with GPN (AI enabled)</a>'+
-    '</div></div>';
+    '<div class="help-box">Reach us on WhatsApp for any issue — questions, payments, tests, or account problems.<br><br>'+
+    '<a href="https://wa.me/guidedpathnoida" target="_blank" rel="noopener">💬 Chat with GPN (AI enabled)</a></div></div>';
 
   content.innerHTML=html;
 
-  var annClose=document.getElementById('annClose');
-  if(annClose){
-    annClose.addEventListener('click',function(){
-      localStorage.setItem('gpn_announce_seen_'+String((ann.data&&ann.data.updated)||''),'1');
-      var ab=document.getElementById('annBox');
-      if(ab) ab.remove();
-    });
-  }
+  var ac=document.getElementById('annClose');
+  if(ac)ac.addEventListener('click',function(){
+    localStorage.setItem('gpn_announce_seen_'+String((ann.data&&ann.data.updated)||''),'1');
+    var ab=document.getElementById('annBox');if(ab)ab.remove();
+  });
 };
 
-/* ---------- PROFILE ---------- */
+/* ========== PROFILE ========== */
 VIEWS.profile=async function(){
   var r=await apiCall('studentProfile');
   if(!r.ok)return errorState(r.error||'Failed to load.');
-  var s=r.data.student||{}, progs=r.data.programmes||[];
+  var s=r.data.student||{},progs=r.data.programmes||[];
   var html=header('Profile','Your account and programmes.');
   html+='<div class="panel"><div class="ptitle">Account</div><div class="fgrid">';
   [['Student ID',s.StudentID],['Name',s.Name],['Email',s.Email],['Class',s.Class],['Board',s.Board],['School',s.School],['Parent',s.ParentName],['Phone',s.Phone],['Status',s.Status]].forEach(function(x){
     html+='<div><div class="quiet" style="font-size:.68rem;text-transform:uppercase;letter-spacing:.08em">'+esc(x[0])+'</div><div>'+esc(x[1]||'—')+'</div></div>';
   });
   html+='</div></div>';
-
-  html+='<div class="panel"><div class="ptitle">Programmes &amp; Wallet</div>';
-  if(!progs.length) html+=emptyState('No active programmes.');
+  html+='<div class="panel"><div class="ptitle">Programmes</div>';
+  if(!progs.length)html+=emptyState('No active programmes.');
   else{
     progs.forEach(function(p){
       var e=p.enrolment||{};
-      var linked=p.TestCount||0;
-      var total=p.TotalPrice||0;
+      var linked=p.TestCount||0,total=p.TotalPrice||0;
       html+='<div style="border:1px solid var(--l2);border-radius:8px;padding:12px;margin-bottom:10px">'+
         '<div style="color:var(--cy);font-weight:700;margin-bottom:6px">'+esc(p.Name)+'</div>'+
         '<div class="quiet" style="font-size:.82rem">'+
@@ -365,100 +419,137 @@ VIEWS.profile=async function(){
   content.innerHTML=html;
 };
 
-/* ---------- MATERIALS ---------- */
+/* ========== MATERIALS (V14.2 redesign) ========== */
+var _matState={type:'ALL',search:''};
 VIEWS.materials=async function(){
   var r=await apiCall('studentMaterials');
   if(!r.ok)return errorState(r.error||'Failed to load.');
   var mats=(r.data&&r.data.materials)||[];
-  var views=(r.data&&r.data.views)||{};
-  var html=header('Study Materials','View in browser or download.');
-  if(!mats.length){content.innerHTML=html+emptyState('No materials assigned yet.');return;}
-  html+='<div class="twrap"><table class="tbl"><thead><tr><th>Title</th><th>Type</th><th>Class</th><th>Opened</th><th>Actions</th></tr></thead><tbody>';
-  mats.forEach(function(m){
-    var v=views[m.MaterialID]||{};
-    html+='<tr>'+
-      '<td>'+esc(m.Title)+'</td>'+
-      '<td>'+esc(m.Type)+'</td>'+
-      '<td>'+esc(m.Class)+'</td>'+
-      '<td>'+esc(v.ViewCount||0)+'×</td>'+
-      '<td>'+
-        '<button class="btn" data-view="'+esc(m.MaterialID)+'">View</button> '+
-        '<button class="btn gold" data-dl="'+esc(m.MaterialID)+'">Download</button>'+
-      '</td>'+
-    '</tr>';
-  });
-  html+='</tbody></table></div>';
+  if(!mats.length){
+    content.innerHTML=header('Study Materials','Notes, solutions, worksheets and videos assigned to you.')+emptyState('No materials assigned yet.');
+    return;
+  }
+  var html=header('Study Materials','Notes, solutions, worksheets and videos assigned to you.');
+  /* Toolbar */
+  html+='<div class="mat-toolbar">'+
+    '<input type="text" class="search-input" id="matSearch" placeholder="🔍 Search by title or chapter…" value="'+esc(_matState.search)+'">'+
+  '</div>';
+  html+='<div class="mat-toolbar" id="matChips"></div>';
+  html+='<div id="matList"></div>';
   content.innerHTML=html;
 
-  content.querySelectorAll('button[data-view]').forEach(function(b){
+  /* Type chips */
+  var types=['ALL','NOTES','SOLUTION','WORKSHEET','VIDEO','OTHER'];
+  var chipsEl=document.getElementById('matChips');
+  chipsEl.innerHTML=types.map(function(t){
+    return '<button class="chip'+(t===_matState.type?' active':'')+'" data-type="'+t+'">'+t.charAt(0)+t.slice(1).toLowerCase()+'</button>';
+  }).join('');
+  chipsEl.querySelectorAll('.chip').forEach(function(b){
+    b.addEventListener('click',function(){
+      _matState.type=b.getAttribute('data-type');
+      chipsEl.querySelectorAll('.chip').forEach(function(x){x.classList.remove('active');});
+      b.classList.add('active');
+      renderMatList(mats);
+    });
+  });
+  document.getElementById('matSearch').addEventListener('input',function(e){
+    _matState.search=e.target.value.toLowerCase();
+    renderMatList(mats);
+  });
+  renderMatList(mats);
+};
+
+function renderMatList(mats){
+  var list=document.getElementById('matList');
+  if(!list)return;
+  var filtered=mats.filter(function(m){
+    if(_matState.type!=='ALL' && String(m.Type)!==_matState.type) return false;
+    if(_matState.search){
+      var hay=(String(m.Title)+' '+String(m.SubjectName||'')+' '+String(m.ChapterName||'')).toLowerCase();
+      if(hay.indexOf(_matState.search)<0) return false;
+    }
+    return true;
+  });
+  if(!filtered.length){
+    list.innerHTML='<div class="empty">No materials match your filter.</div>';
+    return;
+  }
+  /* Group by Subject → Chapter */
+  var groups={};
+  filtered.forEach(function(m){
+    var skey=m.SubjectName||m.SubjectID||'Other Subjects';
+    var ckey=m.ChapterName||m.ChapterID||'General';
+    if(!groups[skey])groups[skey]={};
+    if(!groups[skey][ckey])groups[skey][ckey]=[];
+    groups[skey][ckey].push(m);
+  });
+  var html='';
+  Object.keys(groups).sort().forEach(function(subj){
+    var chapters=groups[subj];
+    var total=Object.keys(chapters).reduce(function(s,c){return s+chapters[c].length;},0);
+    html+='<div class="mat-group"><div class="mat-group-hd">'+
+      '<span class="sg-title">📚 '+esc(subj)+'</span>'+
+      '<span class="sg-count">'+total+' item'+(total===1?'':'s')+'</span>'+
+    '</div>';
+    Object.keys(chapters).sort().forEach(function(chap){
+      var items=chapters[chap];
+      html+='<div style="font-size:.78rem;color:var(--cy);margin:10px 0 6px;letter-spacing:.05em">▸ '+esc(chap)+'</div>';
+      items.forEach(function(m){
+        html+='<div class="mat-card">'+
+          '<div>'+
+            '<div class="mt-title">'+esc(m.Title)+'</div>'+
+            '<div class="mt-meta">'+badge(m.Type||'OTHER',String(m.Type||'other').toLowerCase())+(m.Description?' · '+esc(m.Description):'')+'</div>'+
+          '</div>'+
+          '<div class="mt-actions">'+
+            '<button class="btn ghost sm" data-view="'+esc(m.MaterialID)+'">👁 View</button>'+
+            '<button class="btn gold sm" data-dl="'+esc(m.MaterialID)+'">⬇ Download</button>'+
+          '</div>'+
+        '</div>';
+      });
+    });
+    html+='</div>';
+  });
+  list.innerHTML=html;
+  list.querySelectorAll('button[data-view]').forEach(function(b){
     b.addEventListener('click',async function(){
       var r2=await apiCall('studentOpenMaterial',{materialId:b.getAttribute('data-view')});
       if(!r2.ok)return toast(r2.error||'Cannot open.','error');
       window.open(r2.data.viewUrl,'_blank','noopener');
     });
   });
-  content.querySelectorAll('button[data-dl]').forEach(function(b){
+  list.querySelectorAll('button[data-dl]').forEach(function(b){
     b.addEventListener('click',async function(){
       var r2=await apiCall('studentOpenMaterial',{materialId:b.getAttribute('data-dl')});
       if(!r2.ok)return toast(r2.error||'Cannot open.','error');
       window.open(r2.data.downloadUrl,'_blank','noopener');
     });
   });
-};
+}
 
-/* ---------- QUESTION BANK ---------- */
-VIEWS.questionbank=async function(){
-  var r=await apiCall('studentQuestionBank');
-  if(!r.ok)return errorState(r.error||'Failed to load.');
-  var items=(r.data&&r.data.items)||[];
-  var html=header('Question Bank','Practice resources assigned to you.');
-  if(!items.length){content.innerHTML=html+emptyState('No question bank resources yet.');return;}
-  html+='<div class="twrap"><table class="tbl"><thead><tr><th>Title</th><th>Class</th><th>Actions</th></tr></thead><tbody>';
-  items.forEach(function(q){
-    html+='<tr>'+
-      '<td>'+esc(q.Title)+'</td>'+
-      '<td>'+esc(q.Class)+'</td>'+
-      '<td>'+
-        '<button class="btn" data-view="'+esc(q.BankID)+'">View</button> '+
-        '<button class="btn gold" data-dl="'+esc(q.BankID)+'">Download</button>'+
-      '</td>'+
-    '</tr>';
-  });
-  html+='</tbody></table></div>';
-  content.innerHTML=html;
-
-  content.querySelectorAll('button[data-view]').forEach(function(b){
-    b.addEventListener('click',async function(){
-      var r2=await apiCall('studentOpenQuestionBank',{bankId:b.getAttribute('data-view')});
-      if(!r2.ok)return toast(r2.error||'Cannot open.','error');
-      window.open(r2.data.viewUrl,'_blank','noopener');
-    });
-  });
-  content.querySelectorAll('button[data-dl]').forEach(function(b){
-    b.addEventListener('click',async function(){
-      var r2=await apiCall('studentOpenQuestionBank',{bankId:b.getAttribute('data-dl')});
-      if(!r2.ok)return toast(r2.error||'Cannot open.','error');
-      window.open(r2.data.downloadUrl,'_blank','noopener');
-    });
-  });
-};
-
-/* ---------- SCHEDULE ---------- */
+/* ========== SCHEDULE ========== */
 VIEWS.schedule=async function(){
   var r=await apiCall('studentSchedule');
   if(!r.ok)return errorState(r.error||'Failed to load.');
   var rows=(r.data&&r.data.schedule)||[];
   var html=header('Schedule','Your scheduled sessions and tests.');
   if(!rows.length){content.innerHTML=html+emptyState('No schedule entries.');return;}
-  html+='<div class="twrap"><table class="tbl"><thead><tr><th>Date</th><th>Start</th><th>End</th><th>Type</th><th>Subject</th></tr></thead><tbody>';
+  html+='<div class="twrap"><table class="tbl"><thead><tr><th>Date</th><th>Start</th><th>End</th><th>Type</th><th>Subject</th><th></th></tr></thead><tbody>';
   rows.forEach(function(s){
-    html+='<tr><td>'+esc(fmtDate(s.Date))+'</td><td>'+esc(s.StartTime||'—')+'</td><td>'+esc(s.EndTime||'—')+'</td><td>'+esc(s.Type)+'</td><td>'+esc(s.SubjectID||'—')+'</td></tr>';
+    var resched=String(s.UpdateReason)==='Rescheduled';
+    html+='<tr>'+
+      '<td>'+esc(fmtDate(s.Date))+'</td>'+
+      '<td>'+esc(s.StartTime||'—')+'</td>'+
+      '<td>'+esc(s.EndTime||'—')+'</td>'+
+      '<td>'+esc(s.Type)+'</td>'+
+      '<td>'+esc(s.SubjectID||'—')+'</td>'+
+      '<td>'+(resched?'<span class="reschedule-badge">🔄 Rescheduled</span>':'')+'</td>'+
+    '</tr>';
   });
   html+='</tbody></table></div>';
   content.innerHTML=html;
 };
 
-/* ---------- TESTS ---------- */
+/* ========== TESTS (V14.2 — persistent code panel) ========== */
 VIEWS.tests=async function(){
   var r=await apiCall('studentTests');
   if(!r.ok)return errorState(r.error||'Failed to load.');
@@ -467,17 +558,32 @@ VIEWS.tests=async function(){
   var html=header('Tests','Available and completed assessments.');
   html+='<div class="stats">'+stat('Wallet Balance','₹'+wallet,'gold')+'</div>';
   if(!list.length){content.innerHTML=html+emptyState('No tests assigned.');return;}
+
   list.forEach(function(it){
     var t=it.test||{},a=it.attempt,res=it.result,s=it.schedule;
     var status=String(t.Status||'').toUpperCase();
     var price=Number(t.Price||0);
+    var activeAttempt=a && String(a.Status)==='ISSUED' && a.Code && a.ExpiresAt;
+
     html+='<div class="test-card">'+
-      '<div class="tname">'+esc(t.Title)+' '+badge(status)+'</div>'+
+      '<div class="tname">'+esc(t.Title)+' '+badge(status)+(s&&String(s.UpdateReason)==='Rescheduled'?'<span class="reschedule-badge">🔄 Rescheduled</span>':'')+'</div>'+
       '<div class="tmeta">Marks: '+esc(t.TotalMarks)+' · Duration: '+esc(t.Duration)+' min · Cost: ₹'+price+
         (s?' · Scheduled: '+esc(fmtDate(s.Date))+' '+(esc(s.StartTime)||''):'')+'</div>';
 
     if(res){
       html+='<div>Result: <b style="color:var(--cy)">'+esc(res.MarksObtained)+' / '+esc(res.MaxMarks)+' ('+esc(res.Percentage)+'%)</b></div>';
+    } else if(activeAttempt){
+      /* Persistent code panel */
+      html+='<div class="code-panel">'+
+        '<div class="cp-label">Your Submission Code</div>'+
+        '<div class="cp-code" id="code_'+esc(a.AttemptID)+'">'+esc(a.Code)+'</div>'+
+        '<div class="cp-actions">'+
+          '<button class="btn gold sm" data-copy="'+esc(a.Code)+'">📋 Copy Code</button>'+
+          '<button class="btn sm" data-open-form="'+esc(t.TestID)+'">🔗 Open Google Form</button>'+
+        '</div>'+
+        '<div class="cp-expiry" data-expires="'+esc(a.ExpiresAt)+'">Calculating…</div>'+
+        '<div class="hint" style="margin-top:6px">Copy the code, open the form, paste it into the "Submission Code" field, then answer the questions and submit.</div>'+
+      '</div>';
     } else if(a && a.Status==='SUBMITTED'){
       html+='<div class="quiet">Submitted. Awaiting teacher evaluation.</div>';
     } else if(a && a.Status==='EVALUATED'){
@@ -503,6 +609,20 @@ VIEWS.tests=async function(){
   });
   content.innerHTML=html;
 
+  content.querySelectorAll('button[data-copy]').forEach(function(b){
+    b.addEventListener('click',function(){copyToClipboard(b.getAttribute('data-copy'));});
+  });
+
+  content.querySelectorAll('button[data-open-form]').forEach(function(b){
+    b.addEventListener('click',async function(){
+      var tid=b.getAttribute('data-open-form');
+      /* Resume existing attempt to get fresh form URL */
+      var r2=await apiCall('studentStartTest',{testId:tid});
+      if(!r2.ok)return toast(r2.error||'Cannot open.','error');
+      window.open(r2.data.formUrl,'_blank','noopener');
+    });
+  });
+
   content.querySelectorAll('button[data-start]').forEach(function(b){
     b.addEventListener('click',async function(){
       var tid=b.getAttribute('data-start');
@@ -511,33 +631,32 @@ VIEWS.tests=async function(){
       b.disabled=false;b.textContent='Start Test';
       if(!r2.ok){
         var msg=r2.error||'Cannot start.';
-        if(r2.code==='NOT_YET_OPEN') msg='This test opens at '+(r2.data&&r2.data.nextOpenAt||'a later time')+'.';
-        if(r2.code==='BETWEEN_WINDOWS') msg='First window ended. Second window opens at '+(r2.data&&r2.data.nextOpenAt||'')+'.';
-        if(r2.code==='WINDOW_CLOSED') msg='The test window has closed.';
-        if(r2.code==='ALREADY_SUBMITTED') msg='You already submitted this test.';
+        if(r2.code==='NOT_YET_OPEN')msg='This test opens at '+((r2.data&&r2.data.nextOpenAt)||'a later time')+'.';
+        if(r2.code==='BETWEEN_WINDOWS')msg='First window ended. Second window opens at '+((r2.data&&r2.data.nextOpenAt)||'')+'.';
+        if(r2.code==='WINDOW_CLOSED')msg='The test window has closed.';
+        if(r2.code==='ALREADY_SUBMITTED')msg='You already submitted this test.';
         if(r2.code==='INSUFFICIENT_BALANCE'){
           var p=(r2.data&&r2.data.paymentUrl)||'https://www.guidedpathnoida.in/fees';
           msg='Insufficient wallet balance. Shortfall: ₹'+((r2.data&&r2.data.shortfall)||0)+'. Open payment page?';
-          if(confirm(msg)){ window.open(p,'_blank','noopener'); return; }
+          if(confirm(msg)){window.open(p,'_blank','noopener');return;}
           return;
         }
         return toast(msg,'error');
       }
-      var d=r2.data;
-      var go=confirm('Your submission code is:\n\n  '+d.code+'\n\nCopy it, then click OK to open the test in a new tab.\nCode expires: '+d.expiresAt+'\n\nDo NOT close the tab before submitting the form.');
-      if(go) window.open(d.formUrl,'_blank','noopener');
+      toast('Code issued. Copy it into the Google Form.','ok');
+      render('tests');
     });
   });
 };
 
-/* ---------- RESULTS ---------- */
+/* ========== RESULTS ========== */
 VIEWS.results=async function(){
   var r=await apiCall('studentResults');
   if(!r.ok)return errorState(r.error||'Failed to load.');
   var rows=(r.data&&r.data.results)||[];
   var rem=(r.data&&r.data.remarks)||[];
   var html=header('Results','Published assessments.');
-  if(!rows.length) html+=emptyState('No results published yet.');
+  if(!rows.length)html+=emptyState('No results published yet.');
   else{
     html+='<div class="twrap"><table class="tbl"><thead><tr><th>Date</th><th>Test</th><th>Subject</th><th>Score</th><th>%</th></tr></thead><tbody>';
     rows.forEach(function(x){
@@ -561,7 +680,7 @@ VIEWS.results=async function(){
   content.innerHTML=html;
 };
 
-/* ---------- WALLET ---------- */
+/* ========== WALLET ========== */
 VIEWS.wallet=async function(){
   var r=await apiCall('studentWallet');
   if(!r.ok)return errorState(r.error||'Failed to load.');
@@ -575,7 +694,7 @@ VIEWS.wallet=async function(){
     '<a class="btn" href="https://wa.me/guidedpathnoida" target="_blank" rel="noopener">WhatsApp Us</a>'+
   '</div>';
   html+='<div class="panel"><div class="ptitle">Transaction History</div>';
-  if(!hist.length) html+=emptyState('No transactions yet.');
+  if(!hist.length)html+=emptyState('No transactions yet.');
   else{
     html+='<div class="twrap"><table class="tbl"><thead><tr><th>Date</th><th>Type</th><th>Amount</th><th>Balance</th><th>Notes</th></tr></thead><tbody>';
     hist.forEach(function(h){
@@ -596,7 +715,7 @@ VIEWS.wallet=async function(){
   content.innerHTML=html;
 };
 
-/* ---------- PASSWORD ---------- */
+/* ========== PASSWORD ========== */
 VIEWS.password=async function(){
   var html=header('Change Password','You will be signed out after changing.');
   html+='<div class="panel"><div class="fgrid">'+
